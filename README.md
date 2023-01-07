@@ -20,12 +20,12 @@ See [l0-auth](https://github.com/tiki/l0-auth) for an example.
 ### Data Structure: 
 *Note: skeleton framework only, not to be taken as final table structure*
 
-<img width="674" alt="image" src="https://user-images.githubusercontent.com/3769672/211114317-b8ff1682-def5-4e09-aa07-90e7716bbc7e.png">
+<img width="674" alt="image" src="https://user-images.githubusercontent.com/3769672/211174385-f8dd0926-6e7d-4421-810f-276606fcdc3d.png">
 
 ### APIs
 
 `GET /app/{id}`  
-Parameters: `app_id`   
+Parameters: `aid`   
 Returns: List of `addresses`
 
 `GET /app/address/{address}`  
@@ -41,7 +41,7 @@ Parameters: transaction `hash` aka transaction_id
 Returns: Deserialized transaction
 
 `POST /report`  
-Parameters: `app_id`, `address`, `block_hash` and a list of `transaction_hashes`  
+Parameters: `aid`, `address`, `block_hash` and a list of `transaction_hashes`  
 Returns `200 OK`
 
 ### Security
