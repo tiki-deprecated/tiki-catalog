@@ -7,29 +7,32 @@
 -- ADDRESS
 -- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS address (
-    address_aid BYTEA PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     address BYTEA NOT NULL,
     aid TEXT NOT NULL,
-    created_utc TIMESTAMP WITH TIME ZONE NOT NULL
+    created_utc TIMESTAMP WITH TIME ZONE NOT NULL,
+    UNIQUE (aid, address)
 );
 
 -- -----------------------------------------------------------------------
 -- BLOCK
 -- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS block (
-    block_hash BYTEA PRIMARY KEY,
-    address_aid BYTEA NOT NULL,
+    id BIGSERIAL PRIMARY KEY,
+    block_hash BYTEA NOT NULL UNIQUE,
+    address_id BIGINT NOT NULL,
     src_url TEXT NOT NULL,
     created_utc TIMESTAMP WITH TIME ZONE NOT NULL,
-    FOREIGN KEY(address_aid) REFERENCES address(address_aid)
+    FOREIGN KEY(address_id) REFERENCES address(id)
 );
 
 -- -----------------------------------------------------------------------
 -- TRANSACTION
 -- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS txn (
-    txn_hash BYTEA PRIMARY KEY,
-    block_hash BYTEA NOT NULL,
+    id BIGSERIAL PRIMARY KEY,
+    txn_hash BYTEA NOT NULL UNIQUE,
+    block_id BIGINT NOT NULL,
     created_utc TIMESTAMP WITH TIME ZONE NOT NULL,
-    FOREIGN KEY(block_hash) REFERENCES block(block_hash)
+    FOREIGN KEY(block_id) REFERENCES block(id)
 );
