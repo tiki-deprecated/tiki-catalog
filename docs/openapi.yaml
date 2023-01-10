@@ -1,0 +1,44 @@
+openapi: 3.0.1
+info:
+  title: L0 Index
+  description: Index Service
+  license:
+    name: MIT
+    url: https://github.com/tiki/l0-index/blob/main/LICENSE
+  version: 0.0.1
+servers:
+- url: https://index.l0.mytiki.com
+paths:
+  /health:
+    get:
+      tags:
+      - HEALTH
+      summary: Health Check
+      description: Get service status
+      operationId: l0-index-health-get
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                message: OK
+components:
+  schemas:
+    ApiError:
+      type: object
+      properties:
+        id:
+          type: string
+        message:
+          type: string
+        detail:
+          type: string
+        help:
+          type: string
+        properties:
+          type: object
+          additionalProperties:
+            type: string
