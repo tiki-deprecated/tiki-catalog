@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 public class AddressController {
     private final AddressService service;
@@ -25,10 +23,5 @@ public class AddressController {
             @PathVariable(name = "id") String id,
             @PathVariable(name = "address") String address) {
         return service.getAddress(id, address);
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path = "/address/{address}")
-    public List<AddressAO> getAddresses(@PathVariable(name = "address") String address) {
-        return service.getAddresses(address);
     }
 }

@@ -12,5 +12,5 @@ import java.util.Optional;
 
 public interface AddressRepository extends JpaRepository<AddressDO, Long> {
     Optional<AddressDO> findByAidAndAddress(String aid, byte[] address);
-    List<AddressDO> findAllByAddress(byte[] address);
+    List<AddressDO> findAllByAid(String aid);
 }

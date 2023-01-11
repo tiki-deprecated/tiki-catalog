@@ -29,9 +29,8 @@ public class AddressService {
         }else return null;
     }
 
-    public List<AddressAO> getAddresses(String address){
-        byte[] addressBytes = B64.decode(address);
-        List<AddressDO> found = repository.findAllByAddress(addressBytes);
+    public List<AddressAO> getAddresses(String appId){
+        List<AddressDO> found = repository.findAllByAid(appId);
         return found.stream().map(addr -> {
             AddressAO rsp = new AddressAO();
             rsp.setAddress(B64.encode(addr.getAddress()));

@@ -5,9 +5,22 @@
 
 package com.mytiki.l0_index.features.latest.address;
 
+import java.util.List;
+
 public class AddressAO {
-    private String address;
     private String appId;
+
+    private String address;
+
+    private List<String> blocks;
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
     public String getAddress() {
         return address;
@@ -17,11 +30,11 @@ public class AddressAO {
         this.address = address;
     }
 
-    public String getAppId() {
-        return appId;
+    public List<String> getBlocks() {
+        return blocks;
     }
 
-    public void setAppId(String appId) {
-        this.appId = appId;
+    public void setBlocks(List<String> blocks) {
+        this.blocks = blocks;
     }
 }

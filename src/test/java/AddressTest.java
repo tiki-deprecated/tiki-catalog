@@ -18,11 +18,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -62,57 +61,5 @@ public class AddressTest {
 
         AddressAO found = service.getAddress(appId, address);
         assertNull(found);
-    }
-
-    @Test
-    public void Test_GetAddresses_Single(){
-        String appId = UUID.randomUUID().toString();
-        String address = UUID.randomUUID().toString();
-
-        AddressDO testAddress = new AddressDO();
-        testAddress.setAddress(B64.decode(address));
-        testAddress.setAid(appId);
-        testAddress.setCreated(ZonedDateTime.now());
-        repository.save(testAddress);
-
-        List<AddressAO> found = service.getAddresses(address);
-        assertEquals(1, found.size());
-        assertEquals(appId, found.get(0).getAppId());
-        assertEquals(address, found.get(0).getAddress());
-    }
-
-    @Test
-    public void Test_GetAddresses_Multiple(){
-        int rounds = 3;
-        String address = UUID.randomUUID().toString();
-
-        List<String> aidList = new ArrayList<>(){{
-            add(UUID.randomUUID().toString());
-            add(UUID.randomUUID().toString());
-            add(UUID.randomUUID().toString());
-        }};
-
-        for(int i=0; i<rounds; i++) {
-            AddressDO testAddress = new AddressDO();
-            testAddress.setAddress(B64.decode(address));
-            testAddress.setAid(aidList.get(i));
-            testAddress.setCreated(ZonedDateTime.now());
-            repository.save(testAddress);
-        }
-
-        List<AddressAO> found = service.getAddresses(address);
-        assertEquals(rounds, found.size());
-        for(int i=0; i<rounds; i++){
-            assertEquals(address, found.get(i).getAddress());
-            assertTrue(aidList.contains(found.get(i).getAppId()));
-        }
-    }
-
-    @Test
-    public void Test_GetAddresses_None(){
-        String address = UUID.randomUUID().toString();
-
-        List<AddressAO> found = service.getAddresses(address);
-        assertEquals(0, found.size());
     }
 }
