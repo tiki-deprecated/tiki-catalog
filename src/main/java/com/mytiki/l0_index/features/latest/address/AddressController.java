@@ -5,10 +5,7 @@
 
 package com.mytiki.l0_index.features.latest.address;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AddressController {
@@ -21,7 +18,9 @@ public class AddressController {
     @RequestMapping(method = RequestMethod.GET, path = "/app/{id}/address/{address}")
     public AddressAO getAddress(
             @PathVariable(name = "id") String id,
-            @PathVariable(name = "address") String address) {
-        return service.getAddress(id, address);
+            @PathVariable(name = "address") String address,
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "size", defaultValue = "100", required = false) int size) {
+        return service.getAddress(id, address, page, size);
     }
 }

@@ -78,6 +78,7 @@ public class AppTest {
         AppAO found = service.getApp(appId);
         assertEquals(appId, found.getAppId());
         assertEquals(rounds, found.getAddress().size());
+
         for(int i=0; i<rounds; i++){
             assertTrue(addressList.contains(found.getAddress().get(i)));
         }

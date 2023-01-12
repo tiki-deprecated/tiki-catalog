@@ -5,14 +5,14 @@
 
 package com.mytiki.l0_index.features.latest.address;
 
-import java.util.List;
+import com.mytiki.l0_index.features.latest.block.BlockPageAO;
 
 public class AddressAO {
     private String appId;
 
     private String address;
 
-    private List<String> blocks;
+    private BlockPageAO blocks;
 
     public String getAppId() {
         return appId;
@@ -30,11 +30,11 @@ public class AddressAO {
         this.address = address;
     }
 
-    public List<String> getBlocks() {
+    public BlockPageAO getBlocks() {
         return blocks;
     }
 
-    public void setBlocks(List<String> blocks) {
+    public void setBlocks(BlockPageAO blocks) {
         this.blocks = blocks;
     }
 }

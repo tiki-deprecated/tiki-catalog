@@ -5,6 +5,7 @@
 
 package com.mytiki.l0_index.features.latest.address;
 
+import com.mytiki.l0_index.features.latest.block.BlockService;
 import com.mytiki.l0_index.utilities.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -22,7 +23,7 @@ public class AddressConfig {
     }
 
     @Bean
-    public AddressService addressService(@Autowired AddressRepository repository){
-        return new AddressService(repository);
+    public AddressService addressService(@Autowired AddressRepository repository, @Autowired BlockService blockService){
+        return new AddressService(repository, blockService);
     }
 }
