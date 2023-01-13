@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) TIKI Inc.
+ * MIT license. See LICENSE file in root directory.
+ */
+
 package com.mytiki.l0_index.main;
 
 import com.mytiki.l0_index.features.FeaturesConfig;
@@ -20,7 +25,6 @@ import java.util.TimeZone;
 @Import({
         SecurityConfig.class,
         HealthConfig.class,
-        //UtilitiesConfig.class,
         FeaturesConfig.class
 })
 public class AppConfig {
