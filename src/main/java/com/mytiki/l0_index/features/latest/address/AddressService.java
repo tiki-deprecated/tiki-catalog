@@ -29,7 +29,7 @@ public class AddressService {
         if(found.isPresent()){
             rsp.setAddress(B64.encode(found.get().getAddress()));
             rsp.setAppId(found.get().getAid());
-            rsp.setBlocks(blockService.page(addressBytes, page, size));
+            rsp.setBlocks(blockService.page(appId, addressBytes, page, size));
         }
         return rsp;
     }

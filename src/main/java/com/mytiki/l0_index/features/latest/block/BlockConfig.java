@@ -8,6 +8,7 @@ package com.mytiki.l0_index.features.latest.block;
 import com.mytiki.l0_index.utilities.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
@@ -17,7 +18,9 @@ public class BlockConfig {
     public static final String PACKAGE_PATH = Constants.PACKAGE_FEATURES_LATEST_DOT_PATH + ".block";
 
     @Bean
-    public BlockService blockService(@Autowired BlockRepository repository){
-        return new BlockService(repository);
+    public BlockService blockService(
+            @Autowired BlockRepository repository,
+            @Autowired RestTemplateBuilder restTemplateBuilder){
+        return new BlockService(repository, restTemplateBuilder.build());
     }
 }
