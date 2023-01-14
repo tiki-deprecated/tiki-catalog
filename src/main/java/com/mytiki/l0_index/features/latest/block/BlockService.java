@@ -5,6 +5,7 @@
 
 package com.mytiki.l0_index.features.latest.block;
 
+import com.mytiki.l0_index.features.latest.address.AddressDO;
 import com.mytiki.l0_index.utilities.B64;
 import com.mytiki.l0_index.utilities.Decode;
 import com.mytiki.l0_index.utilities.Sha256;
@@ -19,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import java.lang.invoke.MethodHandles;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -84,5 +86,14 @@ public class BlockService {
             logger.error("src_url is an invalid URI", e);
             return List.of();
         }
+    }
+
+    public BlockDO create(byte[] hash, URL src, AddressDO address){
+        BlockDO req = new BlockDO();
+        req.setHash(hash);
+        req.setSrc(src);
+        req.setAddress(address);
+        req.setCreated(ZonedDateTime.now());
+        return repository.save(req);
     }
 }

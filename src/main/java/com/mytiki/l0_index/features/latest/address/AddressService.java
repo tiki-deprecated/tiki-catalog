@@ -8,6 +8,7 @@ package com.mytiki.l0_index.features.latest.address;
 import com.mytiki.l0_index.features.latest.block.BlockService;
 import com.mytiki.l0_index.utilities.B64;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,5 +43,17 @@ public class AddressService {
             rsp.setAppId(addr.getAid());
             return rsp;
         }).toList();
+    }
+
+    public AddressDO getCreate(String apiId, byte[] address){
+        Optional<AddressDO> found = repository.findByAidAndAddress(apiId, address);
+        if(found.isEmpty()) {
+            AddressDO req = new AddressDO();
+            req.setAid(apiId);
+            req.setAddress(address);
+            req.setCreated(ZonedDateTime.now());
+            return repository.save(req);
+        }else
+            return found.get();
     }
 }
