@@ -5,12 +5,14 @@
 
 package com.mytiki.l0_index.features.latest.txn;
 
+import com.mytiki.l0_index.features.latest.block.BlockDO;
 import com.mytiki.l0_index.features.latest.block.BlockService;
 import com.mytiki.l0_index.utilities.B64;
 import com.mytiki.l0_index.utilities.Decode;
 import com.mytiki.l0_index.utilities.Sha256;
 
 import java.net.URL;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -110,5 +112,13 @@ public class TxnService {
         txnContents.setContentSchema(TxnContentSchema.UNKNOWN.getName());
         txnContents.setContents(contents);
         return txnContents;
+    }
+
+    public TxnDO create(byte[] hash, BlockDO block){
+        TxnDO req = new TxnDO();
+        req.setHash(hash);
+        req.setBlock(block);
+        req.setCreated(ZonedDateTime.now());
+        return repository.save(req);
     }
 }
