@@ -23,4 +23,9 @@ public class BlockConfig {
             @Autowired RestTemplateBuilder restTemplateBuilder){
         return new BlockService(repository, restTemplateBuilder.build());
     }
+
+    @Bean
+    public BlockController blockController(@Autowired BlockService service){
+        return new BlockController(service);
+    }
 }

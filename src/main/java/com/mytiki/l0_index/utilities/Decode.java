@@ -5,8 +5,13 @@
 
 package com.mytiki.l0_index.utilities;
 
+import org.springframework.security.crypto.codec.Utf8;
+
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,6 +70,18 @@ public class Decode {
                 BigInteger.valueOf(result).negate() :
                 BigInteger.valueOf(result) :
                 BigInteger.ZERO;
+    }
+
+    static public String utf8(byte[] bytes) {
+        if (bytes.length == 1 && bytes[0] == 0) return null;
+        else return Utf8.decode(bytes);
+    }
+
+    static public ZonedDateTime dateTime(byte[] bytes) {
+        if (bytes.length == 1 && bytes[0] == 0) return null;
+        else return Instant
+                .ofEpochSecond(Decode.bigInt(bytes).longValue())
+                .atZone(ZoneOffset.UTC);
     }
 
     private static byte[] copyToBytes(char[] src, int from){

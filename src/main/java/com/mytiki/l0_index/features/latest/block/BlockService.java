@@ -19,8 +19,6 @@ import org.springframework.web.client.RestTemplate;
 import java.lang.invoke.MethodHandles;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.time.Instant;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -64,9 +62,7 @@ public class BlockService {
             block.setSignature(B64.encode(binary.get(0)));
             List<byte[]> body = Decode.bytes(binary.get(1));
             block.setVersion(Decode.bigInt(body.get(0)).intValue());
-            block.setTimestamp(Instant
-                    .ofEpochSecond(Decode.bigInt(body.get(1)).longValue())
-                    .atZone(ZoneOffset.UTC));
+            block.setTimestamp(Decode.dateTime(body.get(1)));
             block.setPrevious(B64.encode(body.get(2)));
             block.setTransactionRoot(B64.encode(body.get(3)));
             int txnCount = Decode.bigInt(body.get(4)).intValue();
@@ -78,7 +74,7 @@ public class BlockService {
         return block;
     }
 
-    private List<byte[]> fetch(URL src){
+    public List<byte[]> fetch(URL src){
         try {
             ResponseEntity<byte[]> response = client.getForEntity(src.toURI(), byte[].class);
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null)
