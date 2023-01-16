@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = AppController.PATH_CONTROLLER)
 public class AppController {
-    public static final String PATH_CONTROLLER = ApiConstants.API_LATEST_ROUTE + "/app/{id}";
+    public static final String PATH_CONTROLLER = ApiConstants.API_LATEST_ROUTE + "app/{id}";
 
     private final AppService service;
 

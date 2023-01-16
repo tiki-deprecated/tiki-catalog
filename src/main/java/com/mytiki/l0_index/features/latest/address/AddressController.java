@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = AddressController.PATH_CONTROLLER)
 public class AddressController {
     public static final String PATH_CONTROLLER = ApiConstants.API_LATEST_ROUTE +
-            "/app/{id}/address/{address}";
+            "app/{id}/address/{address}";
     private final AddressService service;
 
     public AddressController(AddressService service) {
