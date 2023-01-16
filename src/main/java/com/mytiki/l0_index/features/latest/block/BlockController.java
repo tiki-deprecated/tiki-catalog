@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = BlockController.PATH_CONTROLLER)
 public class BlockController {
     public static final String PATH_CONTROLLER = ApiConstants.API_LATEST_ROUTE +
-            "/app/{id}/address/{address}/block/{hash}";
+            "app/{id}/address/{address}/block/{hash}";
 
     private final BlockService service;
 

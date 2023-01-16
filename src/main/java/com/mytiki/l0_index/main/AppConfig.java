@@ -8,6 +8,7 @@ package com.mytiki.l0_index.main;
 import com.mytiki.l0_index.features.FeaturesConfig;
 import com.mytiki.l0_index.health.HealthConfig;
 import com.mytiki.l0_index.security.SecurityConfig;
+import com.mytiki.spring_rest_api.ApiExceptionHandlerDefault;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
@@ -23,6 +24,7 @@ import java.util.Collections;
 import java.util.TimeZone;
 
 @Import({
+        ApiExceptionHandlerDefault.class,
         SecurityConfig.class,
         HealthConfig.class,
         FeaturesConfig.class

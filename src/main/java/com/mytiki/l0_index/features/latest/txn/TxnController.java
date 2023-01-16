@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = TxnController.PATH_CONTROLLER)
 public class TxnController {
     public static final String PATH_CONTROLLER = ApiConstants.API_LATEST_ROUTE +
-            "/app/{id}/address/{address}/block/{block-hash}/transaction/{txn-hash}";
+            "app/{id}/address/{address}/block/{block-hash}/transaction/{txn-hash}";
     private final TxnService service;
 
     public TxnController(TxnService service) {
