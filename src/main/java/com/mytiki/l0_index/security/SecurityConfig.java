@@ -43,17 +43,26 @@ public class SecurityConfig {
     private final Set<JWSAlgorithm> jwtJwsAlgorithms;
     private final Set<String> jwtAudiences;
     private final String jwtIssuer;
+    private final String l0StorageId;
+    private final String l0StorageSecret;
+    private final String l0StorageRole;
 
     public SecurityConfig(
             @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}") URL jwtJwkUri,
             @Value("${spring.security.oauth2.resourceserver.jwt.jws-algorithms}") Set<JWSAlgorithm> jwtJwsAlgorithms,
             @Value("${spring.security.oauth2.resourceserver.jwt.audiences}") Set<String> jwtAudiences,
             @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") String jwtIssuer,
+            @Value("${com.mytiki.l0_index.l0_storage.id}") String l0StorageId,
+            @Value("${com.mytiki.l0_index.l0_storage.secret}") String l0StorageSecret,
+            @Value("${com.mytiki.l0_index.l0_storage.role}") String l0StorageRole,
             @Autowired ObjectMapper objectMapper) {
         this.jwtJwkUri = jwtJwkUri;
         this.jwtJwsAlgorithms = jwtJwsAlgorithms;
         this.jwtAudiences = jwtAudiences;
         this.jwtIssuer = jwtIssuer;
+        this.l0StorageSecret = l0StorageSecret;
+        this.l0StorageId = l0StorageId;
+        this.l0StorageRole = l0StorageRole;
         this.accessDeniedHandler = new AccessDeniedHandler(objectMapper);
         this.authenticationEntryPoint = new AuthenticationEntryPoint(objectMapper);
     }
@@ -86,7 +95,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.GET, ApiConstants.HEALTH_ROUTE).permitAll()
                 .requestMatchers(HttpMethod.GET, Constants.API_DOCS_PATH).permitAll()
-                .requestMatchers(HttpMethod.POST, ReportController.PATH_CONTROLLER).hasRole("LOSTORAGE")
+                .requestMatchers(HttpMethod.POST, ReportController.PATH_CONTROLLER).hasRole(l0StorageRole)
                 .anyRequest().authenticated().and()
                 .httpBasic()
                 .authenticationEntryPoint(authenticationEntryPoint).and()
@@ -118,9 +127,9 @@ public class SecurityConfig {
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
         UserDetails user = User.builder()
-                .username("")
-                .password("")
-                .roles("LOSTORAGE")
+                .username(l0StorageId)
+                .password(l0StorageSecret)
+                .roles(l0StorageRole)
                 .build();
         return new InMemoryUserDetailsManager(user);
     }
