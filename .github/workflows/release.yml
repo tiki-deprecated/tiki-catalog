@@ -16,7 +16,7 @@ jobs:
         image: postgres:14.5
         env:
           POSTGRES_USER: tester
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_TEST_PW }}
+          POSTGRES_PASSWORD: pgtestpw
           POSTGRES_DB: l0_index
           POSTGRES_PORT: 5432
         ports:
