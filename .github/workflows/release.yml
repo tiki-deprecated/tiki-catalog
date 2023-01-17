@@ -64,4 +64,5 @@ jobs:
         uses: RichardInnocent/semantic-versioning-maven@v0.0.35
         with:
           access-token: ${{ secrets.github_token }}
+          
 
