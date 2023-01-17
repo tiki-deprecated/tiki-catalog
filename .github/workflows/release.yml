@@ -4,8 +4,8 @@ on:
   pull_request:
     branches:
       - main
-#    types:
-#      - closed
+    types:
+      - closed
 
 # Cancel any active builds when new commits are pushed
 concurrency:
@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   run_if:
-#    if: startsWith(github.head_ref, 'release/') && github.event.pull_request.merged == true
+    if: startsWith(github.head_ref, 'release/') && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -60,9 +60,9 @@ jobs:
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_ST }}
 
-      - name: Increment version
+      - name: Bump Version
+        id: bump-version
         uses: RichardInnocent/semantic-versioning-maven@v0.0.35
         with:
           access-token: ${{ secrets.github_token }}
-          
 
