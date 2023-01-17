@@ -5,7 +5,11 @@
 
 package com.mytiki.l0_index.features.latest.txn;
 
-public class TxnAOOwnership extends TxnAOContents{
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(name = "Ownership")
+public class TxnAOOwnership implements TxnAOContents {
+    private String raw;
     private String source;
     private String type;
     private String origin;
@@ -50,5 +54,15 @@ public class TxnAOOwnership extends TxnAOContents{
 
     public void setContains(String contains) {
         this.contains = contains;
+    }
+
+    @Override
+    public String getRaw() {
+        return raw;
+    }
+
+    @Override
+    public void setRaw(String raw) {
+        this.raw = raw;
     }
 }

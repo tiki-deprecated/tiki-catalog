@@ -5,14 +5,14 @@
 
 package com.mytiki.l0_index.features.latest.txn;
 
-public class TxnAOContents {
-    private String raw;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 
-    public String getRaw() {
-        return raw;
-    }
+@JsonSubTypes(value = {
+        @JsonSubTypes.Type(value = TxnAOOwnership.class),
+        @JsonSubTypes.Type(value = TxnAOConsent.class),
+        @JsonSubTypes.Type(value = TxnAOUnknown.class)})
+public interface TxnAOContents {
+    String getRaw();
 
-    public void setRaw(String raw) {
-        this.raw = raw;
-    }
+    void setRaw(String raw);
 }

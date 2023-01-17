@@ -5,12 +5,12 @@
 
 package com.mytiki.l0_index.features.latest.app;
 
-import java.util.List;
+import com.mytiki.l0_index.features.latest.address.AddressPageAO;
 
 public class AppAO {
     private String appId;
 
-    private List<String> address;
+    private AddressPageAO addresses;
 
     public String getAppId() {
         return appId;
@@ -20,11 +20,11 @@ public class AppAO {
         this.appId = appId;
     }
 
-    public List<String> getAddress() {
-        return address;
+    public AddressPageAO getAddresses() {
+        return addresses;
     }
 
-    public void setAddress(List<String> address) {
-        this.address = address;
+    public void setAddresses(AddressPageAO addresses) {
+        this.addresses = addresses;
     }
 }

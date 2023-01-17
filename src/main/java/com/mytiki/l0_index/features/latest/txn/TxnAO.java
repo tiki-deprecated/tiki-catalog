@@ -5,9 +5,11 @@
 
 package com.mytiki.l0_index.features.latest.txn;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.ZonedDateTime;
 
-public class TxnAO<C extends TxnAOContents> {
+public class TxnAO {
     private String apiId;
     private String address;
     private String block;
@@ -17,8 +19,10 @@ public class TxnAO<C extends TxnAOContents> {
     private ZonedDateTime timestamp;
     private String assetRef;
     private String signature;
+
+    @Schema(allowableValues = { "consent_nft", "ownership_nft", "unknown" })
     private String contentSchema;
-    private C contents;
+    private TxnAOContents contents;
 
     public String getApiId() {
         return apiId;
@@ -100,11 +104,11 @@ public class TxnAO<C extends TxnAOContents> {
         this.contentSchema = contentSchema;
     }
 
-    public C getContents() {
+    public TxnAOContents getContents() {
         return contents;
     }
 
-    public void setContents(C contents) {
+    public void setContents(TxnAOContents contents) {
         this.contents = contents;
     }
 }

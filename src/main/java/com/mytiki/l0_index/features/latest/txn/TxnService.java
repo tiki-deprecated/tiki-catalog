@@ -27,8 +27,13 @@ public class TxnService {
         this.blockService = blockService;
     }
 
-    public TxnAO<?> getTransaction(String apiId, String address, String blockHash, String txnHash){
-        TxnAO<?> txn;
+    public TxnAO getTransaction(String apiId, String address, String blockHash, String txnHash){
+        TxnAO rsp = new TxnAO();
+        rsp.setApiId(apiId);
+        rsp.setAddress(address);
+        rsp.setBlock(blockHash);
+        rsp.setHash(txnHash);
+
         byte[] addressBytes = B64.decode(address);
         byte[] blockHashBytes = B64.decode(blockHash);
         byte[] txnHashBytes = B64.decode(txnHash);
@@ -37,24 +42,25 @@ public class TxnService {
                 txnHashBytes, blockHashBytes, apiId, addressBytes);
 
         if(found.isPresent()){
+            rsp.setUrl(found.get().getBlock().getSrc().toString());
             List<byte[]> binary = fetch(found.get().getBlock().getSrc(), B64.decode(txnHash));
             if(!binary.isEmpty()) {
-                txn = resolveContents(binary.get(5));
-                txn.setVersion(Decode.bigInt(binary.get(0)).intValue());
-                txn.setTimestamp(Decode.dateTime(binary.get(2)));
-                txn.setAssetRef(B64.encode(binary.get(3)));
-                txn.setSignature(B64.encode(binary.get(4)));
-            }else
-                txn = new TxnAO<>();
-            txn.setUrl(found.get().getBlock().getSrc().toString());
-        }else
-            txn = new TxnAO<>();
+                rsp.setVersion(Decode.bigInt(binary.get(0)).intValue());
+                rsp.setTimestamp(Decode.dateTime(binary.get(2)));
+                rsp.setAssetRef(B64.encode(binary.get(3)));
+                rsp.setSignature(B64.encode(binary.get(4)));
 
-        txn.setAddress(address);
-        txn.setApiId(apiId);
-        txn.setBlock(blockHash);
-        txn.setHash(txnHash);
-        return txn;
+                List<byte[]> contentBytes = Decode.bytes(binary.get(5));
+                TxnContentSchema schema = TxnContentSchema.fromId(Decode.bigInt(contentBytes.get(0)).intValue());
+                if(schema == TxnContentSchema.UNKNOWN) schema = TxnContentSchema.CONSENT;
+
+                rsp.setContentSchema(schema.getName());
+                TxnAOContents contents = resolveContents(schema, contentBytes);
+                contents.setRaw(B64.encode(binary.get(5)));
+                rsp.setContents(contents);
+            }
+        }
+        return rsp;
     }
 
     public List<byte[]> fetch(URL src, byte[] txnHash){
@@ -71,47 +77,30 @@ public class TxnService {
         return List.of();
     }
 
-    public TxnAO<?> resolveContents(byte[] raw){
-        List<byte[]> decoded = Decode.bytes(raw);
-        TxnContentSchema schema = TxnContentSchema.fromId(Decode.bigInt(decoded.get(0)).intValue());
-
-        if(schema == TxnContentSchema.UNKNOWN) schema = TxnContentSchema.CONSENT; //Temporary fix for bad block serialization.
-
+    private TxnAOContents resolveContents(TxnContentSchema schema, List<byte[]> bytes){
         switch (schema) {
             case CONSENT -> {
                 TxnAOConsent consent = new TxnAOConsent();
-                consent.setOwnershipId(B64.encode(decoded.get(0)));
-                consent.setDestination(Decode.utf8(decoded.get(1)));
-                consent.setAbout(Decode.utf8(decoded.get(2)));
-                consent.setReward(Decode.utf8(decoded.get(3)));
-                consent.setExpiry(Decode.dateTime(decoded.get(4)));
-                consent.setRaw(B64.encode(raw));
-                TxnAO<TxnAOConsent> txnConsent = new TxnAO<>();
-                txnConsent.setContentSchema(TxnContentSchema.CONSENT.getName());
-                txnConsent.setContents(consent);
-                return txnConsent;
+                consent.setOwnershipId(B64.encode(bytes.get(0)));
+                consent.setDestination(Decode.utf8(bytes.get(1)));
+                consent.setAbout(Decode.utf8(bytes.get(2)));
+                consent.setReward(Decode.utf8(bytes.get(3)));
+                consent.setExpiry(Decode.dateTime(bytes.get(4)));
+                return consent;
             }
             case OWNERSHIP -> {
                 TxnAOOwnership ownership = new TxnAOOwnership();
-                ownership.setSource(Decode.utf8(decoded.get(1)));
-                ownership.setType(Decode.utf8(decoded.get(2)));
-                ownership.setOrigin(Decode.utf8(decoded.get(3)));
-                ownership.setAbout(Decode.utf8(decoded.get(4)));
-                ownership.setContains(Decode.utf8(decoded.get(5)));
-                ownership.setRaw(B64.encode(raw));
-                TxnAO<TxnAOOwnership> txnOwnership = new TxnAO<>();
-                txnOwnership.setContentSchema(TxnContentSchema.OWNERSHIP.getName());
-                txnOwnership.setContents(ownership);
-                return txnOwnership;
+                ownership.setSource(Decode.utf8(bytes.get(1)));
+                ownership.setType(Decode.utf8(bytes.get(2)));
+                ownership.setOrigin(Decode.utf8(bytes.get(3)));
+                ownership.setAbout(Decode.utf8(bytes.get(4)));
+                ownership.setContains(Decode.utf8(bytes.get(5)));
+                return ownership;
+            }
+            default -> {
+                return new TxnAOUnknown();
             }
         }
-
-        TxnAO<TxnAOContents> txnContents = new TxnAO<>();
-        TxnAOContents contents = new TxnAOContents();
-        contents.setRaw(B64.encode(raw));
-        txnContents.setContentSchema(TxnContentSchema.UNKNOWN.getName());
-        txnContents.setContents(contents);
-        return txnContents;
     }
 
     public TxnDO create(byte[] hash, BlockDO block){

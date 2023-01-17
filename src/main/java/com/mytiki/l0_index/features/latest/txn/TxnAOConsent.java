@@ -5,9 +5,13 @@
 
 package com.mytiki.l0_index.features.latest.txn;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.ZonedDateTime;
 
-public class TxnAOConsent extends TxnAOContents{
+@Schema(name = "Consent")
+public class TxnAOConsent implements TxnAOContents {
+    private String raw;
     private String ownershipId;
     private String destination;
     private String about;
@@ -52,5 +56,15 @@ public class TxnAOConsent extends TxnAOContents{
 
     public void setExpiry(ZonedDateTime expiry) {
         this.expiry = expiry;
+    }
+
+    @Override
+    public String getRaw() {
+        return raw;
+    }
+
+    @Override
+    public void setRaw(String raw) {
+        this.raw = raw;
     }
 }

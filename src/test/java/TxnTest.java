@@ -94,7 +94,7 @@ public class TxnTest {
         testTxn.setHash(B64.decode(txnHash));
         txnRepository.save(testTxn);
 
-        TxnAO<TxnAOOwnership> found = (TxnAO<TxnAOOwnership>) txnService.getTransaction(appId, address, blockHash, txnHash);
+        TxnAO found = txnService.getTransaction(appId, address, blockHash, txnHash);
 
         assertEquals(appId, found.getApiId());
         assertEquals(address, found.getAddress());
@@ -107,11 +107,13 @@ public class TxnTest {
         assertEquals("Ehlzv9uQp6FIy6QpwajErT-gKIbUPd0ycAWCUBZda252y6sK9xxOl25qQaRpKqerRjyE8a6QebVrU-qmdwbMvSbD93k-qRcTelk6rOuDuaWYma2IzMmi3bd74WyG5Gb_ObBdaPtdT7Dk3ITzuzdS-x88LuFvuQDwBFsLpkbuLiVsoc545ZiM1_UQ_G5YI_6IiuFHFU9f_4lKioLsr2yREcvisdPBWRpd5-5RKQUyB6nqYyly38n7mo9Djpo22VVkFoctDnVyA-CkWvNEpObTuYbExzTvE-SDVZqFWVZVRjR9ygexbAYOWFk9wVIZTborV4qvCmgbXZ-DdDDrdiL1Pg",
                 found.getSignature());
         assertEquals(TxnContentSchema.OWNERSHIP.getName(), found.getContentSchema());
-        assertEquals("user_92e71914-5766-417e-940e-c39492cdf3df", found.getContents().getSource());
-        assertEquals("data_point", found.getContents().getType());
-        assertEquals("com.mytiki.example_flutter_tos", found.getContents().getOrigin());
-        assertEquals("You can put the Terms of Service the user agreed to here.", found.getContents().getAbout());
-        assertEquals("[\"user_id\"]", found.getContents().getContains());
+
+        TxnAOOwnership ownership = (TxnAOOwnership) found.getContents();
+        assertEquals("user_92e71914-5766-417e-940e-c39492cdf3df", ownership.getSource());
+        assertEquals("data_point", ownership.getType());
+        assertEquals("com.mytiki.example_flutter_tos", ownership.getOrigin());
+        assertEquals("You can put the Terms of Service the user agreed to here.", ownership.getAbout());
+        assertEquals("[\"user_id\"]", ownership.getContains());
         assertEquals("AQEpdXNlcl85MmU3MTkxNC01NzY2LTQxN2UtOTQwZS1jMzk0OTJjZGYzZGYKZGF0YV9wb2ludB5jb20ubXl0aWtpLmV4YW1wbGVfZmx1dHRlcl90b3M5WW91IGNhbiBwdXQgdGhlIFRlcm1zIG9mIFNlcnZpY2UgdGhlIHVzZXIgYWdyZWVkIHRvIGhlcmUuC1sidXNlcl9pZCJd",
                 found.getContents().getRaw());
     }
@@ -151,7 +153,7 @@ public class TxnTest {
         testTxn.setHash(B64.decode(txnHash));
         txnRepository.save(testTxn);
 
-        TxnAO<TxnAOConsent> found = (TxnAO<TxnAOConsent>) txnService.getTransaction(appId, address, blockHash, txnHash);
+        TxnAO found = txnService.getTransaction(appId, address, blockHash, txnHash);
 
         assertEquals(appId, found.getApiId());
         assertEquals(address, found.getAddress());
@@ -164,11 +166,13 @@ public class TxnTest {
         assertEquals("gjp8OXna2pe4G_gELtQr31W-Hucwr3a3F25w7Nfrg1I1ortZtYSK1Z-fJV2x-fhX3E_5ZfmKwT5x5WfFnFdJsEKuGIeJZBkL4JUU2GRSuz8xK9u8QXJIPRRIbJCHmFWPyTC5l7dU2oLR9eXWSGf7wpWYzXL_NLbgAEZ5mmimTHsJjwE8C5ZsiFk6kpEePxPTPWlBiBnHHk1sZUipTgzW02c3cndw9Vo3EEETPHVYhVhTSF5kkj0KIEYsVcT8t-Lv15raWIOVaJbdv5fEgZNIpx1HJ3Ss1NevGa3iaqeak-v3nnNsGKCmlh1iehXwUV02boobzD3yL91cvn6cdTO7BQ",
                 found.getSignature());
         assertEquals(TxnContentSchema.CONSENT.getName(), found.getContentSchema());
-        assertEquals("9G88VZEb7eyJSS5L71NLRfKN1Ab0Y3Sj6b-1azllfNM", found.getContents().getOwnershipId());
-        assertEquals("\u0005[\"*\"]\u0005[\"*\"]", found.getContents().getDestination());
-        assertNull(found.getContents().getAbout());
-        assertNull(found.getContents().getReward());
-        assertNull(found.getContents().getExpiry());
+
+        TxnAOConsent consent = (TxnAOConsent) found.getContents();
+        assertEquals("9G88VZEb7eyJSS5L71NLRfKN1Ab0Y3Sj6b-1azllfNM", consent.getOwnershipId());
+        assertEquals("\u0005[\"*\"]\u0005[\"*\"]", consent.getDestination());
+        assertNull(consent.getAbout());
+        assertNull(consent.getReward());
+        assertNull(consent.getExpiry());
         assertEquals("IPRvPFWRG-3siUkuS-9TS0XyjdQG9GN0o-m_tWs5ZXzTDAVbIioiXQVbIioiXQEAAQABAA",
                 found.getContents().getRaw());
     }
@@ -206,7 +210,7 @@ public class TxnTest {
         testTxn.setHash(B64.decode(txnHash));
         txnRepository.save(testTxn);
 
-        TxnAO<?> found = txnService.getTransaction(appId, address, blockHash, txnHash);
+        TxnAO found = txnService.getTransaction(appId, address, blockHash, txnHash);
 
         assertEquals(appId, found.getApiId());
         assertEquals(address, found.getAddress());
@@ -248,7 +252,7 @@ public class TxnTest {
         testTxn.setHash(B64.decode(txnHash));
         txnRepository.save(testTxn);
 
-        TxnAO<?> found = txnService.getTransaction(appId, address, blockHash, txnHash);
+        TxnAO found = txnService.getTransaction(appId, address, blockHash, txnHash);
 
         assertEquals(appId, found.getApiId());
         assertEquals(address, found.getAddress());
@@ -267,7 +271,7 @@ public class TxnTest {
         String blockHash = UUID.randomUUID().toString();
         String txnHash = UUID.randomUUID().toString();
 
-        TxnAO<?> found = txnService.getTransaction(appId, address, blockHash, txnHash);
+        TxnAO found = txnService.getTransaction(appId, address, blockHash, txnHash);
 
         assertEquals(appId, found.getApiId());
         assertEquals(address, found.getAddress());
