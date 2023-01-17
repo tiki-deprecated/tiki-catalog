@@ -49,9 +49,7 @@ jobs:
           PGPASSWORD: pgtestpw
 
       - name: Maven Package L0 Index
-        run: |
-          cd l0-index
-          doppler run -c tst -- mvn clean package
+        run: doppler run -c tst -- mvn clean package
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_ST }}
 
