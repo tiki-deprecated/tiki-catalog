@@ -330,10 +330,6 @@ components:
             type: string
           contains:
             type: string
-    Raw:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/TxnAOContents'
     TxnAO:
       type: object
       properties:
@@ -359,16 +355,24 @@ components:
           type: string
         contentSchema:
           type: string
+          enum:
+          - consent_nft
+          - ownership_nft
+          - unknown
         contents:
           oneOf:
           - $ref: '#/components/schemas/Consent'
           - $ref: '#/components/schemas/Ownership'
-          - $ref: '#/components/schemas/Raw'
+          - $ref: '#/components/schemas/Unknown'
     TxnAOContents:
       type: object
       properties:
         raw:
           type: string
+    Unknown:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/TxnAOContents'
   securitySchemes:
     l0Storage:
       type: http

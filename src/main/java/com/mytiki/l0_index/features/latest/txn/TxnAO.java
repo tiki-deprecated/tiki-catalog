@@ -5,6 +5,8 @@
 
 package com.mytiki.l0_index.features.latest.txn;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.ZonedDateTime;
 
 public class TxnAO {
@@ -17,6 +19,8 @@ public class TxnAO {
     private ZonedDateTime timestamp;
     private String assetRef;
     private String signature;
+
+    @Schema(allowableValues = { "consent_nft", "ownership_nft", "unknown" })
     private String contentSchema;
     private TxnAOContents contents;
 

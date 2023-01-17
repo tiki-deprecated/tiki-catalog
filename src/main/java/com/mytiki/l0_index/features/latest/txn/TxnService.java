@@ -98,7 +98,7 @@ public class TxnService {
                 return ownership;
             }
             default -> {
-                return new TxnAORaw();
+                return new TxnAOUnknown();
             }
         }
     }
