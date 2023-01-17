@@ -182,15 +182,12 @@ paths:
         schema:
           type: string
       responses:
-        default:
-          description: default response
+        "200":
+          description: OK
           content:
             application/json:
               schema:
-                anyOf:
-                - $ref: '#/components/schemas/TxnAOContents'
-                - $ref: '#/components/schemas/TxnAOOwnership'
-                - $ref: '#/components/schemas/TxnAOConsent'
+                $ref: '#/components/schemas/TxnAO'
       security:
       - jwt: []
 components:
@@ -300,123 +297,78 @@ components:
           type: array
           items:
             type: string
+    TxnAO:
+      type: object
+      properties:
+        apiId:
+          type: string
+        address:
+          type: string
+        block:
+          type: string
+        url:
+          type: string
+        hash:
+          type: string
+        version:
+          type: integer
+          format: int32
+        timestamp:
+          type: string
+          format: date-time
+        assetRef:
+          type: string
+        signature:
+          type: string
+        contentSchema:
+          type: string
+        contents:
+          oneOf:
+          - $ref: '#/components/schemas/TxnAOConsent'
+          - $ref: '#/components/schemas/TxnAOOwnership'
+          - $ref: '#/components/schemas/TxnAORaw'
+    TxnAOConsent:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/TxnAOContents'
+      - type: object
+        properties:
+          ownershipId:
+            type: string
+          destination:
+            type: string
+          about:
+            type: string
+          reward:
+            type: string
+          expiry:
+            type: string
+            format: date-time
     TxnAOContents:
       type: object
       properties:
-        apiId:
-          type: string
-        address:
-          type: string
-        block:
-          type: string
-        url:
-          type: string
-        hash:
-          type: string
-        version:
-          type: integer
-          format: int32
-        timestamp:
-          type: string
-          format: date-time
-        assetRef:
-          type: string
-        signature:
-          type: string
-        contentSchema:
-          type: string
-        contents:
-          $ref: '#/components/schemas/TxnAOContentsRaw'
-    TxnAOContentsRaw:
-      type: object
-      properties:
         raw:
-          type: string
-    TxnAOContentsOwnership:
-      type: object
-      properties:
-        raw:
-          type: string
-        source:
-          type: string
-        type:
-          type: string
-        origin:
-          type: string
-        about:
-          type: string
-        contains:
           type: string
     TxnAOOwnership:
       type: object
-      properties:
-        apiId:
-          type: string
-        address:
-          type: string
-        block:
-          type: string
-        url:
-          type: string
-        hash:
-          type: string
-        version:
-          type: integer
-          format: int32
-        timestamp:
-          type: string
-          format: date-time
-        assetRef:
-          type: string
-        signature:
-          type: string
-        contentSchema:
-          type: string
-        contents:
-          $ref: '#/components/schemas/TxnAOContentsOwnership'
-    TxnAOConsent:
+      allOf:
+      - $ref: '#/components/schemas/TxnAOContents'
+      - type: object
+        properties:
+          source:
+            type: string
+          type:
+            type: string
+          origin:
+            type: string
+          about:
+            type: string
+          contains:
+            type: string
+    TxnAORaw:
       type: object
-      properties:
-        apiId:
-          type: string
-        address:
-          type: string
-        block:
-          type: string
-        url:
-          type: string
-        hash:
-          type: string
-        version:
-          type: integer
-          format: int32
-        timestamp:
-          type: string
-          format: date-time
-        assetRef:
-          type: string
-        signature:
-          type: string
-        contentSchema:
-          type: string
-        contents:
-          $ref: '#/components/schemas/TxnAOContentsConsent'
-    TxnAOContentsConsent:
-      type: object
-      properties:
-        raw:
-          type: string
-        ownershipId:
-          type: string
-        destination:
-          type: string
-        about:
-          type: string
-        reward:
-          type: string
-        expiry:
-          type: string
-          format: date-time
+      allOf:
+      - $ref: '#/components/schemas/TxnAOContents'
   securitySchemes:
     l0Storage:
       type: http

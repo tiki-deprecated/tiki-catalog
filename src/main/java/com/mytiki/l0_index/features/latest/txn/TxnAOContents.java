@@ -5,4 +5,14 @@
 
 package com.mytiki.l0_index.features.latest.txn;
 
-public class TxnAOContents extends TxnAO<TxnAOContentsRaw> {}
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+
+@JsonSubTypes(value = {
+        @JsonSubTypes.Type(value = TxnAOOwnership.class),
+        @JsonSubTypes.Type(value = TxnAOConsent.class),
+        @JsonSubTypes.Type(value = TxnAORaw.class)})
+public interface TxnAOContents {
+    String getRaw();
+
+    void setRaw(String raw);
+}
