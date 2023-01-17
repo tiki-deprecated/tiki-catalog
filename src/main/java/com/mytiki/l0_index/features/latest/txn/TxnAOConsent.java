@@ -5,8 +5,11 @@
 
 package com.mytiki.l0_index.features.latest.txn;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.ZonedDateTime;
 
+@Schema(name = "Consent")
 public class TxnAOConsent implements TxnAOContents {
     private String raw;
     private String ownershipId;

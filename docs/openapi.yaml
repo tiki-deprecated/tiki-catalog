@@ -297,6 +297,43 @@ components:
           type: array
           items:
             type: string
+    Consent:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/TxnAOContents'
+      - type: object
+        properties:
+          ownershipId:
+            type: string
+          destination:
+            type: string
+          about:
+            type: string
+          reward:
+            type: string
+          expiry:
+            type: string
+            format: date-time
+    Ownership:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/TxnAOContents'
+      - type: object
+        properties:
+          source:
+            type: string
+          type:
+            type: string
+          origin:
+            type: string
+          about:
+            type: string
+          contains:
+            type: string
+    Raw:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/TxnAOContents'
     TxnAO:
       type: object
       properties:
@@ -324,51 +361,14 @@ components:
           type: string
         contents:
           oneOf:
-          - $ref: '#/components/schemas/TxnAOConsent'
-          - $ref: '#/components/schemas/TxnAOOwnership'
-          - $ref: '#/components/schemas/TxnAORaw'
-    TxnAOConsent:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/TxnAOContents'
-      - type: object
-        properties:
-          ownershipId:
-            type: string
-          destination:
-            type: string
-          about:
-            type: string
-          reward:
-            type: string
-          expiry:
-            type: string
-            format: date-time
+          - $ref: '#/components/schemas/Consent'
+          - $ref: '#/components/schemas/Ownership'
+          - $ref: '#/components/schemas/Raw'
     TxnAOContents:
       type: object
       properties:
         raw:
           type: string
-    TxnAOOwnership:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/TxnAOContents'
-      - type: object
-        properties:
-          source:
-            type: string
-          type:
-            type: string
-          origin:
-            type: string
-          about:
-            type: string
-          contains:
-            type: string
-    TxnAORaw:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/TxnAOContents'
   securitySchemes:
     l0Storage:
       type: http
