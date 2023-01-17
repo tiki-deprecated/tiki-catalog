@@ -32,13 +32,6 @@ jobs:
         with:
           path: l0-index
 
-      - name: Checkout spring-rest-api
-        uses: actions/checkout@v3
-        with:
-          repository: tiki/spring-rest-api
-          path: spring-rest-api
-          ref: '1.0.0'
-
       - name: Set up JDK 19
         uses: actions/setup-java@v3
         with:
@@ -57,11 +50,6 @@ jobs:
         run: psql -h localhost -d l0_index -U tester -f l0-index/database/create_tables.sql
         env:
           PGPASSWORD: ${{ secrets.POSTGRES_TEST_PW }}
-
-      - name: Maven Install spring-rest-api
-        run: |
-          cd spring-rest-api
-          mvn install
 
       - name: Maven Package L0 Index
         run: |
@@ -105,7 +93,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.1.1
+        uses: actions/checkout@v3
 
       - name: Get Version From Tag
         id: vars
