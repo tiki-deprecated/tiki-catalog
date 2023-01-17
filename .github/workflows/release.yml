@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  run_if:
-    if: startsWith(github.head_ref, 'release/') && github.event.pull_request.merged == true
+  bump_and_tag:
+    if: github.event.pull_request.merged == true #startsWith(github.head_ref, 'release/') && 
     runs-on: ubuntu-latest
     services:
       postgres:
