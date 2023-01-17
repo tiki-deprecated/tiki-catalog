@@ -7,9 +7,10 @@ package com.mytiki.l0_index.features.latest.address;
 
 import com.mytiki.l0_index.features.latest.block.BlockService;
 import com.mytiki.l0_index.utilities.B64;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 import java.util.Optional;
 
 public class AddressService {
@@ -35,14 +36,14 @@ public class AddressService {
         return rsp;
     }
 
-    public List<AddressAO> getAddresses(String appId){
-        List<AddressDO> found = repository.findAllByAid(appId);
-        return found.stream().map(addr -> {
-            AddressAO rsp = new AddressAO();
-            rsp.setAddress(B64.encode(addr.getAddress()));
-            rsp.setAppId(addr.getAid());
-            return rsp;
-        }).toList();
+    public AddressPageAO getAddresses(String appId, int num, int size){
+        AddressPageAO rsp = new AddressPageAO();
+        Page<AddressDO> page = repository.findAllByAid(appId, PageRequest.of(num, size));
+        rsp.setPage(page.getNumber());
+        rsp.setTotalPages(page.getTotalPages());
+        rsp.setTotalAddresses(page.getTotalElements());
+        rsp.setAddresses(page.get().map(address -> B64.encode(address.getAddress())).toList());
+        return rsp;
     }
 
     public AddressDO getCreate(String apiId, byte[] address){

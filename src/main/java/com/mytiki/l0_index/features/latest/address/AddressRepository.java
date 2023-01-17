@@ -5,12 +5,13 @@
 
 package com.mytiki.l0_index.features.latest.address;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface AddressRepository extends JpaRepository<AddressDO, Long> {
     Optional<AddressDO> findByAidAndAddress(String aid, byte[] address);
-    List<AddressDO> findAllByAid(String aid);
+    Page<AddressDO> findAllByAid(String aid, Pageable pageable);
 }

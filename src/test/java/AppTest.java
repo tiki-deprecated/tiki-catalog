@@ -50,10 +50,12 @@ public class AppTest {
         testAddress.setCreated(ZonedDateTime.now());
         repository.save(testAddress);
 
-        AppAO found = service.getApp(appId);
+        AppAO found = service.getApp(appId, 0, 10);
         assertEquals(appId, found.getAppId());
-        assertEquals(1, found.getAddress().size());
-        assertTrue(found.getAddress().contains(address));
+        assertEquals(1, found.getAddresses().getTotalAddresses());
+        assertEquals(0, found.getAddresses().getPage());
+        assertEquals(1, found.getAddresses().getTotalPages());
+        assertTrue(found.getAddresses().getAddresses().contains(address));
     }
 
     @Test
@@ -75,21 +77,53 @@ public class AppTest {
             repository.save(testAddress);
         }
 
-        AppAO found = service.getApp(appId);
+        AppAO found = service.getApp(appId,0, rounds);
         assertEquals(appId, found.getAppId());
-        assertEquals(rounds, found.getAddress().size());
+        assertEquals(rounds, found.getAddresses().getTotalAddresses());
+        assertEquals(0, found.getAddresses().getPage());
+        assertEquals(1, found.getAddresses().getTotalPages());
 
         for(int i=0; i<rounds; i++){
-            assertTrue(addressList.contains(found.getAddress().get(i)));
+            assertTrue(addressList.contains(found.getAddresses().getAddresses().get(i)));
         }
+    }
+
+    @Test
+    public void Test_GetApp_Page_Success(){
+        int rounds = 3;
+        String appId = UUID.randomUUID().toString();
+
+        List<String> addressList = new ArrayList<>(){{
+            add(UUID.randomUUID().toString());
+            add(UUID.randomUUID().toString());
+            add(UUID.randomUUID().toString());
+        }};
+
+        for(int i=0; i<rounds; i++) {
+            AddressDO testAddress = new AddressDO();
+            testAddress.setAddress(B64.decode(addressList.get(i)));
+            testAddress.setAid(appId);
+            testAddress.setCreated(ZonedDateTime.now());
+            repository.save(testAddress);
+        }
+
+        AppAO found = service.getApp(appId,0, 1);
+        assertEquals(appId, found.getAppId());
+        assertEquals(rounds, found.getAddresses().getTotalAddresses());
+        assertEquals(0, found.getAddresses().getPage());
+        assertEquals(rounds, found.getAddresses().getTotalPages());
+        assertTrue(addressList.contains(found.getAddresses().getAddresses().get(0)));
     }
 
     @Test
     public void Test_GetApp_None_Success(){
         String appId = UUID.randomUUID().toString();
 
-        AppAO found = service.getApp(appId);
+        AppAO found = service.getApp(appId, 0, 10);
         assertEquals(appId, appId);
-        assertEquals(0, found.getAddress().size());
+        assertEquals(0, found.getAddresses().getTotalAddresses());
+        assertEquals(0, found.getAddresses().getPage());
+        assertEquals(0, found.getAddresses().getTotalPages());
+        assertTrue(found.getAddresses().getAddresses().isEmpty());
     }
 }
