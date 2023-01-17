@@ -94,7 +94,7 @@ public class TxnTest {
         testTxn.setHash(B64.decode(txnHash));
         txnRepository.save(testTxn);
 
-        TxnAO<TxnAOOwnership> found = (TxnAO<TxnAOOwnership>) txnService.getTransaction(appId, address, blockHash, txnHash);
+        TxnAO<TxnAOContentsOwnership> found = (TxnAO<TxnAOContentsOwnership>) txnService.getTransaction(appId, address, blockHash, txnHash);
 
         assertEquals(appId, found.getApiId());
         assertEquals(address, found.getAddress());
@@ -151,7 +151,7 @@ public class TxnTest {
         testTxn.setHash(B64.decode(txnHash));
         txnRepository.save(testTxn);
 
-        TxnAO<TxnAOConsent> found = (TxnAO<TxnAOConsent>) txnService.getTransaction(appId, address, blockHash, txnHash);
+        TxnAO<TxnAOContentsConsent> found = (TxnAO<TxnAOContentsConsent>) txnService.getTransaction(appId, address, blockHash, txnHash);
 
         assertEquals(appId, found.getApiId());
         assertEquals(address, found.getAddress());

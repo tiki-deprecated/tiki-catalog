@@ -79,35 +79,35 @@ public class TxnService {
 
         switch (schema) {
             case CONSENT -> {
-                TxnAOConsent consent = new TxnAOConsent();
+                TxnAOContentsConsent consent = new TxnAOContentsConsent();
                 consent.setOwnershipId(B64.encode(decoded.get(0)));
                 consent.setDestination(Decode.utf8(decoded.get(1)));
                 consent.setAbout(Decode.utf8(decoded.get(2)));
                 consent.setReward(Decode.utf8(decoded.get(3)));
                 consent.setExpiry(Decode.dateTime(decoded.get(4)));
                 consent.setRaw(B64.encode(raw));
-                TxnAO<TxnAOConsent> txnConsent = new TxnAO<>();
+                TxnAO<TxnAOContentsConsent> txnConsent = new TxnAO<>();
                 txnConsent.setContentSchema(TxnContentSchema.CONSENT.getName());
                 txnConsent.setContents(consent);
                 return txnConsent;
             }
             case OWNERSHIP -> {
-                TxnAOOwnership ownership = new TxnAOOwnership();
+                TxnAOContentsOwnership ownership = new TxnAOContentsOwnership();
                 ownership.setSource(Decode.utf8(decoded.get(1)));
                 ownership.setType(Decode.utf8(decoded.get(2)));
                 ownership.setOrigin(Decode.utf8(decoded.get(3)));
                 ownership.setAbout(Decode.utf8(decoded.get(4)));
                 ownership.setContains(Decode.utf8(decoded.get(5)));
                 ownership.setRaw(B64.encode(raw));
-                TxnAO<TxnAOOwnership> txnOwnership = new TxnAO<>();
+                TxnAO<TxnAOContentsOwnership> txnOwnership = new TxnAO<>();
                 txnOwnership.setContentSchema(TxnContentSchema.OWNERSHIP.getName());
                 txnOwnership.setContents(ownership);
                 return txnOwnership;
             }
         }
 
-        TxnAO<TxnAOContents> txnContents = new TxnAO<>();
-        TxnAOContents contents = new TxnAOContents();
+        TxnAO<TxnAOContentsRaw> txnContents = new TxnAO<>();
+        TxnAOContentsRaw contents = new TxnAOContentsRaw();
         contents.setRaw(B64.encode(raw));
         txnContents.setContentSchema(TxnContentSchema.UNKNOWN.getName());
         txnContents.setContents(contents);

@@ -5,12 +5,20 @@
 
 package com.mytiki.l0_index.features.latest.txn;
 
+import com.mytiki.l0_index.utilities.Constants;
 import com.mytiki.spring_rest_api.ApiConstants;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "FIND")
 @RestController
 @RequestMapping(value = TxnController.PATH_CONTROLLER)
 public class TxnController {
@@ -21,7 +29,16 @@ public class TxnController {
     public TxnController(TxnService service) {
         this.service = service;
     }
-
+    @Operation(
+            operationId = Constants.PROJECT_DASH_PATH +  "-txn-get",
+            summary = "Get Transaction",
+            description = "Get a deserialized transaction given an app id, address, block hash, and transaction hash",
+            security = @SecurityRequirement(name = "jwt"),
+            responses = @ApiResponse(
+                    responseCode = "200",
+                    content = @Content(schema = @Schema(
+                    anyOf = {TxnAOContents.class, TxnAOOwnership.class, TxnAOConsent.class}
+            ))))
     @RequestMapping(method = RequestMethod.GET)
     public TxnAO<?> getTransaction(
             @PathVariable(name = "id") String id,

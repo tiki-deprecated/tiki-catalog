@@ -5,10 +5,7 @@
 
 package com.mytiki.l0_index.features.latest.app;
 
-import com.mytiki.l0_index.features.latest.address.AddressAO;
 import com.mytiki.l0_index.features.latest.address.AddressService;
-
-import java.util.List;
 
 public class AppService {
 
@@ -18,11 +15,10 @@ public class AppService {
         this.addressService = addressService;
     }
 
-    public AppAO getApp(String appId){
-        List<AddressAO> addresses = addressService.getAddresses(appId);
+    public AppAO getApp(String appId, int num, int size){
         AppAO rsp = new AppAO();
         rsp.setAppId(appId);
-        rsp.setAddress(addresses.stream().map(AddressAO::getAddress).toList());
+        rsp.setAddresses(addressService.getAddresses(appId, num, size));
         return rsp;
     }
 }

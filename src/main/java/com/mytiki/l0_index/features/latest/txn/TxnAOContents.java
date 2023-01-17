@@ -5,14 +5,4 @@
 
 package com.mytiki.l0_index.features.latest.txn;
 
-public class TxnAOContents {
-    private String raw;
-
-    public String getRaw() {
-        return raw;
-    }
-
-    public void setRaw(String raw) {
-        this.raw = raw;
-    }
-}
+public class TxnAOContents extends TxnAO<TxnAOContentsRaw> {}

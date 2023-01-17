@@ -7,7 +7,7 @@ package com.mytiki.l0_index.features.latest.txn;
 
 import java.time.ZonedDateTime;
 
-public class TxnAO<C extends TxnAOContents> {
+public class TxnAO<C extends TxnAOContentsRaw> {
     private String apiId;
     private String address;
     private String block;

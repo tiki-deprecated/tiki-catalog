@@ -9,6 +9,24 @@ info:
 servers:
 - url: https://index.l0.mytiki.com
 paths:
+  /api/latest/report:
+    post:
+      tags:
+      - REPORT
+      summary: Report Block
+      description: Report a new block creation to the index service
+      operationId: l0-index-report-post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportAO'
+        required: true
+      responses:
+        "200":
+          description: OK
+      security:
+      - l0Storage: []
   /health:
     get:
       tags:
@@ -25,8 +43,173 @@ paths:
                 $ref: '#/components/schemas/ApiError'
               example:
                 message: OK
+  /api/latest/app/{id}:
+    get:
+      tags:
+      - FIND
+      summary: Page Addresses
+      description: Get a page of addresses given an app id
+      operationId: l0-index-app-get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppAO'
+      security:
+      - jwt: []
+  /api/latest/app/{id}/address/{address}:
+    get:
+      tags:
+      - FIND
+      summary: Page Blocks
+      description: Get a page of block hashes given an app id and address
+      operationId: l0-index-address-get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: address
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressAO'
+      security:
+      - jwt: []
+  /api/latest/app/{id}/address/{address}/block/{hash}:
+    get:
+      tags:
+      - FIND
+      summary: Get Block
+      description: "Get a deserialized block given an app id, address, and block hash"
+      operationId: l0-index-block-get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: address
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: hash
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlockAO'
+      security:
+      - jwt: []
+  /api/latest/app/{id}/address/{address}/block/{block-hash}/transaction/{txn-hash}:
+    get:
+      tags:
+      - FIND
+      summary: Get Transaction
+      description: "Get a deserialized transaction given an app id, address, block\
+        \ hash, and transaction hash"
+      operationId: l0-index-txn-get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: address
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: block-hash
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: txn-hash
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/TxnAOContents'
+                - $ref: '#/components/schemas/TxnAOOwnership'
+                - $ref: '#/components/schemas/TxnAOConsent'
+      security:
+      - jwt: []
 components:
   schemas:
+    ReportAO:
+      type: object
+      properties:
+        apiId:
+          type: string
+        address:
+          type: string
+        block:
+          type: string
+        src:
+          type: string
+        transactions:
+          type: array
+          items:
+            type: string
     ApiError:
       type: object
       properties:
@@ -42,3 +225,203 @@ components:
           type: object
           additionalProperties:
             type: string
+    AddressPageAO:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        totalAddresses:
+          type: integer
+          format: int64
+        addresses:
+          type: array
+          items:
+            type: string
+    AppAO:
+      type: object
+      properties:
+        appId:
+          type: string
+        addresses:
+          $ref: '#/components/schemas/AddressPageAO'
+    AddressAO:
+      type: object
+      properties:
+        appId:
+          type: string
+        address:
+          type: string
+        blocks:
+          $ref: '#/components/schemas/BlockPageAO'
+    BlockPageAO:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        totalHashes:
+          type: integer
+          format: int64
+        hashes:
+          type: array
+          items:
+            type: string
+    BlockAO:
+      type: object
+      properties:
+        apiId:
+          type: string
+        address:
+          type: string
+        hash:
+          type: string
+        url:
+          type: string
+        version:
+          type: integer
+          format: int32
+        timestamp:
+          type: string
+          format: date-time
+        previous:
+          type: string
+        signature:
+          type: string
+        transactionRoot:
+          type: string
+        transactions:
+          type: array
+          items:
+            type: string
+    TxnAOContents:
+      type: object
+      properties:
+        apiId:
+          type: string
+        address:
+          type: string
+        block:
+          type: string
+        url:
+          type: string
+        hash:
+          type: string
+        version:
+          type: integer
+          format: int32
+        timestamp:
+          type: string
+          format: date-time
+        assetRef:
+          type: string
+        signature:
+          type: string
+        contentSchema:
+          type: string
+        contents:
+          $ref: '#/components/schemas/TxnAOContentsRaw'
+    TxnAOContentsRaw:
+      type: object
+      properties:
+        raw:
+          type: string
+    TxnAOContentsOwnership:
+      type: object
+      properties:
+        raw:
+          type: string
+        source:
+          type: string
+        type:
+          type: string
+        origin:
+          type: string
+        about:
+          type: string
+        contains:
+          type: string
+    TxnAOOwnership:
+      type: object
+      properties:
+        apiId:
+          type: string
+        address:
+          type: string
+        block:
+          type: string
+        url:
+          type: string
+        hash:
+          type: string
+        version:
+          type: integer
+          format: int32
+        timestamp:
+          type: string
+          format: date-time
+        assetRef:
+          type: string
+        signature:
+          type: string
+        contentSchema:
+          type: string
+        contents:
+          $ref: '#/components/schemas/TxnAOContentsOwnership'
+    TxnAOConsent:
+      type: object
+      properties:
+        apiId:
+          type: string
+        address:
+          type: string
+        block:
+          type: string
+        url:
+          type: string
+        hash:
+          type: string
+        version:
+          type: integer
+          format: int32
+        timestamp:
+          type: string
+          format: date-time
+        assetRef:
+          type: string
+        signature:
+          type: string
+        contentSchema:
+          type: string
+        contents:
+          $ref: '#/components/schemas/TxnAOContentsConsent'
+    TxnAOContentsConsent:
+      type: object
+      properties:
+        raw:
+          type: string
+        ownershipId:
+          type: string
+        destination:
+          type: string
+        about:
+          type: string
+        reward:
+          type: string
+        expiry:
+          type: string
+          format: date-time
+  securitySchemes:
+    l0Storage:
+      type: http
+      scheme: basic
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -42,7 +42,7 @@ public class BlockService {
         rsp.setPage(page.getNumber());
         rsp.setTotalPages(page.getTotalPages());
         rsp.setTotalHashes(page.getTotalElements());
-        rsp.setHashes(page.getContent().stream().map(block -> B64.encode(block.getHash())).toList());
+        rsp.setHashes(page.get().map(block -> B64.encode(block.getHash())).toList());
         return rsp;
     }
 
