@@ -4,8 +4,8 @@ on:
   pull_request:
     branches:
       - main
-#    types:
-#      - closed
+    types:
+      - closed
 
 # Cancel any active builds when new commits are pushed
 concurrency:
@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   run_if:
-#    if: startsWith(github.head_ref, 'release/') && github.event.pull_request.merged == true
+    if: startsWith(github.head_ref, 'release/') && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -65,11 +65,4 @@ jobs:
         uses: RichardInnocent/semantic-versioning-maven@v0.0.35
         with:
           access-token: ${{ secrets.github_token }}
-
-      - name: Commit Version and Tag
-        if: steps.bump-version.outputs.previous-version != steps.bump-version.outputs.new-version
-        uses: EndBug/add-and-commit@v9
-        with:
-          add: pom.xml
-          tag: ${{ steps.bump-version.outputs.new-version }}
 
