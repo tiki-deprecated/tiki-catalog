@@ -65,5 +65,5 @@ jobs:
         uses: mike-audi/semantic-versioning-maven@1.0.0
         with:
           access-token: ${{ secrets.github_token }}
-          version-prefix: ''
+          version-prefix:
 
