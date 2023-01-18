@@ -4,8 +4,8 @@ on:
   pull_request:
     branches:
       - main
-#    types:
-#      - closed
+    types:
+      - closed
 
 # Cancel any active builds when new commits are pushed
 concurrency:
@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   bump_and_tag:
-    #if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
+    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
     runs-on: ubuntu-latest
     environment: Production
     services:
