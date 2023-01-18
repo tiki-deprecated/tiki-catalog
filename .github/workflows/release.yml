@@ -117,15 +117,6 @@ jobs:
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_ST }}
 
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: |
-            registry.digitalocean.com/tiki/l0-index
-          tags: |
-            type=raw,value=${{ needs.bump_and_tag.outputs.version }}
-
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
@@ -140,7 +131,7 @@ jobs:
           context: .
           file: prod.dockerfile
           push: true
-          tags: ${{ needs.bump_and_tag.outputs.version }}
+          tags: registry.digitalocean.com/tiki/l0-index:${{ steps.meta.outputs.tags }}
           build-args: |
             JAR_FILE=target/*.jar
   deploy_to_infra:
