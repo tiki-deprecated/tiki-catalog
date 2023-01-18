@@ -66,7 +66,6 @@ jobs:
         with:
           access-token: ${{ secrets.github_token }}
           version-prefix:
-
   test_and_push:
     runs-on: ubuntu-latest
     needs: [ bump_and_tag ]
