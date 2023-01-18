@@ -131,7 +131,7 @@ jobs:
           context: .
           file: prod.dockerfile
           push: true
-          tags: registry.digitalocean.com/tiki/l0-index:${{ steps.meta.outputs.tags }}
+          tags: registry.digitalocean.com/tiki/l0-index:${{ steps.bump-version.outputs.new-version }}
           build-args: |
             JAR_FILE=target/*.jar
   deploy_to_infra:
