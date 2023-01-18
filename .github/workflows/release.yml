@@ -124,8 +124,7 @@ jobs:
           images: |
             registry.digitalocean.com/tiki/l0-index
           tags: |
-            type=ref,event=tag
-            type=semver,pattern={{version}}
+            type=raw,value=${{ needs.bump_and_tag.outputs.version }}
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -144,7 +143,6 @@ jobs:
           tags: ${{ needs.bump_and_tag.outputs.version }}
           build-args: |
             JAR_FILE=target/*.jar
-            DOPPLER_ST=${{ secrets.DOPPLER_ST }}
   deploy_to_infra:
     runs-on: ubuntu-latest
     needs: [ bump_and_tag, test_and_push ]
