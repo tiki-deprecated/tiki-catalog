@@ -63,7 +63,7 @@ jobs:
 
       - name: Bump Version
         id: bump-version
-        uses: mike-audi/semantic-versioning-maven@1.0.0
+        uses: RichardInnocent/semantic-versioning-maven@v0.0.36
         with:
           access-token: ${{ secrets.github_token }}
           version-prefix:
