@@ -15,7 +15,7 @@ jobs:
         image: postgres:13.2
         env:
           POSTGRES_USER: tester
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_TEST_PW }}
+          POSTGRES_PASSWORD: pgtestpw
           POSTGRES_DB: l0_index
           POSTGRES_PORT: 5432
         ports:
@@ -28,9 +28,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.1.1
-        with:
-          path: l0-index
+        uses: actions/checkout@v3
 
       - name: Set up JDK 19
         uses: actions/setup-java@v3
@@ -47,14 +45,12 @@ jobs:
           sudo apt-get install --yes postgresql-client
 
       - name: Create Tables
-        run: psql -h localhost -d l0_index -U tester -f l0-index/database/create_tables.sql
+        run: psql -h localhost -d l0_index -U tester -f database/create_tables.sql
         env:
           PGPASSWORD: ${{ secrets.POSTGRES_TEST_PW }}
 
       - name: Maven Package L0 Index
-        run: |
-          cd l0-index
-          doppler run -c tst -- mvn clean package
+        run: doppler run -c tst -- mvn clean package
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_ST }}
 
@@ -79,7 +75,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: l0-index/
+          context: .
           file: prod.dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -131,7 +127,7 @@ jobs:
     needs: [ deploy_to_infra ]
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Create Sentry release
         uses: getsentry/action-release@v1
@@ -147,10 +143,10 @@ jobs:
     needs: [ sentry_release ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.1.1
+        uses: actions/checkout@v3
 
       - name: OpenApi
-        uses: readmeio/rdme@8.3.0
+        uses: readmeio/rdme@8.4.0
         with:
           rdme: openapi docs/openapi.yaml --key=${{ secrets.README_API_KEY }} --id=63c6011fa9d9d30086fb6427
 
