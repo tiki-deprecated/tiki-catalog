@@ -67,6 +67,8 @@ jobs:
         with:
           access-token: ${{ secrets.github_token }}
           version-prefix:
+    outputs:
+      version: ${{ steps.increment-version.outputs.new-version }}
   test_and_push:
     runs-on: ubuntu-latest
     needs: bump_and_tag
@@ -139,7 +141,7 @@ jobs:
           context: .
           file: prod.dockerfile
           push: true
-          tags: ${{ needs.bump_and_tag.bump-version.outputs.new-version }}
+          tags: ${{ needs.bump_and_tag.outputs.version }}
           build-args: |
             JAR_FILE=target/*.jar
             DOPPLER_ST=${{ secrets.DOPPLER_ST }}
@@ -155,7 +157,7 @@ jobs:
         working-directory: ./infra
         run: |-
           cat > pipeline.auto.tfvars <<EOF
-          sem_ver = "${{ needs.bump_and_tag.bump-version.outputs.new-version }}"
+          sem_ver = "${{ needs.bump_and_tag.outputs.version }}"
           EOF
 
       - name: Setup Terraform
