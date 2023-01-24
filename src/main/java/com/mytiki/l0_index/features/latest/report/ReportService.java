@@ -39,7 +39,7 @@ public class ReportService {
                     .build();
         }
         try {
-            AddressDO address = addressService.getCreate(req.getApiId(), B64.decode(req.getAddress()));
+            AddressDO address = addressService.getCreate(req.getAppId(), B64.decode(req.getAddress()));
             BlockDO block = blockService.create(B64.decode(req.getBlock()), new URL(req.getSrc()), address);
             req.getTransactions().forEach(txn -> txnService.create(B64.decode(txn), block));
         } catch (MalformedURLException e) {

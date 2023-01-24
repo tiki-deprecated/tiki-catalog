@@ -8,13 +8,10 @@ package com.mytiki.l0_index.features.latest.report;
 import com.mytiki.l0_index.utilities.Constants;
 import com.mytiki.spring_rest_api.ApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "REPORT")
 @RestController
@@ -31,8 +28,8 @@ public class ReportController {
     @Operation(operationId = Constants.PROJECT_DASH_PATH +  "-report-post",
             summary = "Report Block", description = "Report a new block creation to the index service",
             security = @SecurityRequirement(name = "l0Storage"))
-    @ApiResponse(responseCode = "200")
     @RequestMapping(method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void post(@RequestBody ReportAO body) {
         service.report(body);
     }
