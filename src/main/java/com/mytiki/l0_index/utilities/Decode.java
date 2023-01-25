@@ -72,13 +72,6 @@ public class Decode {
                 BigInteger.ZERO;
     }
 
-    static private BigInteger negate(BigInteger val){
-        byte[] raw = val.toByteArray();
-        for(int i=0; i< raw.length; i++)
-            raw[i] = (byte) ~(raw[i]);
-        return new BigInteger(raw);
-    }
-
     static public String utf8(byte[] bytes) {
         if (bytes.length == 1 && bytes[0] == 0) return null;
         else return Utf8.decode(bytes);
@@ -101,7 +94,7 @@ public class Decode {
         return out.array();
     }
 
-    private static int decodeCompactSize(byte[] compactSize) {
+    public static int decodeCompactSize(byte[] compactSize) {
         int size =  compactSize[0] & 0xFF;
 
         byte[] bytes;
