@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.codec.Utf8;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
@@ -81,7 +80,7 @@ public class BlockService {
         try {
             ResponseEntity<byte[]> response = client.getForEntity(src.toURI(), byte[].class);
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null)
-                return Decode.chars(Utf8.decode(response.getBody()).toCharArray());
+                return Decode.bytes(response.getBody());
             else return List.of();
         } catch (URISyntaxException | ResourceAccessException e) {
             logger.error("src_url is an invalid URI", e);

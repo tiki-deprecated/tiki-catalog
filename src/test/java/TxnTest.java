@@ -67,7 +67,7 @@ public class TxnTest {
         BlockService blockService = new BlockService(blockRepository, testRestTemplate.getRestTemplate());
         TxnService txnService = new TxnService(txnRepository, blockService);
 
-        String txnHash = "9G88VZEb7eyJSS5L71NLRfKN1Ab0Y3Sj6b-1azllfNM";
+        String txnHash = "-TCPtpG11vITi0J3stisH834F4FCY65p1F5V4LtX75U";
         txnRepository.deleteByHash(B64.decode(txnHash));
 
         String appId = UUID.randomUUID().toString();
@@ -103,18 +103,17 @@ public class TxnTest {
         assertEquals(src.toString(), found.getUrl());
         assertEquals(1, found.getVersion());
         assertEquals("AA", found.getAssetRef());
-        assertEquals("2023-01-12T02:56:10Z", found.getTimestamp().toString());
-        assertEquals("Ehlzv9uQp6FIy6QpwajErT-gKIbUPd0ycAWCUBZda252y6sK9xxOl25qQaRpKqerRjyE8a6QebVrU-qmdwbMvSbD93k-qRcTelk6rOuDuaWYma2IzMmi3bd74WyG5Gb_ObBdaPtdT7Dk3ITzuzdS-x88LuFvuQDwBFsLpkbuLiVsoc545ZiM1_UQ_G5YI_6IiuFHFU9f_4lKioLsr2yREcvisdPBWRpd5-5RKQUyB6nqYyly38n7mo9Djpo22VVkFoctDnVyA-CkWvNEpObTuYbExzTvE-SDVZqFWVZVRjR9ygexbAYOWFk9wVIZTborV4qvCmgbXZ-DdDDrdiL1Pg",
+        assertEquals("2023-02-14T04:10:03Z", found.getTimestamp().toString());
+        assertEquals("WdVIJ2BLcWfImPq2hEoH9xSGZHwsRjidvIj_yrkzyIz0_tfEjQqWYVKufLp5XdAktKNjQ6Krz30ATPLX62r9vFQiVov-aLeDgejh2ihMP8__0Vl6XS-k_49dw0ygf9YyI2tj9xXh5MUsgbjZO_9zNtF1OoR5n9PrEauRxoGpnd4-bGEl7h7K4o8iiCpMWZ0scH0l5PQw55WGEi-wczDslmE-XzO_qTZzTnmyOLjelY5wrFS2g_lEA07HCidAAA_x9yujW-DGOkxZMoP7AItq4oUUV0dkaqsG4PM8kZkgIHhpyJ3pQEK-sM-VjzJm518Kk2ul25ILgyeybsx-A6nbvg",
                 found.getSignature());
         assertEquals(TxnContentSchema.OWNERSHIP.getName(), found.getContentSchema());
 
         TxnAOOwnership ownership = (TxnAOOwnership) found.getContents();
-        assertEquals("user_92e71914-5766-417e-940e-c39492cdf3df", ownership.getSource());
-        assertEquals("data_point", ownership.getType());
-        assertEquals("com.mytiki.example_flutter_tos", ownership.getOrigin());
-        assertEquals("You can put the Terms of Service the user agreed to here.", ownership.getAbout());
-        assertEquals("[\"user_id\"]", ownership.getContains());
-        assertEquals("AQEpdXNlcl85MmU3MTkxNC01NzY2LTQxN2UtOTQwZS1jMzk0OTJjZGYzZGYKZGF0YV9wb2ludB5jb20ubXl0aWtpLmV4YW1wbGVfZmx1dHRlcl90b3M5WW91IGNhbiBwdXQgdGhlIFRlcm1zIG9mIFNlcnZpY2UgdGhlIHVzZXIgYWdyZWVkIHRvIGhlcmUuC1sidXNlcl9pZCJd",
+        assertEquals("eyJtZXNzYWdlIiA6ICJIZWxsbyBUaWtpISJ9", ownership.getSource());
+        assertEquals("data_stream", ownership.getType());
+        assertEquals("com.mytiki.tiki_sdk_example", ownership.getOrigin());
+        assertEquals("[\"Test data\"]", ownership.getContains());
+        assertEquals("AQEkZXlKdFpYTnpZV2RsSWlBNklDSklaV3hzYnlCVWFXdHBJU0o5C2RhdGFfc3RyZWFtG2NvbS5teXRpa2kudGlraV9zZGtfZXhhbXBsZQEADVsiVGVzdCBkYXRhIl0",
                 found.getContents().getRaw());
     }
 
@@ -126,7 +125,7 @@ public class TxnTest {
         BlockService blockService = new BlockService(blockRepository, testRestTemplate.getRestTemplate());
         TxnService txnService = new TxnService(txnRepository, blockService);
 
-        String txnHash = "IR3N5-G9VU53R0zzcrI8mdB0_LoPPamM-VrqjKBRaRg";
+        String txnHash = "TfP2bf66oS0ysSGgqDA7JshI0QQBTmSds-2ngT2NisM";
         txnRepository.deleteByHash(B64.decode(txnHash));
 
         String appId = UUID.randomUUID().toString();
@@ -162,18 +161,18 @@ public class TxnTest {
         assertEquals(src.toString(), found.getUrl());
         assertEquals(1, found.getVersion());
         assertEquals("AA", found.getAssetRef());
-        assertEquals("2023-01-12T02:56:18Z", found.getTimestamp().toString());
-        assertEquals("gjp8OXna2pe4G_gELtQr31W-Hucwr3a3F25w7Nfrg1I1ortZtYSK1Z-fJV2x-fhX3E_5ZfmKwT5x5WfFnFdJsEKuGIeJZBkL4JUU2GRSuz8xK9u8QXJIPRRIbJCHmFWPyTC5l7dU2oLR9eXWSGf7wpWYzXL_NLbgAEZ5mmimTHsJjwE8C5ZsiFk6kpEePxPTPWlBiBnHHk1sZUipTgzW02c3cndw9Vo3EEETPHVYhVhTSF5kkj0KIEYsVcT8t-Lv15raWIOVaJbdv5fEgZNIpx1HJ3Ss1NevGa3iaqeak-v3nnNsGKCmlh1iehXwUV02boobzD3yL91cvn6cdTO7BQ",
+        assertEquals("2023-02-14T04:10:19Z", found.getTimestamp().toString());
+        assertEquals("W-7kCbVhPOlBAM3T0kwl3K5_zlY9cuXuf6m-c7EmGZJNoz466kWgUVEaasGisVDYxkcpqBhV5bvspNpA-JKs3WyRYiJKluevR4G4L3QYgoNduWpZuilurjM0aANUbDS9XTdC1HdpfFT_VfkFsICKgFqROiIXkjjS4MSNwRxcb9ApWuUJEdhTFJRmq-jLXtInecluqsqI5NXEB76y0cG3RHQg3mE18pGXvD5N9M8lfsrwpbU8Iy5UrSAVaAAXZJgw2W1Wk5_p-yn4scSfRu4p7ZTWPjgZPlbIbAZOO2KuWrApDqXHJ2NElc7n941JBKL-bgunUA8SNm_iL5WeF_Kl8w",
                 found.getSignature());
         assertEquals(TxnContentSchema.CONSENT.getName(), found.getContentSchema());
 
         TxnAOConsent consent = (TxnAOConsent) found.getContents();
-        assertEquals("9G88VZEb7eyJSS5L71NLRfKN1Ab0Y3Sj6b-1azllfNM", consent.getOwnershipId());
-        assertEquals("\u0005[\"*\"]\u0005[\"*\"]", consent.getDestination());
+        assertEquals("-TCPtpG11vITi0J3stisH834F4FCY65p1F5V4LtX75U", consent.getOwnershipId());
+        assertEquals("![\"https://postman-echo.com/post\"]\b[\"POST\"]", consent.getDestination());
         assertNull(consent.getAbout());
         assertNull(consent.getReward());
         assertNull(consent.getExpiry());
-        assertEquals("IPRvPFWRG-3siUkuS-9TS0XyjdQG9GN0o-m_tWs5ZXzTDAVbIioiXQVbIioiXQEAAQABAA",
+        assertEquals("IPkwj7aRtdbyE4tCd7LYrB_N-BeBQmOuadReVeC7V--VKyFbImh0dHBzOi8vcG9zdG1hbi1lY2hvLmNvbS9wb3N0Il0IWyJQT1NUIl0BAAEAAQA",
                 found.getContents().getRaw());
     }
 

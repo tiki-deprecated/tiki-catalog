@@ -88,15 +88,14 @@ public class BlockTest {
         assertEquals(src.toString(), found.getUrl());
         assertEquals(1, found.getVersion());
         assertEquals("AA", found.getPrevious());
-        assertEquals("2023-01-12T02:56:19Z", found.getTimestamp().toString());
+        assertEquals("2023-02-14T04:11:03Z", found.getTimestamp().toString());
         assertEquals(
-                "BCRu6A66rHsdMZ_wXDbIKSw26iwQ5tXpaAgKhDivPJcx264CRAoTHTBBojoyF5AVc7EjgzGC0kgKKgEIEfou3QsMrQ7d-YX4LRihuyolugjPBiPpUwpucoHc8LZ3qUZ5aHGN2t5ixkkD57BFd2FZWkboPb9oc0XjZMIxg0AuEJawoxDDafkfMJi15BJtNiYRHmThR2FLEtTC4ZNIYLmMemhPRoczbXiN70JAkTJ-2F38hEdysxRPYiSNJ3056Ppz8FhY4-tDORbyWkJw4WSVd3RSU4usAo0V-AxOxv32k-b0AZmZgOJCgcRxejLyFOuwWn3HGQXD5Yj_NYzifnamCw",
+                "fyKzihI1aZ6QIc2BKMv5NIVrnzXNy1I2wx71yJS93heJQnvenECq5oCkMsUdsgpLe3ZZPnX8pwP_zPsp-R9P8zbx5aOhY2VVBuxPNzBKjn_rdZ_ShQau0qUPVmb6hWr8MN3aPE-n__7wgd9yjGap_l-C9rv2aBINF1GUotez9YkC4mmrA3lX4OEJJJB2LQrRyXYyKUlCqX5R5VkI_0_GkHpp2vfgTk8GyaNwJSZgIIEvxQT18jIAZ743mXd1481DlGbdg-WwZHtFLi7LBhWBTXTryN9hMuNK_hy_TYu7cqrXy1GGfWGIVWhYiVcz4ibuAhmxZ_GInVGmVwWzjlv54g",
                 found.getSignature());
-        assertEquals("igw0LizBwrFiHPqHOm0KsNGptN97G0rKXmOZh7Mv1mc", found.getTransactionRoot());
-        assertEquals(3, found.getTransactions().size());
-        assertTrue(found.getTransactions().contains("9G88VZEb7eyJSS5L71NLRfKN1Ab0Y3Sj6b-1azllfNM"));
-        assertTrue(found.getTransactions().contains("IR3N5-G9VU53R0zzcrI8mdB0_LoPPamM-VrqjKBRaRg"));
-        assertTrue(found.getTransactions().contains("eCgm9X0b2g9ultCEL8lrb8lyE0q3m3VyVPm_NbJ__fk"));
+        assertEquals("4y3VPrsWN8m4CfQBNO8CK8OEAnwRD47ySkrjp3vOEiw", found.getTransactionRoot());
+        assertEquals(10, found.getTransactions().size());
+        assertTrue(found.getTransactions().contains("-TCPtpG11vITi0J3stisH834F4FCY65p1F5V4LtX75U"));
+        assertTrue(found.getTransactions().contains("TfP2bf66oS0ysSGgqDA7JshI0QQBTmSds-2ngT2NisM"));
     }
 
     @Test
