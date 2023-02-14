@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = TxnController.PATH_CONTROLLER)
 public class TxnController {
     public static final String PATH_CONTROLLER = ApiConstants.API_LATEST_ROUTE +
-            "app/{id}/address/{address}/block/{block-hash}/transaction/{txn-hash}";
+            "app/{app-id}/address/{address}/block/{block-hash}/transaction/{txn-hash}";
     private final TxnService service;
 
     public TxnController(TxnService service) {
@@ -33,10 +33,10 @@ public class TxnController {
             security = @SecurityRequirement(name = "jwt"))
     @RequestMapping(method = RequestMethod.GET)
     public TxnAO getTransaction(
-            @PathVariable(name = "id") String id,
+            @PathVariable(name = "app-id") String appId,
             @PathVariable(name = "address") String address,
             @PathVariable(name = "block-hash") String blockHash,
             @PathVariable(name = "txn-hash") String txnHash) {
-        return service.getTransaction(id, address, blockHash, txnHash);
+        return service.getTransaction(appId, address, blockHash, txnHash);
     }
 }

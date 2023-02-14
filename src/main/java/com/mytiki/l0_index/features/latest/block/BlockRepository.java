@@ -12,6 +12,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface BlockRepository extends JpaRepository<BlockDO, Long> {
-    Page<BlockDO> findAllByAddressAidAndAddressAddress(String aid, byte[] address, Pageable pageable);
-    Optional<BlockDO> findByHashAndAddressAidAndAddressAddress(byte[] hash, String aid, byte[] address);
+    Page<BlockDO> findAllByAddressAppIdAndAddressAddress(String appId, byte[] address, Pageable pageable);
+    Optional<BlockDO> findByHashAndAddressAppIdAndAddressAddress(byte[] hash, String appId, byte[] address);
 }

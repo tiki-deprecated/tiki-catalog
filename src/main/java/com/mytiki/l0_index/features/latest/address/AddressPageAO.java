@@ -8,7 +8,6 @@ package com.mytiki.l0_index.features.latest.address;
 import java.util.List;
 
 public class AddressPageAO {
-
     private int page;
     private int totalPages;
     private long totalAddresses;

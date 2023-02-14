@@ -27,9 +27,9 @@ public class TxnService {
         this.blockService = blockService;
     }
 
-    public TxnAO getTransaction(String apiId, String address, String blockHash, String txnHash){
+    public TxnAO getTransaction(String appId, String address, String blockHash, String txnHash){
         TxnAO rsp = new TxnAO();
-        rsp.setApiId(apiId);
+        rsp.setAppId(appId);
         rsp.setAddress(address);
         rsp.setBlock(blockHash);
         rsp.setHash(txnHash);
@@ -38,8 +38,8 @@ public class TxnService {
         byte[] blockHashBytes = B64.decode(blockHash);
         byte[] txnHashBytes = B64.decode(txnHash);
 
-        Optional<TxnDO> found = repository.findByHashAndBlockHashAndBlockAddressAidAndBlockAddressAddress(
-                txnHashBytes, blockHashBytes, apiId, addressBytes);
+        Optional<TxnDO> found = repository.findByHashAndBlockHashAndBlockAddressAppIdAndBlockAddressAddress(
+                txnHashBytes, blockHashBytes, appId, addressBytes);
 
         if(found.isPresent()){
             rsp.setUrl(found.get().getBlock().getSrc().toString());

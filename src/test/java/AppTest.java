@@ -46,7 +46,7 @@ public class AppTest {
 
         AddressDO testAddress = new AddressDO();
         testAddress.setAddress(B64.decode(address));
-        testAddress.setAid(appId);
+        testAddress.setAppId(appId);
         testAddress.setCreated(ZonedDateTime.now());
         repository.save(testAddress);
 
@@ -72,7 +72,7 @@ public class AppTest {
         for(int i=0; i<rounds; i++) {
             AddressDO testAddress = new AddressDO();
             testAddress.setAddress(B64.decode(addressList.get(i)));
-            testAddress.setAid(appId);
+            testAddress.setAppId(appId);
             testAddress.setCreated(ZonedDateTime.now());
             repository.save(testAddress);
         }
@@ -102,7 +102,7 @@ public class AppTest {
         for(int i=0; i<rounds; i++) {
             AddressDO testAddress = new AddressDO();
             testAddress.setAddress(B64.decode(addressList.get(i)));
-            testAddress.setAid(appId);
+            testAddress.setAppId(appId);
             testAddress.setCreated(ZonedDateTime.now());
             repository.save(testAddress);
         }

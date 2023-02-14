@@ -77,7 +77,7 @@ public class TxnTest {
 
         AddressDO testAddress = new AddressDO();
         testAddress.setAddress(B64.decode(address));
-        testAddress.setAid(appId);
+        testAddress.setAppId(appId);
         testAddress.setCreated(ZonedDateTime.now());
         addressRepository.save(testAddress);
 
@@ -96,7 +96,7 @@ public class TxnTest {
 
         TxnAO found = txnService.getTransaction(appId, address, blockHash, txnHash);
 
-        assertEquals(appId, found.getApiId());
+        assertEquals(appId, found.getAppId());
         assertEquals(address, found.getAddress());
         assertEquals(blockHash, found.getBlock());
         assertEquals(txnHash, found.getHash());
@@ -136,7 +136,7 @@ public class TxnTest {
 
         AddressDO testAddress = new AddressDO();
         testAddress.setAddress(B64.decode(address));
-        testAddress.setAid(appId);
+        testAddress.setAppId(appId);
         testAddress.setCreated(ZonedDateTime.now());
         addressRepository.save(testAddress);
 
@@ -155,7 +155,7 @@ public class TxnTest {
 
         TxnAO found = txnService.getTransaction(appId, address, blockHash, txnHash);
 
-        assertEquals(appId, found.getApiId());
+        assertEquals(appId, found.getAppId());
         assertEquals(address, found.getAddress());
         assertEquals(blockHash, found.getBlock());
         assertEquals(txnHash, found.getHash());
@@ -193,7 +193,7 @@ public class TxnTest {
 
         AddressDO testAddress = new AddressDO();
         testAddress.setAddress(B64.decode(address));
-        testAddress.setAid(appId);
+        testAddress.setAppId(appId);
         testAddress.setCreated(ZonedDateTime.now());
         addressRepository.save(testAddress);
 
@@ -212,7 +212,7 @@ public class TxnTest {
 
         TxnAO found = txnService.getTransaction(appId, address, blockHash, txnHash);
 
-        assertEquals(appId, found.getApiId());
+        assertEquals(appId, found.getAppId());
         assertEquals(address, found.getAddress());
         assertEquals(blockHash, found.getBlock());
         assertEquals(txnHash, found.getHash());
@@ -235,7 +235,7 @@ public class TxnTest {
 
         AddressDO testAddress = new AddressDO();
         testAddress.setAddress(B64.decode(address));
-        testAddress.setAid(appId);
+        testAddress.setAppId(appId);
         testAddress.setCreated(ZonedDateTime.now());
         addressRepository.save(testAddress);
 
@@ -254,7 +254,7 @@ public class TxnTest {
 
         TxnAO found = txnService.getTransaction(appId, address, blockHash, txnHash);
 
-        assertEquals(appId, found.getApiId());
+        assertEquals(appId, found.getAppId());
         assertEquals(address, found.getAddress());
         assertEquals(blockHash, found.getBlock());
         assertEquals(txnHash, found.getHash());
@@ -273,7 +273,7 @@ public class TxnTest {
 
         TxnAO found = txnService.getTransaction(appId, address, blockHash, txnHash);
 
-        assertEquals(appId, found.getApiId());
+        assertEquals(appId, found.getAppId());
         assertEquals(address, found.getAddress());
         assertEquals(blockHash, found.getBlock());
         assertEquals(txnHash, found.getHash());

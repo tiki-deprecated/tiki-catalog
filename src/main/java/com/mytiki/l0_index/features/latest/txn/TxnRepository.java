@@ -11,8 +11,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface TxnRepository extends JpaRepository<TxnDO, Long> {
-    Optional<TxnDO> findByHashAndBlockHashAndBlockAddressAidAndBlockAddressAddress(
-            byte[] txnHash, byte[] blockHash, String aid, byte[] address);
+    Optional<TxnDO> findByHashAndBlockHashAndBlockAddressAppIdAndBlockAddressAddress(
+            byte[] txnHash, byte[] blockHash, String appId, byte[] address);
     @Transactional
     void deleteByHash(byte[] hash);
 }

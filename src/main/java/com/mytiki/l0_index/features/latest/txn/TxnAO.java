@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.ZonedDateTime;
 
 public class TxnAO {
-    private String apiId;
+    private String appId;
     private String address;
     private String block;
     private String url;
@@ -19,17 +19,16 @@ public class TxnAO {
     private ZonedDateTime timestamp;
     private String assetRef;
     private String signature;
-
     @Schema(allowableValues = { "consent_nft", "ownership_nft", "unknown" })
     private String contentSchema;
     private TxnAOContents contents;
 
-    public String getApiId() {
-        return apiId;
+    public String getAppId() {
+        return appId;
     }
 
-    public void setApiId(String apiId) {
-        this.apiId = apiId;
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     public String getAddress() {
