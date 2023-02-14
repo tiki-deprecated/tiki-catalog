@@ -199,7 +199,7 @@ jobs:
       - name: OpenApi
         uses: readmeio/rdme@8.4.0
         with:
-          rdme: openapi docs/openapi.yaml --key=${{ secrets.README_API_KEY }} --id=63c6011fa9d9d30086fb6427
+          rdme: openapi docs/openapi.yaml --key=${{ secrets.README_API_KEY }} --id=63eb0b3c8850f60012d4bf13
 
       - name: Release
         uses: softprops/action-gh-release@v1
