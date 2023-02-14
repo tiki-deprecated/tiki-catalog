@@ -4,7 +4,7 @@
 resource "digitalocean_database_cluster" "db-cluster-l0-index" {
   name                 = "l0-index-db-cluster-${local.region}"
   engine               = "pg"
-  version              = "14"
+  version              = "14.6"
   size                 = "db-s-1vcpu-1gb"
   region               = local.region
   node_count           = 1
