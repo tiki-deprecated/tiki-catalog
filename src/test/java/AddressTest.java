@@ -53,7 +53,7 @@ public class AddressTest {
 
         AddressDO testAddress = new AddressDO();
         testAddress.setAddress(B64.decode(address));
-        testAddress.setAid(appId);
+        testAddress.setAppId(appId);
         testAddress.setCreated(ZonedDateTime.now());
         repository.save(testAddress);
         AddressAO found = service.getAddress(appId, address, 0, 100);
@@ -84,7 +84,7 @@ public class AddressTest {
 
         AddressDO testAddress = new AddressDO();
         testAddress.setAddress(B64.decode(address));
-        testAddress.setAid(appId);
+        testAddress.setAppId(appId);
         testAddress.setCreated(ZonedDateTime.now());
         repository.save(testAddress);
 
@@ -121,7 +121,7 @@ public class AddressTest {
 
         AddressDO testAddress = new AddressDO();
         testAddress.setAddress(B64.decode(address));
-        testAddress.setAid(appId);
+        testAddress.setAppId(appId);
         testAddress.setCreated(ZonedDateTime.now());
         repository.save(testAddress);
 

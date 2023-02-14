@@ -65,17 +65,17 @@ public class ReportTest {
         ReportAO req = new ReportAO(appId, address, blockHash, src,  List.of(txnHash1, txnHash2));
         service.report(req);
 
-        Optional<AddressDO> foundAddress = addressRepository.findByAidAndAddress(appId, B64.decode(address));
-        Optional<BlockDO> foundBlock = blockRepository.findByHashAndAddressAidAndAddressAddress(
+        Optional<AddressDO> foundAddress = addressRepository.findByAppIdAndAddress(appId, B64.decode(address));
+        Optional<BlockDO> foundBlock = blockRepository.findByHashAndAddressAppIdAndAddressAddress(
                 B64.decode(blockHash), appId, B64.decode(address));
-        Optional<TxnDO> foundTxn1 = txnRepository.findByHashAndBlockHashAndBlockAddressAidAndBlockAddressAddress(
+        Optional<TxnDO> foundTxn1 = txnRepository.findByHashAndBlockHashAndBlockAddressAppIdAndBlockAddressAddress(
                 B64.decode(txnHash1), B64.decode(blockHash), appId, B64.decode(address));
-        Optional<TxnDO> foundTxn2 = txnRepository.findByHashAndBlockHashAndBlockAddressAidAndBlockAddressAddress(
+        Optional<TxnDO> foundTxn2 = txnRepository.findByHashAndBlockHashAndBlockAddressAppIdAndBlockAddressAddress(
                 B64.decode(txnHash2), B64.decode(blockHash), appId, B64.decode(address));
 
         assertTrue(foundAddress.isPresent());
         assertEquals(address, B64.encode(foundAddress.get().getAddress()));
-        assertEquals(appId, foundAddress.get().getAid());
+        assertEquals(appId, foundAddress.get().getAppId());
         assertNotNull(foundAddress.get().getCreated());
 
         assertTrue(foundBlock.isPresent());
@@ -93,7 +93,7 @@ public class ReportTest {
     }
 
     @Test
-    public void Test_Report_DuplicateAddressApiId_Success() {
+    public void Test_Report_DuplicateAddressAppId_Success() {
         String appId = UUID.randomUUID().toString();
         String address = UUID.randomUUID().toString();
         String blockHash = UUID.randomUUID().toString();
@@ -103,24 +103,24 @@ public class ReportTest {
 
         AddressDO dupe = new AddressDO();
         dupe.setAddress(B64.decode(address));
-        dupe.setAid(appId);
+        dupe.setAppId(appId);
         dupe.setCreated(ZonedDateTime.now());
         addressRepository.save(dupe);
 
         ReportAO req = new ReportAO(appId, address, blockHash, src,  List.of(txnHash1, txnHash2));
         service.report(req);
 
-        Optional<AddressDO> foundAddress = addressRepository.findByAidAndAddress(appId, B64.decode(address));
-        Optional<BlockDO> foundBlock = blockRepository.findByHashAndAddressAidAndAddressAddress(
+        Optional<AddressDO> foundAddress = addressRepository.findByAppIdAndAddress(appId, B64.decode(address));
+        Optional<BlockDO> foundBlock = blockRepository.findByHashAndAddressAppIdAndAddressAddress(
                 B64.decode(blockHash), appId, B64.decode(address));
-        Optional<TxnDO> foundTxn1 = txnRepository.findByHashAndBlockHashAndBlockAddressAidAndBlockAddressAddress(
+        Optional<TxnDO> foundTxn1 = txnRepository.findByHashAndBlockHashAndBlockAddressAppIdAndBlockAddressAddress(
                 B64.decode(txnHash1), B64.decode(blockHash), appId, B64.decode(address));
-        Optional<TxnDO> foundTxn2 = txnRepository.findByHashAndBlockHashAndBlockAddressAidAndBlockAddressAddress(
+        Optional<TxnDO> foundTxn2 = txnRepository.findByHashAndBlockHashAndBlockAddressAppIdAndBlockAddressAddress(
                 B64.decode(txnHash2), B64.decode(blockHash), appId, B64.decode(address));
 
         assertTrue(foundAddress.isPresent());
         assertEquals(address, B64.encode(foundAddress.get().getAddress()));
-        assertEquals(appId, foundAddress.get().getAid());
+        assertEquals(appId, foundAddress.get().getAppId());
         assertNotNull(foundAddress.get().getCreated());
 
         assertTrue(foundBlock.isPresent());
@@ -176,7 +176,7 @@ public class ReportTest {
 
         AddressDO dupeAddress = new AddressDO();
         dupeAddress.setAddress(B64.decode(address));
-        dupeAddress.setAid(appId);
+        dupeAddress.setAppId(appId);
         dupeAddress.setCreated(ZonedDateTime.now());
         addressRepository.save(dupeAddress);
 

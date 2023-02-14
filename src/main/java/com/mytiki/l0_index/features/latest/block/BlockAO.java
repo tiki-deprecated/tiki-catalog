@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 public class BlockAO {
-    private String apiId;
+    private String appId;
     private String address;
     private String hash;
     private String url;
@@ -20,12 +20,12 @@ public class BlockAO {
     private String transactionRoot;
     private List<String> transactions;
 
-    public String getApiId() {
-        return apiId;
+    public String getAppId() {
+        return appId;
     }
 
-    public void setApiId(String apiId) {
-        this.apiId = apiId;
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     public String getAddress() {

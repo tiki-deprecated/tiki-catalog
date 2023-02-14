@@ -30,6 +30,7 @@ import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.net.URL;
 import java.util.*;
@@ -91,7 +92,9 @@ public class SecurityConfig {
                 .cors()
                 .configurationSource(SecurityConstants.corsConfigurationSource()).and()
                 .csrf()
-                .ignoringRequestMatchers(ReportController.PATH_CONTROLLER).and()
+                .ignoringRequestMatchers(
+                        new AntPathRequestMatcher(ReportController.PATH_CONTROLLER, HttpMethod.POST.name())
+                ).and()
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.GET, ApiConstants.HEALTH_ROUTE).permitAll()
                 .requestMatchers(HttpMethod.GET, Constants.API_DOCS_PATH).permitAll()

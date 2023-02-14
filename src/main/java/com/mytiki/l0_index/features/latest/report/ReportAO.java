@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class ReportAO {
-    private String apiId;
+    private String appId;
     private String address;
     private String block;
     private String src;
@@ -19,24 +19,24 @@ public class ReportAO {
 
     @JsonCreator
     public ReportAO(
-            @JsonProperty(required = true) String apiId,
+            @JsonProperty(required = true) String appId,
             @JsonProperty(required = true) String address,
             @JsonProperty(required = true) String block,
             @JsonProperty(required = true) String src,
             @JsonProperty(required = true) List<String> transactions) {
-        this.apiId = apiId;
+        this.appId = appId;
         this.address = address;
         this.block = block;
         this.src = src;
         this.transactions = transactions;
     }
 
-    public String getApiId() {
-        return apiId;
+    public String getAppId() {
+        return appId;
     }
 
-    public void setApiId(String apiId) {
-        this.apiId = apiId;
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     public String getAddress() {

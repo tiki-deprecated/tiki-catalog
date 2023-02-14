@@ -9,9 +9,9 @@
 CREATE TABLE IF NOT EXISTS address (
     id BIGSERIAL PRIMARY KEY,
     address BYTEA NOT NULL,
-    aid TEXT NOT NULL,
+    app_id TEXT NOT NULL,
     created_utc TIMESTAMP WITH TIME ZONE NOT NULL,
-    UNIQUE (aid, address)
+    UNIQUE (app_id, address)
 );
 
 -- -----------------------------------------------------------------------

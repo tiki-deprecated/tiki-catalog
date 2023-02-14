@@ -15,7 +15,7 @@ import java.time.ZonedDateTime;
 public class AddressDO implements Serializable {
     private Long id;
     private byte[] address;
-    private String aid;
+    private String appId;
     private ZonedDateTime created;
 
     @Id
@@ -38,13 +38,13 @@ public class AddressDO implements Serializable {
         this.address = address;
     }
 
-    @Column(name = "aid")
-    public String getAid() {
-        return aid;
+    @Column(name = "app_id")
+    public String getAppId() {
+        return appId;
     }
 
-    public void setAid(String aid) {
-        this.aid = aid;
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     @Column(name = "created_utc")

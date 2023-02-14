@@ -58,16 +58,16 @@ public class Decode {
         boolean negative = bytes.length > 0 && ((bytes[0] & 0x80) == 0x80);
         long result;
         if (bytes.length == 1) {
-            result = bytes[0];
+            result = (negative ? ~bytes[0] : bytes[0]) & 0xFF;
         } else {
             result = 0;
             for (int i = 0; i < bytes.length; i++) {
                 long item = bytes[bytes.length - i - 1] & 0xFF;
-                result |= item << (8 * i);
+                result |= ((negative ? ~item : item) & 0xFF) << (8 * i);
             }
         }
         return result != 0 ? negative ?
-                BigInteger.valueOf(result).negate() :
+                BigInteger.valueOf(result + 1).negate() :
                 BigInteger.valueOf(result) :
                 BigInteger.ZERO;
     }
@@ -94,7 +94,7 @@ public class Decode {
         return out.array();
     }
 
-    private static int decodeCompactSize(byte[] compactSize) {
+    public static int decodeCompactSize(byte[] compactSize) {
         int size =  compactSize[0] & 0xFF;
 
         byte[] bytes;

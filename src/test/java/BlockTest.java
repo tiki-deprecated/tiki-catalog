@@ -70,7 +70,7 @@ public class BlockTest {
 
         AddressDO testAddress = new AddressDO();
         testAddress.setAddress(B64.decode(address));
-        testAddress.setAid(appId);
+        testAddress.setAppId(appId);
         testAddress.setCreated(ZonedDateTime.now());
         addressRepository.save(testAddress);
 
@@ -82,7 +82,7 @@ public class BlockTest {
         repository.save(testBlock);
 
         BlockAO found = service.getBlock(appId, address, hash);
-        assertEquals(appId, found.getApiId());
+        assertEquals(appId, found.getAppId());
         assertEquals(address, found.getAddress());
         assertEquals(hash, found.getHash());
         assertEquals(src.toString(), found.getUrl());
@@ -113,7 +113,7 @@ public class BlockTest {
 
         AddressDO testAddress = new AddressDO();
         testAddress.setAddress(B64.decode(address));
-        testAddress.setAid(appId);
+        testAddress.setAppId(appId);
         testAddress.setCreated(ZonedDateTime.now());
         addressRepository.save(testAddress);
 
@@ -125,7 +125,7 @@ public class BlockTest {
         repository.save(testBlock);
 
         BlockAO found = service.getBlock(appId, address, hash);
-        assertEquals(appId, found.getApiId());
+        assertEquals(appId, found.getAppId());
         assertEquals(address, found.getAddress());
         assertEquals(hash, found.getHash());
         assertEquals(src.toString(), found.getUrl());
@@ -140,7 +140,7 @@ public class BlockTest {
         String hash = UUID.randomUUID().toString();
 
         BlockAO found = service.getBlock(appId, address, hash);
-        assertEquals(appId, found.getApiId());
+        assertEquals(appId, found.getAppId());
         assertEquals(address, found.getAddress());
         assertEquals(hash, found.getHash());
     }

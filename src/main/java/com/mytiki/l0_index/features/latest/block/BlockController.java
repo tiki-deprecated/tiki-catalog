@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = BlockController.PATH_CONTROLLER)
 public class BlockController {
     public static final String PATH_CONTROLLER = ApiConstants.API_LATEST_ROUTE +
-            "app/{id}/address/{address}/block/{hash}";
+            "app/{app-id}/address/{address}/block/{block-hash}";
 
     private final BlockService service;
 
@@ -33,9 +33,9 @@ public class BlockController {
             security = @SecurityRequirement(name = "jwt"))
     @RequestMapping(method = RequestMethod.GET)
     public BlockAO getBlock(
-            @PathVariable(name = "id") String id,
+            @PathVariable(name = "app-id") String appId,
             @PathVariable(name = "address") String address,
-            @PathVariable(name = "hash") String hash) {
-        return service.getBlock(id, address, hash);
+            @PathVariable(name = "block-hash") String blockHash) {
+        return service.getBlock(appId, address, blockHash);
     }
 }

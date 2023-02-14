@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = AddressController.PATH_CONTROLLER)
 public class AddressController {
     public static final String PATH_CONTROLLER = ApiConstants.API_LATEST_ROUTE +
-            "app/{id}/address/{address}";
+            "app/{app-id}/address/{address}";
     private final AddressService service;
 
     public AddressController(AddressService service) {
@@ -29,10 +29,10 @@ public class AddressController {
             security = @SecurityRequirement(name = "jwt"))
     @RequestMapping(method = RequestMethod.GET)
     public AddressAO getAddress(
-            @PathVariable(name = "id") String id,
+            @PathVariable(name = "app-id") String appId,
             @PathVariable(name = "address") String address,
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "size", defaultValue = "100", required = false) int size) {
-        return service.getAddress(id, address, page, size);
+        return service.getAddress(appId, address, page, size);
     }
 }

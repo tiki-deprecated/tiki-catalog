@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = AppController.PATH_CONTROLLER)
 public class AppController {
-    public static final String PATH_CONTROLLER = ApiConstants.API_LATEST_ROUTE + "app/{id}";
+    public static final String PATH_CONTROLLER = ApiConstants.API_LATEST_ROUTE + "app/{app-id}";
 
     private final AppService service;
 
@@ -29,9 +29,9 @@ public class AppController {
             security = @SecurityRequirement(name = "jwt"))
     @RequestMapping(method = RequestMethod.GET)
     public AppAO getAddress(
-            @PathVariable(name = "id") String id,
+            @PathVariable(name = "app-id") String appId,
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "size", defaultValue = "100", required = false) int size) {
-        return service.getApp(id, page, size);
+        return service.getApp(appId, page, size);
     }
 }
