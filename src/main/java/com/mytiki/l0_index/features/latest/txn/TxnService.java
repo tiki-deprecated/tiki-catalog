@@ -77,6 +77,19 @@ public class TxnService {
         return List.of();
     }
 
+    public TxnDO create(byte[] hash, BlockDO block){
+        TxnDO req = new TxnDO();
+        req.setHash(hash);
+        req.setBlock(block);
+        req.setCreated(ZonedDateTime.now());
+        return repository.save(req);
+    }
+
+    public List<TxnDO> findByHash(String hash){
+        byte[] hashBytes = B64.decode(hash);
+        return repository.findByHash(hashBytes);
+    }
+
     private TxnAOContents resolveContents(TxnContentSchema schema, List<byte[]> bytes){
         switch (schema) {
             case CONSENT -> {
@@ -101,13 +114,5 @@ public class TxnService {
                 return new TxnAOUnknown();
             }
         }
-    }
-
-    public TxnDO create(byte[] hash, BlockDO block){
-        TxnDO req = new TxnDO();
-        req.setHash(hash);
-        req.setBlock(block);
-        req.setCreated(ZonedDateTime.now());
-        return repository.save(req);
     }
 }
