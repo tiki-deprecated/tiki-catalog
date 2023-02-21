@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public class AddressService {
@@ -56,5 +57,10 @@ public class AddressService {
             return repository.save(req);
         }else
             return found.get();
+    }
+
+    public List<AddressDO> findByAddress(String address){
+        byte[] addressBytes = B64.decode(address);
+        return repository.findByAddress(addressBytes);
     }
 }

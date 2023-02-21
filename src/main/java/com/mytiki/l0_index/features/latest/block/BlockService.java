@@ -57,25 +57,6 @@ public class BlockService {
         return found.map(blockDO -> fetchAndMerge(rsp, blockDO.getSrc())).orElse(rsp);
     }
 
-    private BlockAO fetchAndMerge(BlockAO block, URL src){
-        block.setUrl(src.toString());
-        List<byte[]> binary = fetch(src);
-        if(!binary.isEmpty()){
-            block.setSignature(B64.encode(binary.get(0)));
-            List<byte[]> body = Decode.bytes(binary.get(1));
-            block.setVersion(Decode.bigInt(body.get(0)).intValue());
-            block.setTimestamp(Decode.dateTime(body.get(1)));
-            block.setPrevious(B64.encode(body.get(2)));
-            block.setTransactionRoot(B64.encode(body.get(3)));
-            int txnCount = Decode.bigInt(body.get(4)).intValue();
-            List<String> txns = new ArrayList<>(txnCount);
-            for (int i = 0; i < txnCount; i++)
-                txns.add(B64.encode(Sha256.hash(body.get(5 + i))));
-            block.setTransactions(txns);
-        }
-        return block;
-    }
-
     public List<byte[]> fetch(URL src){
         try {
             ResponseEntity<byte[]> response = client.getForEntity(src.toURI(), byte[].class);
@@ -95,5 +76,29 @@ public class BlockService {
         req.setAddress(address);
         req.setCreated(ZonedDateTime.now());
         return repository.save(req);
+    }
+
+    public List<BlockDO> findByHash(String hash){
+        byte[] hashBytes = B64.decode(hash);
+        return repository.findByHash(hashBytes);
+    }
+
+    private BlockAO fetchAndMerge(BlockAO block, URL src){
+        block.setUrl(src.toString());
+        List<byte[]> binary = fetch(src);
+        if(!binary.isEmpty()){
+            block.setSignature(B64.encode(binary.get(0)));
+            List<byte[]> body = Decode.bytes(binary.get(1));
+            block.setVersion(Decode.bigInt(body.get(0)).intValue());
+            block.setTimestamp(Decode.dateTime(body.get(1)));
+            block.setPrevious(B64.encode(body.get(2)));
+            block.setTransactionRoot(B64.encode(body.get(3)));
+            int txnCount = Decode.bigInt(body.get(4)).intValue();
+            List<String> txns = new ArrayList<>(txnCount);
+            for (int i = 0; i < txnCount; i++)
+                txns.add(B64.encode(Sha256.hash(body.get(5 + i))));
+            block.setTransactions(txns);
+        }
+        return block;
     }
 }
