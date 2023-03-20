@@ -14,13 +14,14 @@ import java.time.ZonedDateTime;
 @Table(name = "address")
 public class AddressDO implements Serializable {
     private Long id;
-    private byte[] address;
+    private String address;
     private String appId;
+    private String userId;
     private ZonedDateTime created;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "address_id")
     public Long getId() {
         return id;
     }
@@ -30,11 +31,11 @@ public class AddressDO implements Serializable {
     }
 
     @Column(name = "address")
-    public byte[] getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(byte[] address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
@@ -47,7 +48,16 @@ public class AddressDO implements Serializable {
         this.appId = appId;
     }
 
-    @Column(name = "created_utc")
+    @Column(name = "user_id")
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    @Column(name = "created")
     public ZonedDateTime getCreated() {
         return created;
     }
