@@ -83,7 +83,7 @@ public class TitleDO implements Serializable {
         this.created = created;
     }
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "title_tag",
             joinColumns = @JoinColumn(name = "title_id"),

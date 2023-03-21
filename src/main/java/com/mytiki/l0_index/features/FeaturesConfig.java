@@ -7,6 +7,7 @@ package com.mytiki.l0_index.features;
 
 import com.mytiki.l0_index.features.latest.address.AddressConfig;
 import com.mytiki.l0_index.features.latest.block.BlockConfig;
+import com.mytiki.l0_index.features.latest.count.CountConfig;
 import com.mytiki.l0_index.features.latest.index.IndexConfig;
 import com.mytiki.l0_index.features.latest.license.LicenseConfig;
 import com.mytiki.l0_index.features.latest.tag.TagConfig;
@@ -21,6 +22,7 @@ import org.springframework.context.annotation.Import;
         LicenseConfig.class,
         TagConfig.class,
         TitleConfig.class,
-        UseConfig.class
+        UseConfig.class,
+        CountConfig.class
 })
 public class FeaturesConfig {}

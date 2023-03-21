@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS license (
      block_id BIGINT NOT NULL REFERENCES block(block_id),
      address_id BIGINT NOT NULL REFERENCES address(address_id),
      title_id BIGINT REFERENCES title(title_id),
-     created TIMESTAMP WITH TIME ZONE NOT NULL
+     created TIMESTAMP WITH TIME ZONE NOT NULL,
+     is_latest BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 --- -----------------------------------------------------------------------

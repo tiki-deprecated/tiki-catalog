@@ -25,6 +25,7 @@ public class LicenseDO implements Serializable {
     private TitleDO title;
     private ZonedDateTime created;
     private List<UseDO> uses;
+    private boolean isLatest;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -85,7 +86,7 @@ public class LicenseDO implements Serializable {
         this.created = created;
     }
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "license_use",
             joinColumns = @JoinColumn(name = "license_id"),
@@ -96,5 +97,14 @@ public class LicenseDO implements Serializable {
 
     public void setUses(List<UseDO> uses) {
         this.uses = uses;
+    }
+
+    @Column(name = "is_latest")
+    public boolean isLatest() {
+        return isLatest;
+    }
+
+    public void setLatest(boolean latest) {
+        isLatest = latest;
     }
 }

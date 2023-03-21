@@ -3,12 +3,25 @@
  * MIT license. See LICENSE file in root directory.
  */
 
+import com.mytiki.l0_index.features.latest.index.*;
+import com.mytiki.l0_index.features.latest.license.LicenseDO;
+import com.mytiki.l0_index.features.latest.license.LicenseRepository;
+import com.mytiki.l0_index.features.latest.title.TitleDO;
+import com.mytiki.l0_index.features.latest.title.TitleRepository;
 import com.mytiki.l0_index.main.App;
 import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -19,154 +32,63 @@ import org.springframework.test.context.ActiveProfiles;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class IndexTest {
 
-//    @Autowired
-//    private IndexService service;
-//
-//    @Autowired
-//    private AddressRepository addressRepository;
-//
-//    @Autowired
-//    private BlockRepository blockRepository;
-//
-//    @Autowired
-//    private TxnRepository txnRepository;
-//
-//    @Test
-//    public void Test_Report_Success() {
-//        String appId = UUID.randomUUID().toString();
-//        String address = UUID.randomUUID().toString();
-//        String blockHash = UUID.randomUUID().toString();
-//        String txnHash1 = UUID.randomUUID().toString();
-//        String txnHash2 = UUID.randomUUID().toString();
-//        String src = "http://localhost:8080/mockedBlock";
-//
-//        IndexAO req = new IndexAO(appId, address, blockHash, src,  List.of(txnHash1, txnHash2));
-//        service.index(req);
-//
-//        Optional<AddressDO> foundAddress = addressRepository.findByAppIdAndAddress(appId, B64.decode(address));
-//        Optional<BlockDO> foundBlock = blockRepository.findByHashAndAddressAppIdAndAddressAddress(
-//                B64.decode(blockHash), appId, B64.decode(address));
-//        Optional<TxnDO> foundTxn1 = txnRepository.findByHashAndBlockHashAndBlockAddressAppIdAndBlockAddressAddress(
-//                B64.decode(txnHash1), B64.decode(blockHash), appId, B64.decode(address));
-//        Optional<TxnDO> foundTxn2 = txnRepository.findByHashAndBlockHashAndBlockAddressAppIdAndBlockAddressAddress(
-//                B64.decode(txnHash2), B64.decode(blockHash), appId, B64.decode(address));
-//
-//        assertTrue(foundAddress.isPresent());
-//        assertEquals(address, B64.encode(foundAddress.get().getAddress()));
-//        assertEquals(appId, foundAddress.get().getAppId());
-//        assertNotNull(foundAddress.get().getCreated());
-//
-//        assertTrue(foundBlock.isPresent());
-//        assertEquals(blockHash, B64.encode(foundBlock.get().getHash()));
-//        assertEquals(src, foundBlock.get().getSrc().toString());
-//        assertNotNull(foundBlock.get().getCreated());
-//
-//        assertTrue(foundTxn1.isPresent());
-//        assertEquals(txnHash1, B64.encode(foundTxn1.get().getHash()));
-//        assertNotNull(foundTxn1.get().getCreated());
-//
-//        assertTrue(foundTxn2.isPresent());
-//        assertEquals(txnHash2, B64.encode(foundTxn2.get().getHash()));
-//        assertNotNull(foundTxn2.get().getCreated());
-//    }
-//
-//    @Test
-//    public void Test_Report_DuplicateAddressAppId_Success() {
-//        String appId = UUID.randomUUID().toString();
-//        String address = UUID.randomUUID().toString();
-//        String blockHash = UUID.randomUUID().toString();
-//        String txnHash1 = UUID.randomUUID().toString();
-//        String txnHash2 = UUID.randomUUID().toString();
-//        String src = "http://localhost:8080/mockedBlock";
-//
-//        AddressDO dupe = new AddressDO();
-//        dupe.setAddress(B64.decode(address));
-//        dupe.setAppId(appId);
-//        dupe.setCreated(ZonedDateTime.now());
-//        addressRepository.save(dupe);
-//
-//        IndexAO req = new IndexAO(appId, address, blockHash, src,  List.of(txnHash1, txnHash2));
-//        service.index(req);
-//
-//        Optional<AddressDO> foundAddress = addressRepository.findByAppIdAndAddress(appId, B64.decode(address));
-//        Optional<BlockDO> foundBlock = blockRepository.findByHashAndAddressAppIdAndAddressAddress(
-//                B64.decode(blockHash), appId, B64.decode(address));
-//        Optional<TxnDO> foundTxn1 = txnRepository.findByHashAndBlockHashAndBlockAddressAppIdAndBlockAddressAddress(
-//                B64.decode(txnHash1), B64.decode(blockHash), appId, B64.decode(address));
-//        Optional<TxnDO> foundTxn2 = txnRepository.findByHashAndBlockHashAndBlockAddressAppIdAndBlockAddressAddress(
-//                B64.decode(txnHash2), B64.decode(blockHash), appId, B64.decode(address));
-//
-//        assertTrue(foundAddress.isPresent());
-//        assertEquals(address, B64.encode(foundAddress.get().getAddress()));
-//        assertEquals(appId, foundAddress.get().getAppId());
-//        assertNotNull(foundAddress.get().getCreated());
-//
-//        assertTrue(foundBlock.isPresent());
-//        assertEquals(blockHash, B64.encode(foundBlock.get().getHash()));
-//        assertEquals(src, foundBlock.get().getSrc().toString());
-//        assertNotNull(foundBlock.get().getCreated());
-//
-//        assertTrue(foundTxn1.isPresent());
-//        assertEquals(txnHash1, B64.encode(foundTxn1.get().getHash()));
-//        assertNotNull(foundTxn1.get().getCreated());
-//
-//        assertTrue(foundTxn2.isPresent());
-//        assertEquals(txnHash2, B64.encode(foundTxn2.get().getHash()));
-//        assertNotNull(foundTxn2.get().getCreated());
-//    }
-//
-//    @Test
-//    public void Test_Report_BadSrc_Failure() {
-//        String appId = UUID.randomUUID().toString();
-//        String address = UUID.randomUUID().toString();
-//        String blockHash = UUID.randomUUID().toString();
-//        String txnHash1 = UUID.randomUUID().toString();
-//        String txnHash2 = UUID.randomUUID().toString();
-//        String src = "junk";
-//
-//        IndexAO req = new IndexAO(appId, address, blockHash, src,  List.of(txnHash1, txnHash2));
-//
-//        ApiException ex = assertThrows(ApiException.class, () -> service.index(req));
-//        assertEquals(ex.getHttpStatus(), HttpStatus.BAD_REQUEST);
-//    }
-//
-//    @Test
-//    public void Test_Report_NoTxn_Failure() {
-//        String appId = UUID.randomUUID().toString();
-//        String address = UUID.randomUUID().toString();
-//        String blockHash = UUID.randomUUID().toString();
-//        String src = "http://localhost:8080/mockedBlock";
-//
-//        IndexAO req = new IndexAO(appId, address, blockHash, src,  List.of());
-//
-//        ApiException ex = assertThrows(ApiException.class, () -> service.index(req));
-//        assertEquals(ex.getHttpStatus(), HttpStatus.BAD_REQUEST);
-//    }
-//
-//    @Test
-//    public void Test_Report_DuplicateBlock_Failure() throws MalformedURLException {
-//        String appId = UUID.randomUUID().toString();
-//        String address = UUID.randomUUID().toString();
-//        String blockHash = UUID.randomUUID().toString();
-//        String txnHash1 = UUID.randomUUID().toString();
-//        String txnHash2 = UUID.randomUUID().toString();
-//        String src = "http://localhost:8080/mockedBlock";
-//
-//        AddressDO dupeAddress = new AddressDO();
-//        dupeAddress.setAddress(B64.decode(address));
-//        dupeAddress.setAppId(appId);
-//        dupeAddress.setCreated(ZonedDateTime.now());
-//        addressRepository.save(dupeAddress);
-//
-//        BlockDO dupeBlock = new BlockDO();
-//        dupeBlock.setAddress(dupeAddress);
-//        dupeBlock.setHash(B64.decode(blockHash));
-//        dupeBlock.setSrc(new URL(src));
-//        dupeBlock.setCreated(ZonedDateTime.now());
-//        blockRepository.save(dupeBlock);
-//
-//        IndexAO req = new IndexAO(appId, address, blockHash, src,  List.of(txnHash1, txnHash2));
-//        ApiException ex = assertThrows(ApiException.class, () -> service.index(req));
-//        assertEquals(ex.getHttpStatus(), HttpStatus.BAD_REQUEST);
-//    }
+    @Autowired
+    private IndexService service;
+
+    @Autowired
+    private LicenseRepository licenseRepository;
+
+    @Autowired
+    private TitleRepository titleRepository;
+
+    @Test
+    public void Test_Title_Success() {
+        IndexAO req = new IndexAO(UUID.randomUUID().toString(), UUID.randomUUID().toString(), "https://mytiki.com",
+                List.of(new IndexAOTitle(
+                        UUID.randomUUID().toString(),
+                        UUID.randomUUID().toString(),
+                        UUID.randomUUID().toString(),
+                        List.of(UUID.randomUUID().toString()))), null);
+
+        service.index(req);
+        Optional<TitleDO> title = titleRepository.getByTransaction(req.getTitles().get(0).getTransaction());
+        assertTrue(title.isPresent());
+    }
+
+    @Test
+    public void Test_License_Success() {
+        IndexAO req = new IndexAO(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+                "https://mytiki.com", null,
+                List.of(new IndexAOLicense(
+                        UUID.randomUUID().toString(),
+                        UUID.randomUUID().toString(),
+                        UUID.randomUUID().toString(),
+                        List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)))));
+
+        service.index(req);
+        Optional<LicenseDO> license = licenseRepository.getByTransaction(req.getLicenses().get(0).getTransaction());
+        assertTrue(license.isPresent());
+    }
+
+    @Test
+    public void Test_Multiple_Success() {
+        IndexAO req = new IndexAO(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+                "https://mytiki.com",
+                List.of(new IndexAOTitle(
+                        UUID.randomUUID().toString(),
+                        UUID.randomUUID().toString(),
+                        UUID.randomUUID().toString(),
+                        List.of(UUID.randomUUID().toString()))),
+                List.of(new IndexAOLicense(
+                        UUID.randomUUID().toString(),
+                        UUID.randomUUID().toString(),
+                        UUID.randomUUID().toString(),
+                        List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)))));
+
+        service.index(req);
+        Optional<TitleDO> title = titleRepository.getByTransaction(req.getTitles().get(0).getTransaction());
+        assertTrue(title.isPresent());
+        Optional<LicenseDO> license = licenseRepository.getByTransaction(req.getLicenses().get(0).getTransaction());
+        assertTrue(license.isPresent());
+    }
 }

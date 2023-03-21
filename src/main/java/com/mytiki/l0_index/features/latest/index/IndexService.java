@@ -32,7 +32,9 @@ public class IndexService {
     @Transactional
     public void index(IndexAO req){
         BlockDO block = blockService.insert(req.getBlock(), req.getSrc());
-        req.getTitles().forEach(title -> titleService.insert(title, req.getAppId(), block));
-        req.getLicenses().forEach(license -> licenseService.insert(license, req.getAppId(), block));
+        if(req.getTitles() != null)
+            req.getTitles().forEach(title -> titleService.insert(title, req.getAppId(), block));
+        if(req.getLicenses() != null)
+            req.getLicenses().forEach(license -> licenseService.insert(license, req.getAppId(), block));
     }
 }

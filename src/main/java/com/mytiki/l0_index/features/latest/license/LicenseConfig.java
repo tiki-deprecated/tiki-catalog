@@ -6,9 +6,11 @@
 package com.mytiki.l0_index.features.latest.license;
 
 import com.mytiki.l0_index.features.latest.address.AddressService;
+import com.mytiki.l0_index.features.latest.count.CountService;
 import com.mytiki.l0_index.features.latest.title.TitleService;
 import com.mytiki.l0_index.features.latest.use.UseService;
 import com.mytiki.l0_index.utilities.Constants;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +26,13 @@ public class LicenseConfig {
             @Autowired LicenseRepository repository,
             @Autowired UseService useService,
             @Autowired TitleService titleService,
-            @Autowired AddressService addressService){
-        return new LicenseService(repository, useService, titleService, addressService);
+            @Autowired AddressService addressService,
+            @Autowired CountService countService){
+        return new LicenseService(repository, useService, titleService, addressService, countService);
+    }
+
+    @Bean
+    public LicenseRepositorySearch licenseRepositorySearch(@Autowired EntityManager em){
+        return new LicenseRepositorySearchImpl(em);
     }
 }

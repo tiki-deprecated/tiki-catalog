@@ -8,8 +8,7 @@ import com.mytiki.l0_index.features.latest.block.BlockService;
 import com.mytiki.l0_index.features.latest.index.IndexAOLicense;
 import com.mytiki.l0_index.features.latest.index.IndexAOLicenseUse;
 import com.mytiki.l0_index.features.latest.index.IndexAOTitle;
-import com.mytiki.l0_index.features.latest.license.LicenseDO;
-import com.mytiki.l0_index.features.latest.license.LicenseService;
+import com.mytiki.l0_index.features.latest.license.*;
 import com.mytiki.l0_index.features.latest.title.TitleDO;
 import com.mytiki.l0_index.features.latest.title.TitleService;
 import com.mytiki.l0_index.main.App;
@@ -22,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -117,5 +117,139 @@ public class LicenseTest {
         assertNull(license.getTitle());
         assertNotNull(license.getCreated());
         assertNotNull(license.getId());
+    }
+
+    @Test
+    public void Test_List_Page_Success(){
+        String appId = UUID.randomUUID().toString();
+        BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
+        IndexAOTitle titleReq = new IndexAOTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
+        TitleDO title = titleService.insert(titleReq, appId, block);
+
+        int numLicenses = 10;
+        List<String> ids = new ArrayList<>(numLicenses);
+        for(int i=0; i<numLicenses; i++){
+            String transaction = UUID.randomUUID().toString();
+            IndexAOLicense req = new IndexAOLicense(
+                    transaction, UUID.randomUUID().toString(), title.getTransaction(),
+                    List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)));
+            service.insert(req, appId, block);
+            ids.add(transaction);
+        }
+
+        LicenseAOReq req = new LicenseAOReq();
+        req.setIncludeAll(true);
+
+        LicenseAORspList list = service.list(req, appId, null, 2);
+        List<LicenseAORspResult> res = new ArrayList<>(list.getResults());
+        while(list.getNextPageToken() != null){
+            list = service.list(req, appId, list.getNextPageToken(), 2);
+            res.addAll(list.getResults());
+        }
+
+        assertEquals(res.size(), numLicenses);
+        for(int i=0; i<numLicenses; i++){
+            assertTrue(ids.contains(res.get(i).getId()));
+        }
+    }
+
+    @Test
+    public void Test_List_Latest_Success(){
+        String appId = UUID.randomUUID().toString();
+        BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
+        IndexAOTitle titleReq = new IndexAOTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
+        TitleDO title = titleService.insert(titleReq, appId, block);
+        IndexAOLicense licenseReq1 = new IndexAOLicense(
+                UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
+                List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)));
+        IndexAOLicense licenseReq2 = new IndexAOLicense(
+                UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
+                List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)));
+        service.insert(licenseReq1, appId, block);
+        service.insert(licenseReq2, appId, block);
+
+        LicenseAOReq req = new LicenseAOReq();
+        req.setIncludeAll(false);
+        LicenseAORspList list = service.list(req, appId, null, 100);
+        assertEquals(list.getResults().size(), 1);
+        assertEquals(list.getResults().get(0).getId(), licenseReq2.getTransaction());
+    }
+
+    @Test
+    public void Test_List_Tag_Success(){
+        String appId = UUID.randomUUID().toString();
+        BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
+        IndexAOTitle titleReq = new IndexAOTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
+        TitleDO title = titleService.insert(titleReq, appId, block);
+        IndexAOLicense licenseReq = new IndexAOLicense(
+                UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
+                List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)));
+        service.insert(licenseReq, appId, block);
+
+        LicenseAOReq req = new LicenseAOReq();
+        req.setTags(titleReq.getTags());
+        LicenseAORspList list = service.list(req, appId, null, 100);
+        assertEquals(list.getResults().size(), 1);
+        assertEquals(list.getResults().get(0).getId(), licenseReq.getTransaction());
+    }
+
+    @Test
+    public void Test_List_Ptr_Success(){
+        String appId = UUID.randomUUID().toString();
+        BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
+        IndexAOTitle titleReq = new IndexAOTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
+        TitleDO title = titleService.insert(titleReq, appId, block);
+        IndexAOLicense licenseReq = new IndexAOLicense(
+                UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
+                List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)));
+        service.insert(licenseReq, appId, block);
+
+        LicenseAOReq req = new LicenseAOReq();
+        req.setPtrs(List.of(titleReq.getPtr()));
+        LicenseAORspList list = service.list(req, appId, null, 100);
+        assertEquals(list.getResults().size(), 1);
+        assertEquals(list.getResults().get(0).getId(), licenseReq.getTransaction());
+    }
+
+    @Test
+    public void Test_List_Usecase_Success(){
+        String appId = UUID.randomUUID().toString();
+        BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
+        IndexAOTitle titleReq = new IndexAOTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
+        TitleDO title = titleService.insert(titleReq, appId, block);
+        IndexAOLicense licenseReq = new IndexAOLicense(
+                UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
+                List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)));
+        service.insert(licenseReq, appId, block);
+
+        LicenseAOReq req = new LicenseAOReq();
+        req.setUsecases(List.of(licenseReq.getUses().get(0).getUsecase()));
+        LicenseAORspList list = service.list(req, appId, null, 100);
+        assertEquals(list.getResults().size(), 1);
+        assertEquals(list.getResults().get(0).getId(), licenseReq.getTransaction());
+    }
+
+    @Test
+    public void Test_List_Destination_Success(){
+        String appId = UUID.randomUUID().toString();
+        BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
+        IndexAOTitle titleReq = new IndexAOTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
+        TitleDO title = titleService.insert(titleReq, appId, block);
+        IndexAOLicense licenseReq = new IndexAOLicense(
+                UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
+                List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), UUID.randomUUID().toString())));
+        service.insert(licenseReq, appId, block);
+
+        LicenseAOReq req = new LicenseAOReq();
+        req.setDestinations(List.of(licenseReq.getUses().get(0).getDestination()));
+        LicenseAORspList list = service.list(req, appId, null, 100);
+        assertEquals(list.getResults().size(), 1);
+        assertEquals(list.getResults().get(0).getId(), licenseReq.getTransaction());
     }
 }
