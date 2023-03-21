@@ -67,7 +67,7 @@ public class IndexTest {
                         UUID.randomUUID().toString(),
                         UUID.randomUUID().toString(),
                         UUID.randomUUID().toString(),
-                        List.of(new AOUse(UUID.randomUUID().toString(), null)))));
+                        List.of(new AOUse(UUID.randomUUID().toString(), null)), null)));
 
         service.index(req);
         Optional<LicenseDO> license = licenseRepository.getByTransaction(req.getLicenses().get(0).getTransaction());
@@ -87,7 +87,7 @@ public class IndexTest {
                         UUID.randomUUID().toString(),
                         UUID.randomUUID().toString(),
                         UUID.randomUUID().toString(),
-                        List.of(new AOUse(UUID.randomUUID().toString(), null)))));
+                        List.of(new AOUse(UUID.randomUUID().toString(), null)), null)));
 
         service.index(req);
         Optional<TitleDO> title = titleRepository.getByTransaction(req.getTitles().get(0).getTransaction());

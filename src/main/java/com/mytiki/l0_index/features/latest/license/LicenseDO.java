@@ -23,6 +23,7 @@ public class LicenseDO implements Serializable {
     private BlockDO block;
     private AddressDO address;
     private TitleDO title;
+    private ZonedDateTime expiry;
     private ZonedDateTime created;
     private List<UseDO> uses;
     private boolean isLatest;
@@ -75,6 +76,15 @@ public class LicenseDO implements Serializable {
 
     public void setTitle(TitleDO title) {
         this.title = title;
+    }
+
+    @Column(name = "expiry")
+    public ZonedDateTime getExpiry() {
+        return expiry;
+    }
+
+    public void setExpiry(ZonedDateTime expiry) {
+        this.expiry = expiry;
     }
 
     @Column(name = "created")

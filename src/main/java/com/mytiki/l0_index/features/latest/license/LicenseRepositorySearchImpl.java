@@ -48,8 +48,12 @@ public class LicenseRepositorySearchImpl implements LicenseRepositorySearch {
         if(req.getDestinations() != null)
             filters.add(license.get("uses").get("destination").in(req.getDestinations()));
 
-        if(!req.getIncludeAll())
+        if(!req.getIncludeAll()) {
             filters.add(cb.isTrue(license.get("latest")));
+            filters.add(cb.or(
+                    cb.isNull(license.get("expiry")),
+                    cb.greaterThan(license.get("expiry"), cb.currentTimestamp())));
+        }
 
         if(licenseId != null)
             filters.add(cb.greaterThan(license.get("id"), licenseId));

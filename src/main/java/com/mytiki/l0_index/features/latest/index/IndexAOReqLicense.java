@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mytiki.l0_index.utilities.AOUse;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class IndexAOReqLicense {
@@ -16,17 +17,20 @@ public class IndexAOReqLicense {
     private String address;
     private String title;
     private List<AOUse> uses;
+    private ZonedDateTime expiry;
 
     @JsonCreator
     public IndexAOReqLicense(
             @JsonProperty(required = true) String transaction,
             @JsonProperty(required = true) String address,
             @JsonProperty(required = true) String title,
-            @JsonProperty List<AOUse> uses) {
+            @JsonProperty List<AOUse> uses,
+            @JsonProperty ZonedDateTime expiry) {
         this.transaction = transaction;
         this.address = address;
         this.title = title;
         this.uses = uses;
+        this.expiry = expiry;
     }
 
     public String getTransaction() {
@@ -59,5 +63,13 @@ public class IndexAOReqLicense {
 
     public void setUses(List<AOUse> uses) {
         this.uses = uses;
+    }
+
+    public ZonedDateTime getExpiry() {
+        return expiry;
+    }
+
+    public void setExpiry(ZonedDateTime expiry) {
+        this.expiry = expiry;
     }
 }

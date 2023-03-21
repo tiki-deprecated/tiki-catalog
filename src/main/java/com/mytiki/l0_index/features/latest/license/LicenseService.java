@@ -55,6 +55,7 @@ public class LicenseService {
         if(found.isEmpty()) {
             LicenseDO license = new LicenseDO();
             license.setTransaction(req.getTransaction());
+            license.setExpiry(req.getExpiry());
             license.setUses(useService.insert(req.getUses()));
             license.setAddress(addressService.insert(req.getAddress(), appId));
             license.setBlock(block);
@@ -112,6 +113,7 @@ public class LicenseService {
         if(found.isPresent()){
             rsp.setId(transaction);
             rsp.setTitle(found.get().getTitle().getTransaction());
+            rsp.setExpiry(found.get().getExpiry());
             rsp.setUses(found.get().getUses().stream().map(use -> {
                 AOUse aoUse = new AOUse();
                 aoUse.setUsecase(use.getUsecase());
@@ -149,7 +151,6 @@ public class LicenseService {
                     rsp.setTerms(Utf8.decode(contents.get(2)));
                     String desc = Utf8.decode(contents.get(3));
                     if(!desc.isBlank()) rsp.setDescription(desc);
-                    rsp.setExpiry(Decode.dateTime(contents.get(4)));
                 }
             }
         }

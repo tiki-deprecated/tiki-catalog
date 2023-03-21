@@ -27,6 +27,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -87,7 +88,7 @@ public class LicenseTest {
         TitleDO title = titleService.insert(titleReq, appId, block);
 
         IndexAOReqLicense req = new IndexAOReqLicense(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
-                title.getTransaction(), List.of(new AOUse(UUID.randomUUID().toString(), null)));
+                title.getTransaction(), List.of(new AOUse(UUID.randomUUID().toString(), null)), null);
         LicenseDO license = service.insert(req, appId, block);
 
         assertEquals(license.getTransaction(), req.getTransaction());
@@ -112,7 +113,7 @@ public class LicenseTest {
         TitleDO title = titleService.insert(titleReq, appId, block);
 
         IndexAOReqLicense req = new IndexAOReqLicense(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
-                title.getTransaction(), List.of(new AOUse(UUID.randomUUID().toString(), null)));
+                title.getTransaction(), List.of(new AOUse(UUID.randomUUID().toString(), null)), null);
 
         service.insert(req, appId, block);
         LicenseDO license = service.insert(req, appId, block);
@@ -135,7 +136,7 @@ public class LicenseTest {
         String appId = UUID.randomUUID().toString();
         BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
         IndexAOReqLicense req = new IndexAOReqLicense(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
-               UUID.randomUUID().toString(), List.of(new AOUse(UUID.randomUUID().toString(), null)));
+               UUID.randomUUID().toString(), List.of(new AOUse(UUID.randomUUID().toString(), null)), null);
 
         service.insert(req, appId, block);
         LicenseDO license = service.insert(req, appId, block);
@@ -166,7 +167,7 @@ public class LicenseTest {
             String transaction = UUID.randomUUID().toString();
             IndexAOReqLicense req = new IndexAOReqLicense(
                     transaction, UUID.randomUUID().toString(), title.getTransaction(),
-                    List.of(new AOUse(UUID.randomUUID().toString(), null)));
+                    List.of(new AOUse(UUID.randomUUID().toString(), null)), null);
             service.insert(req, appId, block);
             ids.add(transaction);
         }
@@ -196,10 +197,10 @@ public class LicenseTest {
         TitleDO title = titleService.insert(titleReq, appId, block);
         IndexAOReqLicense licenseReq1 = new IndexAOReqLicense(
                 UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
-                List.of(new AOUse(UUID.randomUUID().toString(), null)));
+                List.of(new AOUse(UUID.randomUUID().toString(), null)), null);
         IndexAOReqLicense licenseReq2 = new IndexAOReqLicense(
                 UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
-                List.of(new AOUse(UUID.randomUUID().toString(), null)));
+                List.of(new AOUse(UUID.randomUUID().toString(), null)), null);
         service.insert(licenseReq1, appId, block);
         service.insert(licenseReq2, appId, block);
 
@@ -211,6 +212,24 @@ public class LicenseTest {
     }
 
     @Test
+    public void Test_List_Expired_Success(){
+        String appId = UUID.randomUUID().toString();
+        BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
+        IndexAOReqTitle titleReq = new IndexAOReqTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
+        TitleDO title = titleService.insert(titleReq, appId, block);
+        IndexAOReqLicense licenseReq = new IndexAOReqLicense(
+                UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
+                List.of(new AOUse(UUID.randomUUID().toString(), null)), ZonedDateTime.now().minusDays(1));
+        service.insert(licenseReq, appId, block);
+
+        LicenseAOReq req = new LicenseAOReq();
+        req.setIncludeAll(false);
+        LicenseAORspList list = service.list(req, appId, null, 100);
+        assertEquals(list.getResults().size(), 0);
+    }
+
+    @Test
     public void Test_List_Tag_Success(){
         String appId = UUID.randomUUID().toString();
         BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
@@ -219,7 +238,7 @@ public class LicenseTest {
         TitleDO title = titleService.insert(titleReq, appId, block);
         IndexAOReqLicense licenseReq = new IndexAOReqLicense(
                 UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
-                List.of(new AOUse(UUID.randomUUID().toString(), null)));
+                List.of(new AOUse(UUID.randomUUID().toString(), null)), null);
         service.insert(licenseReq, appId, block);
 
         LicenseAOReq req = new LicenseAOReq();
@@ -238,7 +257,7 @@ public class LicenseTest {
         TitleDO title = titleService.insert(titleReq, appId, block);
         IndexAOReqLicense licenseReq = new IndexAOReqLicense(
                 UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
-                List.of(new AOUse(UUID.randomUUID().toString(), null)));
+                List.of(new AOUse(UUID.randomUUID().toString(), null)), null);
         service.insert(licenseReq, appId, block);
 
         LicenseAOReq req = new LicenseAOReq();
@@ -257,7 +276,7 @@ public class LicenseTest {
         TitleDO title = titleService.insert(titleReq, appId, block);
         IndexAOReqLicense licenseReq = new IndexAOReqLicense(
                 UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
-                List.of(new AOUse(UUID.randomUUID().toString(), null)));
+                List.of(new AOUse(UUID.randomUUID().toString(), null)), null);
         service.insert(licenseReq, appId, block);
 
         LicenseAOReq req = new LicenseAOReq();
@@ -276,7 +295,7 @@ public class LicenseTest {
         TitleDO title = titleService.insert(titleReq, appId, block);
         IndexAOReqLicense licenseReq = new IndexAOReqLicense(
                 UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
-                List.of(new AOUse(UUID.randomUUID().toString(), UUID.randomUUID().toString())));
+                List.of(new AOUse(UUID.randomUUID().toString(), UUID.randomUUID().toString())), null);
         service.insert(licenseReq, appId, block);
 
         LicenseAOReq req = new LicenseAOReq();
@@ -301,7 +320,7 @@ public class LicenseTest {
         TitleDO title = titleService.insert(titleReq, MockedBlock.appId, block);
         IndexAOReqLicense licenseReq = new IndexAOReqLicense(
                 MockedBlock.licenseTxn, MockedBlock.address, title.getTransaction(),
-                List.of(new AOUse("dummy", "dummy")));
+                List.of(new AOUse("dummy", "dummy")), null);
         licenseService.insert(licenseReq, MockedBlock.appId, block);
 
         LicenseAORsp license = licenseService.fetch(MockedBlock.licenseTxn);
@@ -310,7 +329,7 @@ public class LicenseTest {
         assertEquals(license.getUses().size(), 1);
         assertEquals(license.getUses().get(0).getUsecase(), licenseReq.getUses().get(0).getUsecase());
         assertEquals(license.getTerms(), "for use in testing only.");
-        assertEquals(license.getExpiry().toString(),"2023-03-13T04:19:41Z");
+        assertNull(license.getExpiry());
         assertEquals(license.getTimestamp().toString(), "2023-03-12T04:19:41Z");
         assertNull(license.getUser());
         assertEquals(license.getDescription(), "registry testing.");
