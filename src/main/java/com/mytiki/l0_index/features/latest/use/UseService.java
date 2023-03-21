@@ -5,7 +5,7 @@
 
 package com.mytiki.l0_index.features.latest.use;
 
-import com.mytiki.l0_index.features.latest.index.IndexAOLicenseUse;
+import com.mytiki.l0_index.utilities.AOUse;
 
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -18,9 +18,9 @@ public class UseService {
         this.repository = repository;
     }
 
-    public List<UseDO> insert(List<IndexAOLicenseUse> uses){
+    public List<UseDO> insert(List<AOUse> uses){
         Set<String> usecases = new HashSet<>();
-        Map<String, IndexAOLicenseUse> composites = new HashMap<>();
+        Map<String, AOUse> composites = new HashMap<>();
         uses.forEach(use -> {
             usecases.add(use.getUsecase());
             composites.put(use.getUsecase() + ":" + use.getDestination(), use);

@@ -10,20 +10,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class IndexAO {
+public class IndexAOReq {
     private String block;
     private String appId;
     private String src;
-    private List<IndexAOTitle> titles;
-    private List<IndexAOLicense> licenses;
+    private List<IndexAOReqTitle> titles;
+    private List<IndexAOReqLicense> licenses;
 
     @JsonCreator
-    public IndexAO(
+    public IndexAOReq(
             @JsonProperty(required = true) String block,
             @JsonProperty(required = true) String appId,
             @JsonProperty(required = true) String src,
-            @JsonProperty List<IndexAOTitle> titles,
-            @JsonProperty List<IndexAOLicense> licenses) {
+            @JsonProperty List<IndexAOReqTitle> titles,
+            @JsonProperty List<IndexAOReqLicense> licenses) {
         this.block = block;
         this.appId = appId;
         this.src = src;
@@ -55,19 +55,19 @@ public class IndexAO {
         this.src = src;
     }
 
-    public List<IndexAOTitle> getTitles() {
+    public List<IndexAOReqTitle> getTitles() {
         return titles;
     }
 
-    public void setTitles(List<IndexAOTitle> titles) {
+    public void setTitles(List<IndexAOReqTitle> titles) {
         this.titles = titles;
     }
 
-    public List<IndexAOLicense> getLicenses() {
+    public List<IndexAOReqLicense> getLicenses() {
         return licenses;
     }
 
-    public void setLicenses(List<IndexAOLicense> licenses) {
+    public void setLicenses(List<IndexAOReqLicense> licenses) {
         this.licenses = licenses;
     }
 }

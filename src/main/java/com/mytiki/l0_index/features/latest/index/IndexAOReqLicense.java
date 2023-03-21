@@ -7,25 +7,26 @@ package com.mytiki.l0_index.features.latest.index;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mytiki.l0_index.utilities.AOUse;
 
 import java.util.List;
 
-public class IndexAOTitle {
+public class IndexAOReqLicense {
     private String transaction;
     private String address;
-    private String ptr;
-    private List<String> tags;
+    private String title;
+    private List<AOUse> uses;
 
     @JsonCreator
-    public IndexAOTitle(
+    public IndexAOReqLicense(
             @JsonProperty(required = true) String transaction,
             @JsonProperty(required = true) String address,
-            @JsonProperty(required = true) String ptr,
-            @JsonProperty List<String> tags) {
+            @JsonProperty(required = true) String title,
+            @JsonProperty List<AOUse> uses) {
         this.transaction = transaction;
         this.address = address;
-        this.ptr = ptr;
-        this.tags = tags;
+        this.title = title;
+        this.uses = uses;
     }
 
     public String getTransaction() {
@@ -44,19 +45,19 @@ public class IndexAOTitle {
         this.address = address;
     }
 
-    public String getPtr() {
-        return ptr;
+    public String getTitle() {
+        return title;
     }
 
-    public void setPtr(String ptr) {
-        this.ptr = ptr;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public List<String> getTags() {
-        return tags;
+    public List<AOUse> getUses() {
+        return uses;
     }
 
-    public void setTags(List<String> tags) {
-        this.tags = tags;
+    public void setUses(List<AOUse> uses) {
+        this.uses = uses;
     }
 }

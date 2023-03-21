@@ -3,12 +3,16 @@
  * MIT license. See LICENSE file in root directory.
  */
 
-import com.mytiki.l0_index.features.latest.index.*;
+import com.mytiki.l0_index.features.latest.index.IndexAOReq;
+import com.mytiki.l0_index.features.latest.index.IndexAOReqLicense;
+import com.mytiki.l0_index.features.latest.index.IndexAOReqTitle;
+import com.mytiki.l0_index.features.latest.index.IndexService;
 import com.mytiki.l0_index.features.latest.license.LicenseDO;
 import com.mytiki.l0_index.features.latest.license.LicenseRepository;
 import com.mytiki.l0_index.features.latest.title.TitleDO;
 import com.mytiki.l0_index.features.latest.title.TitleRepository;
 import com.mytiki.l0_index.main.App;
+import com.mytiki.l0_index.utilities.AOUse;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -43,8 +47,8 @@ public class IndexTest {
 
     @Test
     public void Test_Title_Success() {
-        IndexAO req = new IndexAO(UUID.randomUUID().toString(), UUID.randomUUID().toString(), "https://mytiki.com",
-                List.of(new IndexAOTitle(
+        IndexAOReq req = new IndexAOReq(UUID.randomUUID().toString(), UUID.randomUUID().toString(), "https://mytiki.com",
+                List.of(new IndexAOReqTitle(
                         UUID.randomUUID().toString(),
                         UUID.randomUUID().toString(),
                         UUID.randomUUID().toString(),
@@ -57,13 +61,13 @@ public class IndexTest {
 
     @Test
     public void Test_License_Success() {
-        IndexAO req = new IndexAO(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+        IndexAOReq req = new IndexAOReq(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
                 "https://mytiki.com", null,
-                List.of(new IndexAOLicense(
+                List.of(new IndexAOReqLicense(
                         UUID.randomUUID().toString(),
                         UUID.randomUUID().toString(),
                         UUID.randomUUID().toString(),
-                        List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)))));
+                        List.of(new AOUse(UUID.randomUUID().toString(), null)))));
 
         service.index(req);
         Optional<LicenseDO> license = licenseRepository.getByTransaction(req.getLicenses().get(0).getTransaction());
@@ -72,18 +76,18 @@ public class IndexTest {
 
     @Test
     public void Test_Multiple_Success() {
-        IndexAO req = new IndexAO(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+        IndexAOReq req = new IndexAOReq(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
                 "https://mytiki.com",
-                List.of(new IndexAOTitle(
+                List.of(new IndexAOReqTitle(
                         UUID.randomUUID().toString(),
                         UUID.randomUUID().toString(),
                         UUID.randomUUID().toString(),
                         List.of(UUID.randomUUID().toString()))),
-                List.of(new IndexAOLicense(
+                List.of(new IndexAOReqLicense(
                         UUID.randomUUID().toString(),
                         UUID.randomUUID().toString(),
                         UUID.randomUUID().toString(),
-                        List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)))));
+                        List.of(new AOUse(UUID.randomUUID().toString(), null)))));
 
         service.index(req);
         Optional<TitleDO> title = titleRepository.getByTransaction(req.getTitles().get(0).getTransaction());

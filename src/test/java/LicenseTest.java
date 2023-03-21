@@ -5,13 +5,13 @@
 
 import com.mytiki.l0_index.features.latest.block.BlockDO;
 import com.mytiki.l0_index.features.latest.block.BlockService;
-import com.mytiki.l0_index.features.latest.index.IndexAOLicense;
-import com.mytiki.l0_index.features.latest.index.IndexAOLicenseUse;
-import com.mytiki.l0_index.features.latest.index.IndexAOTitle;
+import com.mytiki.l0_index.features.latest.index.IndexAOReqLicense;
+import com.mytiki.l0_index.features.latest.index.IndexAOReqTitle;
 import com.mytiki.l0_index.features.latest.license.*;
 import com.mytiki.l0_index.features.latest.title.TitleDO;
 import com.mytiki.l0_index.features.latest.title.TitleService;
 import com.mytiki.l0_index.main.App;
+import com.mytiki.l0_index.utilities.AOUse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -49,12 +49,12 @@ public class LicenseTest {
     public void Test_Insert_Success() {
         String appId = UUID.randomUUID().toString();
         BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
-        IndexAOTitle titleReq = new IndexAOTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+        IndexAOReqTitle titleReq = new IndexAOReqTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
         TitleDO title = titleService.insert(titleReq, appId, block);
 
-        IndexAOLicense req = new IndexAOLicense(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
-                title.getTransaction(), List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)));
+        IndexAOReqLicense req = new IndexAOReqLicense(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+                title.getTransaction(), List.of(new AOUse(UUID.randomUUID().toString(), null)));
         LicenseDO license = service.insert(req, appId, block);
 
         assertEquals(license.getTransaction(), req.getTransaction());
@@ -74,12 +74,12 @@ public class LicenseTest {
     public void Test_Insert_Existing_Success() {
         String appId = UUID.randomUUID().toString();
         BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
-        IndexAOTitle titleReq = new IndexAOTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+        IndexAOReqTitle titleReq = new IndexAOReqTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
         TitleDO title = titleService.insert(titleReq, appId, block);
 
-        IndexAOLicense req = new IndexAOLicense(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
-                title.getTransaction(), List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)));
+        IndexAOReqLicense req = new IndexAOReqLicense(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+                title.getTransaction(), List.of(new AOUse(UUID.randomUUID().toString(), null)));
 
         service.insert(req, appId, block);
         LicenseDO license = service.insert(req, appId, block);
@@ -101,8 +101,8 @@ public class LicenseTest {
     public void Test_Insert_NoTitle_Success() {
         String appId = UUID.randomUUID().toString();
         BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
-        IndexAOLicense req = new IndexAOLicense(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
-               UUID.randomUUID().toString(), List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)));
+        IndexAOReqLicense req = new IndexAOReqLicense(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+               UUID.randomUUID().toString(), List.of(new AOUse(UUID.randomUUID().toString(), null)));
 
         service.insert(req, appId, block);
         LicenseDO license = service.insert(req, appId, block);
@@ -123,7 +123,7 @@ public class LicenseTest {
     public void Test_List_Page_Success(){
         String appId = UUID.randomUUID().toString();
         BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
-        IndexAOTitle titleReq = new IndexAOTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+        IndexAOReqTitle titleReq = new IndexAOReqTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
         TitleDO title = titleService.insert(titleReq, appId, block);
 
@@ -131,9 +131,9 @@ public class LicenseTest {
         List<String> ids = new ArrayList<>(numLicenses);
         for(int i=0; i<numLicenses; i++){
             String transaction = UUID.randomUUID().toString();
-            IndexAOLicense req = new IndexAOLicense(
+            IndexAOReqLicense req = new IndexAOReqLicense(
                     transaction, UUID.randomUUID().toString(), title.getTransaction(),
-                    List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)));
+                    List.of(new AOUse(UUID.randomUUID().toString(), null)));
             service.insert(req, appId, block);
             ids.add(transaction);
         }
@@ -158,15 +158,15 @@ public class LicenseTest {
     public void Test_List_Latest_Success(){
         String appId = UUID.randomUUID().toString();
         BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
-        IndexAOTitle titleReq = new IndexAOTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+        IndexAOReqTitle titleReq = new IndexAOReqTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
         TitleDO title = titleService.insert(titleReq, appId, block);
-        IndexAOLicense licenseReq1 = new IndexAOLicense(
+        IndexAOReqLicense licenseReq1 = new IndexAOReqLicense(
                 UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
-                List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)));
-        IndexAOLicense licenseReq2 = new IndexAOLicense(
+                List.of(new AOUse(UUID.randomUUID().toString(), null)));
+        IndexAOReqLicense licenseReq2 = new IndexAOReqLicense(
                 UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
-                List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)));
+                List.of(new AOUse(UUID.randomUUID().toString(), null)));
         service.insert(licenseReq1, appId, block);
         service.insert(licenseReq2, appId, block);
 
@@ -181,12 +181,12 @@ public class LicenseTest {
     public void Test_List_Tag_Success(){
         String appId = UUID.randomUUID().toString();
         BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
-        IndexAOTitle titleReq = new IndexAOTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+        IndexAOReqTitle titleReq = new IndexAOReqTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
         TitleDO title = titleService.insert(titleReq, appId, block);
-        IndexAOLicense licenseReq = new IndexAOLicense(
+        IndexAOReqLicense licenseReq = new IndexAOReqLicense(
                 UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
-                List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)));
+                List.of(new AOUse(UUID.randomUUID().toString(), null)));
         service.insert(licenseReq, appId, block);
 
         LicenseAOReq req = new LicenseAOReq();
@@ -200,12 +200,12 @@ public class LicenseTest {
     public void Test_List_Ptr_Success(){
         String appId = UUID.randomUUID().toString();
         BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
-        IndexAOTitle titleReq = new IndexAOTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+        IndexAOReqTitle titleReq = new IndexAOReqTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
         TitleDO title = titleService.insert(titleReq, appId, block);
-        IndexAOLicense licenseReq = new IndexAOLicense(
+        IndexAOReqLicense licenseReq = new IndexAOReqLicense(
                 UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
-                List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)));
+                List.of(new AOUse(UUID.randomUUID().toString(), null)));
         service.insert(licenseReq, appId, block);
 
         LicenseAOReq req = new LicenseAOReq();
@@ -219,12 +219,12 @@ public class LicenseTest {
     public void Test_List_Usecase_Success(){
         String appId = UUID.randomUUID().toString();
         BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
-        IndexAOTitle titleReq = new IndexAOTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+        IndexAOReqTitle titleReq = new IndexAOReqTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
         TitleDO title = titleService.insert(titleReq, appId, block);
-        IndexAOLicense licenseReq = new IndexAOLicense(
+        IndexAOReqLicense licenseReq = new IndexAOReqLicense(
                 UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
-                List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), null)));
+                List.of(new AOUse(UUID.randomUUID().toString(), null)));
         service.insert(licenseReq, appId, block);
 
         LicenseAOReq req = new LicenseAOReq();
@@ -238,12 +238,12 @@ public class LicenseTest {
     public void Test_List_Destination_Success(){
         String appId = UUID.randomUUID().toString();
         BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
-        IndexAOTitle titleReq = new IndexAOTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+        IndexAOReqTitle titleReq = new IndexAOReqTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
         TitleDO title = titleService.insert(titleReq, appId, block);
-        IndexAOLicense licenseReq = new IndexAOLicense(
+        IndexAOReqLicense licenseReq = new IndexAOReqLicense(
                 UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
-                List.of(new IndexAOLicenseUse(UUID.randomUUID().toString(), UUID.randomUUID().toString())));
+                List.of(new AOUse(UUID.randomUUID().toString(), UUID.randomUUID().toString())));
         service.insert(licenseReq, appId, block);
 
         LicenseAOReq req = new LicenseAOReq();

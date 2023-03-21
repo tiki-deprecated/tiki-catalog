@@ -10,22 +10,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class IndexAOLicense {
+public class IndexAOReqTitle {
     private String transaction;
     private String address;
-    private String title;
-    private List<IndexAOLicenseUse> uses;
+    private String ptr;
+    private List<String> tags;
 
     @JsonCreator
-    public IndexAOLicense(
+    public IndexAOReqTitle(
             @JsonProperty(required = true) String transaction,
             @JsonProperty(required = true) String address,
-            @JsonProperty(required = true) String title,
-            @JsonProperty List<IndexAOLicenseUse> uses) {
+            @JsonProperty(required = true) String ptr,
+            @JsonProperty List<String> tags) {
         this.transaction = transaction;
         this.address = address;
-        this.title = title;
-        this.uses = uses;
+        this.ptr = ptr;
+        this.tags = tags;
     }
 
     public String getTransaction() {
@@ -44,19 +44,19 @@ public class IndexAOLicense {
         this.address = address;
     }
 
-    public String getTitle() {
-        return title;
+    public String getPtr() {
+        return ptr;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setPtr(String ptr) {
+        this.ptr = ptr;
     }
 
-    public List<IndexAOLicenseUse> getUses() {
-        return uses;
+    public List<String> getTags() {
+        return tags;
     }
 
-    public void setUses(List<IndexAOLicenseUse> uses) {
-        this.uses = uses;
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 }

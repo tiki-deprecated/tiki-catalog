@@ -28,7 +28,7 @@ public class IndexController {
             security = @SecurityRequirement(name = "l0Storage"))
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void post(@RequestBody IndexAO body) {
+    public void post(@RequestBody IndexAOReq body) {
         service.index(body);
     }
 }

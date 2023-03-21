@@ -5,16 +5,23 @@
 
 package com.mytiki.l0_index.features.latest.block;
 
+import com.mytiki.l0_index.utilities.B64;
+import com.mytiki.l0_index.utilities.Decode;
+import com.mytiki.l0_index.utilities.Sha256;
 import com.mytiki.spring_rest_api.ApiExceptionBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public class BlockService {
@@ -48,34 +55,22 @@ public class BlockService {
         }
     }
 
-//    public List<byte[]> fetch(URL src){
-//        try {
-//            ResponseEntity<byte[]> response = client.getForEntity(src.toURI(), byte[].class);
-//            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null)
-//                return Decode.bytes(response.getBody());
-//            else return List.of();
-//        } catch (URISyntaxException | ResourceAccessException e) {
-//            logger.error("src_url is an invalid URI", e);
-//            return List.of();
-//        }
-//    }
-
-//    private BlockAO fetchAndMerge(BlockAO block, URL src){
-//        block.setUrl(src.toString());
-//        List<byte[]> binary = fetch(src);
-//        if(!binary.isEmpty()){
-//            block.setSignature(B64.encode(binary.get(0)));
-//            List<byte[]> body = Decode.bytes(binary.get(1));
-//            block.setVersion(Decode.bigInt(body.get(0)).intValue());
-//            block.setTimestamp(Decode.dateTime(body.get(1)));
-//            block.setPrevious(B64.encode(body.get(2)));
-//            block.setTransactionRoot(B64.encode(body.get(3)));
-//            int txnCount = Decode.bigInt(body.get(4)).intValue();
-//            List<String> txns = new ArrayList<>(txnCount);
-//            for (int i = 0; i < txnCount; i++)
-//                txns.add(B64.encode(Sha256.hash(body.get(5 + i))));
-//            block.setTransactions(txns);
-//        }
-//        return block;
-//    }
+    public byte[] fetch(URL src, String transaction){
+        try {
+            ResponseEntity<byte[]> response = client.getForEntity(src.toURI(), byte[].class);
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                List<byte[]> decoded = Decode.bytes(response.getBody());
+                List<byte[]> block = Decode.bytes(decoded.get(1));
+                int txnCount = Decode.bigInt(block.get(4)).intValue();
+                for (int i = 0; i < txnCount; i++) {
+                    String hash = B64.encode(Sha256.hash(block.get(5 + i)));
+                    if(hash.equals(transaction))
+                        return block.get(5 + i);
+                }
+            }
+        } catch (URISyntaxException | ResourceAccessException e) {
+            logger.error("src_url is an invalid URI", e);
+        }
+        return null;
+    }
 }

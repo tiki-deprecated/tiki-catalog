@@ -6,6 +6,7 @@
 package com.mytiki.l0_index.features.latest.title;
 
 import com.mytiki.l0_index.features.latest.address.AddressService;
+import com.mytiki.l0_index.features.latest.block.BlockService;
 import com.mytiki.l0_index.features.latest.tag.TagService;
 import com.mytiki.l0_index.utilities.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,8 @@ public class TitleConfig {
     public TitleService titleService(
             @Autowired TitleRepository repository,
             @Autowired TagService tagService,
-            @Autowired AddressService addressService){
-        return new TitleService(repository, tagService, addressService);
+            @Autowired AddressService addressService,
+            @Autowired BlockService blockService){
+        return new TitleService(repository, tagService, addressService, blockService);
     }
 }

@@ -5,13 +5,15 @@
 
 package com.mytiki.l0_index.features.latest.license;
 
+import com.mytiki.l0_index.utilities.AOUse;
+
 import java.util.List;
 
 public class LicenseAORspResult {
     String id;
     String ptr;
     List<String> tags;
-    List<LicenseAORspUse> uses;
+    List<AOUse> uses;
 
     public String getId() {
         return id;
@@ -37,11 +39,11 @@ public class LicenseAORspResult {
         this.tags = tags;
     }
 
-    public List<LicenseAORspUse> getUses() {
+    public List<AOUse> getUses() {
         return uses;
     }
 
-    public void setUses(List<LicenseAORspUse> uses) {
+    public void setUses(List<AOUse> uses) {
         this.uses = uses;
     }
 }

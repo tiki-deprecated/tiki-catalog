@@ -8,11 +8,12 @@ package com.mytiki.l0_index.features.latest.license;
 import com.mytiki.l0_index.features.latest.address.AddressService;
 import com.mytiki.l0_index.features.latest.block.BlockDO;
 import com.mytiki.l0_index.features.latest.count.CountService;
-import com.mytiki.l0_index.features.latest.index.IndexAOLicense;
+import com.mytiki.l0_index.features.latest.index.IndexAOReqLicense;
 import com.mytiki.l0_index.features.latest.tag.TagDO;
 import com.mytiki.l0_index.features.latest.title.TitleDO;
 import com.mytiki.l0_index.features.latest.title.TitleService;
 import com.mytiki.l0_index.features.latest.use.UseService;
+import com.mytiki.l0_index.utilities.AOUse;
 import jakarta.transaction.Transactional;
 
 import java.time.ZonedDateTime;
@@ -40,7 +41,7 @@ public class LicenseService {
     }
 
     @Transactional
-    public LicenseDO insert(IndexAOLicense req, String appId, BlockDO block){
+    public LicenseDO insert(IndexAOReqLicense req, String appId, BlockDO block){
         Optional<LicenseDO> found = repository.getByTransaction(req.getTransaction());
         if(found.isEmpty()) {
             LicenseDO license = new LicenseDO();
@@ -84,10 +85,10 @@ public class LicenseService {
             res.setPtr(license.getTitle().getPtr());
             res.setTags(license.getTitle().getTags().stream().map(TagDO::getValue).toList());
             res.setUses(license.getUses().stream().map(use -> {
-                LicenseAORspUse rspUse = new LicenseAORspUse();
-                rspUse.setUsecase(use.getUsecase());
-                rspUse.setDestination(use.getDestination());
-                return rspUse;
+                AOUse aoUse = new AOUse();
+                aoUse.setUsecase(use.getUsecase());
+                aoUse.setDestination(use.getDestination());
+                return aoUse;
             }).toList());
             return res;
         }).toList());

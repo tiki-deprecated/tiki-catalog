@@ -3,10 +3,10 @@
  * MIT license. See LICENSE file in root directory.
  */
 
-import com.mytiki.l0_index.features.latest.index.IndexAOLicenseUse;
 import com.mytiki.l0_index.features.latest.use.UseDO;
 import com.mytiki.l0_index.features.latest.use.UseService;
 import com.mytiki.l0_index.main.App;
+import com.mytiki.l0_index.utilities.AOUse;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -33,7 +33,7 @@ public class UseTest {
 
     @Test
     public void Test_Insert_One_Success() {
-        IndexAOLicenseUse use = new IndexAOLicenseUse(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+        AOUse use = new AOUse(UUID.randomUUID().toString(), UUID.randomUUID().toString());
         List<UseDO> inserted = service.insert(List.of(use));
 
         assertEquals(inserted.size(), 1);
@@ -46,10 +46,10 @@ public class UseTest {
     @Test
     public void Test_Insert_All_Success() {
         int numUses = 5;
-        List<IndexAOLicenseUse> toInsert = new ArrayList<>(numUses);
-        Map<String, IndexAOLicenseUse> composite = new HashMap<>(numUses);
+        List<AOUse> toInsert = new ArrayList<>(numUses);
+        Map<String, AOUse> composite = new HashMap<>(numUses);
         for(int i=0; i<numUses; i++){
-            IndexAOLicenseUse use = new IndexAOLicenseUse(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+            AOUse use = new AOUse(UUID.randomUUID().toString(), UUID.randomUUID().toString());
             toInsert.add(use);
             composite.put(use.getUsecase() + ":" + use.getDestination(), use);
         }
@@ -58,7 +58,7 @@ public class UseTest {
         assertEquals(inserted.size(), numUses);
         for(int i=0; i<numUses; i++){
             UseDO use = inserted.get(i);
-            IndexAOLicenseUse req = composite.get(use.getUsecase() + ":" + use.getDestination());
+            AOUse req = composite.get(use.getUsecase() + ":" + use.getDestination());
             assertEquals(use.getDestination(), req.getDestination());
             assertEquals(use.getUsecase(), req.getUsecase());
         }
@@ -67,10 +67,10 @@ public class UseTest {
     @Test
     public void Test_Insert_All_Existing_Success() {
         int numUses = 5;
-        List<IndexAOLicenseUse> toInsert = new ArrayList<>(numUses);
-        Map<String, IndexAOLicenseUse> composite = new HashMap<>(numUses);
+        List<AOUse> toInsert = new ArrayList<>(numUses);
+        Map<String, AOUse> composite = new HashMap<>(numUses);
         for(int i=0; i<numUses; i++){
-            IndexAOLicenseUse use = new IndexAOLicenseUse(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+            AOUse use = new AOUse(UUID.randomUUID().toString(), UUID.randomUUID().toString());
             toInsert.add(use);
             composite.put(use.getUsecase() + ":" + use.getDestination(), use);
         }
@@ -81,7 +81,7 @@ public class UseTest {
         assertEquals(inserted.size(), numUses);
         for(int i=0; i<numUses; i++){
             UseDO use = inserted.get(i);
-            IndexAOLicenseUse req = composite.get(use.getUsecase() + ":" + use.getDestination());
+            AOUse req = composite.get(use.getUsecase() + ":" + use.getDestination());
             assertEquals(use.getDestination(), req.getDestination());
             assertEquals(use.getUsecase(), req.getUsecase());
         }
@@ -90,17 +90,17 @@ public class UseTest {
     @Test
     public void Test_Insert_Some_Existing_Success() {
         int numUses = 5;
-        List<IndexAOLicenseUse> toInsert = new ArrayList<>(numUses * 2);
-        Map<String, IndexAOLicenseUse> composite = new HashMap<>(numUses*2);
+        List<AOUse> toInsert = new ArrayList<>(numUses * 2);
+        Map<String, AOUse> composite = new HashMap<>(numUses*2);
         for(int i=0; i<numUses; i++){
-            IndexAOLicenseUse use = new IndexAOLicenseUse(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+            AOUse use = new AOUse(UUID.randomUUID().toString(), UUID.randomUUID().toString());
             toInsert.add(use);
             composite.put(use.getUsecase() + ":" + use.getDestination(), use);
         }
         service.insert(toInsert);
 
         for(int i=numUses; i<(numUses*2); i++){
-            IndexAOLicenseUse use = new IndexAOLicenseUse(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+            AOUse use = new AOUse(UUID.randomUUID().toString(), UUID.randomUUID().toString());
             toInsert.add(use);
             composite.put(use.getUsecase() + ":" + use.getDestination(), use);
         }
@@ -110,7 +110,7 @@ public class UseTest {
         assertEquals(inserted.size(), numUses * 2);
         for(int i=0; i<numUses; i++){
             UseDO use = inserted.get(i);
-            IndexAOLicenseUse req = composite.get(use.getUsecase() + ":" + use.getDestination());
+            AOUse req = composite.get(use.getUsecase() + ":" + use.getDestination());
             assertEquals(use.getDestination(), req.getDestination());
             assertEquals(use.getUsecase(), req.getUsecase());
         }
@@ -118,8 +118,8 @@ public class UseTest {
 
     @Test
     public void Test_Insert_Dupes_Success() {
-        IndexAOLicenseUse use = new IndexAOLicenseUse(UUID.randomUUID().toString(), UUID.randomUUID().toString());
-        List<IndexAOLicenseUse> toInsert = List.of(use, use, use, use, use);
+        AOUse use = new AOUse(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+        List<AOUse> toInsert = List.of(use, use, use, use, use);
 
         List<UseDO> inserted = service.insert(toInsert);
         assertEquals(inserted.size(), 1);
@@ -129,8 +129,8 @@ public class UseTest {
 
     @Test
     public void Test_Insert_NoDestination_Success() {
-        IndexAOLicenseUse use = new IndexAOLicenseUse(UUID.randomUUID().toString(), null);
-        List<IndexAOLicenseUse> toInsert = List.of(use);
+        AOUse use = new AOUse(UUID.randomUUID().toString(), null);
+        List<AOUse> toInsert = List.of(use);
         List<UseDO> inserted = service.insert(toInsert);
 
         assertEquals(inserted.size(), 1);
@@ -140,8 +140,8 @@ public class UseTest {
 
     @Test
     public void Test_Insert_Exists_NoDestination_Success() {
-        IndexAOLicenseUse use = new IndexAOLicenseUse(UUID.randomUUID().toString(), null);
-        List<IndexAOLicenseUse> toInsert = List.of(use);
+        AOUse use = new AOUse(UUID.randomUUID().toString(), null);
+        List<AOUse> toInsert = List.of(use);
         service.insert(toInsert);
         List<UseDO> inserted = service.insert(toInsert);
 
@@ -152,9 +152,9 @@ public class UseTest {
 
     @Test
     public void Test_Insert_Multiple_NoDestination_Success() {
-        IndexAOLicenseUse use1 = new IndexAOLicenseUse(UUID.randomUUID().toString(), null);
-        IndexAOLicenseUse use2 = new IndexAOLicenseUse(UUID.randomUUID().toString(), UUID.randomUUID().toString());
-        List<IndexAOLicenseUse> toInsert = List.of(use1, use2);
+        AOUse use1 = new AOUse(UUID.randomUUID().toString(), null);
+        AOUse use2 = new AOUse(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+        List<AOUse> toInsert = List.of(use1, use2);
         service.insert(toInsert);
         List<UseDO> inserted = service.insert(toInsert);
 
