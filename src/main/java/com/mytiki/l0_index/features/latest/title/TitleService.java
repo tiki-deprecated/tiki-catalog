@@ -77,7 +77,6 @@ public class TitleService {
             int version = Decode.bigInt(decoded.get(0)).intValue();
             if(version == 2) {
                 rsp.setTimestamp(Decode.dateTime(decoded.get(2)));
-
                 AOSignature userSig = new AOSignature();
                 userSig.setSignature(B64.encode(decoded.get(4)));
                 userSig.setPubkey("https://bucket.storage.l0.mytiki.com/" +
@@ -89,7 +88,8 @@ public class TitleService {
                 if(!appSignature.isBlank()){
                     AOSignature appSig = new AOSignature();
                     appSig.setSignature(appSignature);
-                    //appSig.setPubkey(null);
+                    appSig.setPubkey("https://registry.l0.mytiki.com/api/latest/id/" +
+                            address.getUserId() + "/pubkey");
                     rsp.setAppSignature(appSig);
                 }
 

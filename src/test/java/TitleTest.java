@@ -113,44 +113,42 @@ public class TitleTest {
     @Test
     @Transactional
     public void Test_Fetch_Success() throws URISyntaxException {
-        String id = "V5o2oRfogRHcegsJMN86E5Zf4Cz1tTvEkE3KK9qaM1U";
-        mockServer.expect(requestTo(new URI("http://localhost:8080/mockedBlock"))).andRespond(
-                withStatus(HttpStatus.OK).body(MockedBlock.get()));
+        mockServer.expect(requestTo(new URI(MockedBlock.titleSrc))).andRespond(
+                withStatus(HttpStatus.OK).body(MockedBlock.title()));
         BlockService bservice = new BlockService(blockRepository, testRestTemplate.getRestTemplate());
         TitleService titleService = new TitleService(repository, tagService, addressService, bservice);
-        IndexAOReqTitle req = new IndexAOReqTitle(id, UUID.randomUUID().toString(),
-                UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
-        BlockDO block = bservice.insert(UUID.randomUUID().toString(), "http://localhost:8080/mockedBlock");
-        String appId = UUID.randomUUID().toString();
-        titleService.insert(req, appId, block);
+        IndexAOReqTitle req = new IndexAOReqTitle(MockedBlock.titleTxn, MockedBlock.address,
+                "dummy", List.of("dummy"));
+        BlockDO block = bservice.insert(MockedBlock.titleHash, MockedBlock.titleSrc);
+        titleService.insert(req, MockedBlock.appId, block);
 
-        TitleAORsp title = titleService.fetch(id);
-        assertEquals(title.getId(), id);
+        TitleAORsp title = titleService.fetch(MockedBlock.titleTxn);
+        assertEquals(title.getId(), MockedBlock.titleTxn);
         assertEquals(title.getAddress(), req.getAddress());
         assertEquals(title.getTags().size(), 1);
         assertEquals(title.getTags().get(0), req.getTags().get(0));
         assertEquals(title.getOrigin(), "com.mytiki.sdk-dart.test");
         assertEquals(title.getPtr(), req.getPtr());
-        assertEquals(title.getTimestamp().toString(), "2023-03-12T04:26:37Z");
+        assertEquals(title.getTimestamp().toString(), "2023-03-12T04:19:41Z");
         assertNull(title.getUser());
         assertNull(title.getDescription());
         assertEquals(title.getUserSignature().getSignature(),
-                "bjd1U1ocKUWqh3OAJz3i6qtQi1IkGmE3oZJTc0rllp1BJS6b6StfGsavKgW4TLTqpk1GrFqhoPFuTqWZGNmnrTEoNWr1ZXTfMq8xZKzoQfuk5CP8bUfc5wfNg7Y3e8AVbU9iIxtLId1bLrKa1pn3luSu-IiXv_xZAAPXwpHvZVH20Ge7gQ25_ePmi6-5ApyrmtTJ1psGKxEUdCXLzbYDdSI9XsXQ2LX5AbbLe7kq6A9jZNg6HWfjkvUMXS8N6BxpzKBMcMTrY3fmDTdBbl5uFunRTdBSGA-NRr5QVuE022puokhZVRidFP3uAC6SlMO_7OZkFfQzm3NTqiR42rQ5fw");
+                "OQVahD8QhYdkwgOD5LpmrbJm68W-fBumUCcW1ZoJyqeDmeIK5QIp4kn_AQFQds-m1h1hLC9luqYDp4pOsuzo4puj0gKHIf0NAnQGfdTXLepqxeUL1Xu6poHtafVdusAvNCGXh1MrvnUz1UW2oPYeQaKzl-EqkJ8jwyzmGqCZ_d_Y5zwtpACl7SFPzfr35tjVctgNAyyd1ye3iDGir0n0DTFGbOtGat3nY_ceJIW2jEAcpmHzN7fLX_TG1-5YH2VeQZu5NtUL4AqmCDeyPQNAp1XtA_wFDad8D1UxCQDICzwekVoNFJhaaM8coGNx-Sn0XIkm4tU2NsfHKCT3ZmiBWA");
         assertEquals(title.getUserSignature().getPubkey(),
-                "https://bucket.storage.l0.mytiki.com/" + appId + "/"+ req.getAddress() + "/public.key");
+                "https://bucket.storage.l0.mytiki.com/" +
+                        MockedBlock.appId + "/"+ req.getAddress() + "/public.key");
         assertNull(title.getAppSignature());
     }
 
     @Test
     @Transactional
     public void Test_Fetch_None_Success() throws URISyntaxException {
-        String id = UUID.randomUUID().toString();
-        mockServer.expect(requestTo(new URI("http://localhost:8080/mockedBlock"))).andRespond(
-                withStatus(HttpStatus.OK).body(MockedBlock.get()));
+        mockServer.expect(requestTo(new URI(MockedBlock.titleSrc))).andRespond(
+                withStatus(HttpStatus.OK).body(MockedBlock.title()));
         BlockService bservice = new BlockService(blockRepository, testRestTemplate.getRestTemplate());
         TitleService titleService = new TitleService(repository, tagService, addressService, bservice);
 
-        TitleAORsp title = titleService.fetch(id);
+        TitleAORsp title = titleService.fetch(UUID.randomUUID().toString());
         assertNull(title.getId());
     }
 }

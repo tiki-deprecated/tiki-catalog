@@ -6,6 +6,7 @@
 package com.mytiki.l0_index.features.latest.license;
 
 import com.mytiki.l0_index.features.latest.address.AddressService;
+import com.mytiki.l0_index.features.latest.block.BlockService;
 import com.mytiki.l0_index.features.latest.count.CountService;
 import com.mytiki.l0_index.features.latest.title.TitleService;
 import com.mytiki.l0_index.features.latest.use.UseService;
@@ -27,8 +28,9 @@ public class LicenseConfig {
             @Autowired UseService useService,
             @Autowired TitleService titleService,
             @Autowired AddressService addressService,
-            @Autowired CountService countService){
-        return new LicenseService(repository, useService, titleService, addressService, countService);
+            @Autowired CountService countService,
+            @Autowired BlockService blockService){
+        return new LicenseService(repository, useService, titleService, addressService, countService, blockService);
     }
 
     @Bean

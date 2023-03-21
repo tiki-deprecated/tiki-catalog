@@ -5,16 +5,22 @@
 
 package com.mytiki.l0_index.features.latest.license;
 
+import com.mytiki.l0_index.features.latest.address.AddressDO;
 import com.mytiki.l0_index.features.latest.address.AddressService;
 import com.mytiki.l0_index.features.latest.block.BlockDO;
+import com.mytiki.l0_index.features.latest.block.BlockService;
 import com.mytiki.l0_index.features.latest.count.CountService;
 import com.mytiki.l0_index.features.latest.index.IndexAOReqLicense;
 import com.mytiki.l0_index.features.latest.tag.TagDO;
 import com.mytiki.l0_index.features.latest.title.TitleDO;
 import com.mytiki.l0_index.features.latest.title.TitleService;
 import com.mytiki.l0_index.features.latest.use.UseService;
+import com.mytiki.l0_index.utilities.AOSignature;
 import com.mytiki.l0_index.utilities.AOUse;
+import com.mytiki.l0_index.utilities.B64;
+import com.mytiki.l0_index.utilities.Decode;
 import jakarta.transaction.Transactional;
+import org.springframework.security.crypto.codec.Utf8;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -26,18 +32,21 @@ public class LicenseService {
     private final TitleService titleService;
     private final AddressService addressService;
     private final CountService countService;
+    private final BlockService blockService;
 
     public LicenseService(
             LicenseRepository repository,
             UseService useService,
             TitleService titleService,
             AddressService addressService,
-            CountService countService) {
+            CountService countService,
+            BlockService blockService) {
         this.repository = repository;
         this.useService = useService;
         this.titleService = titleService;
         this.addressService = addressService;
         this.countService = countService;
+        this.blockService = blockService;
     }
 
     @Transactional
@@ -93,6 +102,57 @@ public class LicenseService {
             return res;
         }).toList());
 
+        return rsp;
+    }
+
+    @Transactional
+    public LicenseAORsp fetch(String transaction){
+        LicenseAORsp rsp = new LicenseAORsp();
+        Optional<LicenseDO> found = repository.getByTransaction(transaction);
+        if(found.isPresent()){
+            rsp.setId(transaction);
+            rsp.setTitle(found.get().getTitle().getTransaction());
+            rsp.setUses(found.get().getUses().stream().map(use -> {
+                AOUse aoUse = new AOUse();
+                aoUse.setUsecase(use.getUsecase());
+                aoUse.setDestination(use.getDestination());
+                return aoUse;
+            }).toList());
+            AddressDO address = found.get().getAddress();
+            rsp.setAddress(address.getAddress());
+            rsp.setUser(address.getUserId());
+
+            byte[] raw = blockService.fetch(found.get().getBlock().getSrc(), transaction);
+            List<byte[]> decoded = Decode.bytes(raw);
+            int version = Decode.bigInt(decoded.get(0)).intValue();
+            if(version == 2) {
+                rsp.setTimestamp(Decode.dateTime(decoded.get(2)));
+                AOSignature userSig = new AOSignature();
+                userSig.setSignature(B64.encode(decoded.get(4)));
+                userSig.setPubkey("https://bucket.storage.l0.mytiki.com/" +
+                        address.getAppId() + "/" +
+                        address.getAddress() + "/public.key");
+                rsp.setUserSignature(userSig);
+
+                String appSignature = B64.encode(decoded.get(5));
+                if(!appSignature.isBlank()){
+                    AOSignature appSig = new AOSignature();
+                    appSig.setSignature(appSignature);
+                    appSig.setPubkey("https://registry.l0.mytiki.com/api/latest/id/" +
+                            address.getUserId() + "/pubkey");
+                    rsp.setAppSignature(appSig);
+                }
+
+                List<byte[]> contents = Decode.bytes(decoded.get(6));
+                int schema = Decode.bigInt(contents.get(0)).intValue();
+                if(schema == 3){
+                    rsp.setTerms(Utf8.decode(contents.get(2)));
+                    String desc = Utf8.decode(contents.get(3));
+                    if(!desc.isBlank()) rsp.setDescription(desc);
+                    rsp.setExpiry(Decode.dateTime(contents.get(4)));
+                }
+            }
+        }
         return rsp;
     }
 }

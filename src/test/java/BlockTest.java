@@ -86,12 +86,12 @@ public class BlockTest {
 
     @Test
     public void Test_Fetch_Success() throws MalformedURLException, URISyntaxException {
-        mockServer.expect(requestTo(new URI("http://localhost:8080/mockedBlock"))).andRespond(
-                withStatus(HttpStatus.OK).body(MockedBlock.get()));
+        mockServer.expect(requestTo(new URI(MockedBlock.titleSrc))).andRespond(
+                withStatus(HttpStatus.OK).body(MockedBlock.title()));
 
         BlockService service = new BlockService(repository, testRestTemplate.getRestTemplate());
-        URL src = new URL("http://localhost:8080/mockedBlock");
-        byte[] decoded = service.fetch(src, "V5o2oRfogRHcegsJMN86E5Zf4Cz1tTvEkE3KK9qaM1U");
+        URL src = new URL(MockedBlock.titleSrc);
+        byte[] decoded = service.fetch(src, MockedBlock.titleTxn);
         assertNotNull(decoded);
     }
 }

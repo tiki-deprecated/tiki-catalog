@@ -3,29 +3,37 @@
  * MIT license. See LICENSE file in root directory.
  */
 
+import com.mytiki.l0_index.features.latest.address.AddressService;
 import com.mytiki.l0_index.features.latest.block.BlockDO;
+import com.mytiki.l0_index.features.latest.block.BlockRepository;
 import com.mytiki.l0_index.features.latest.block.BlockService;
+import com.mytiki.l0_index.features.latest.count.CountService;
 import com.mytiki.l0_index.features.latest.index.IndexAOReqLicense;
 import com.mytiki.l0_index.features.latest.index.IndexAOReqTitle;
 import com.mytiki.l0_index.features.latest.license.*;
 import com.mytiki.l0_index.features.latest.title.TitleDO;
 import com.mytiki.l0_index.features.latest.title.TitleService;
+import com.mytiki.l0_index.features.latest.use.UseService;
 import com.mytiki.l0_index.main.App;
 import com.mytiki.l0_index.utilities.AOUse;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.client.MockRestServiceServer;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -39,10 +47,35 @@ public class LicenseTest {
     private LicenseService service;
 
     @Autowired
+    private LicenseRepository repository;
+
+    @Autowired
     private TitleService titleService;
 
     @Autowired
     private BlockService blockService;
+
+    @Autowired
+    private BlockRepository blockRepository;
+
+    @Autowired
+    private TestRestTemplate testRestTemplate;
+
+    @Autowired
+    private CountService countService;
+
+    @Autowired
+    private UseService useService;
+
+    @Autowired
+    private AddressService addressService;
+
+    private MockRestServiceServer mockServer;
+
+    @BeforeEach
+    public void init() {
+        mockServer = MockRestServiceServer.createServer(testRestTemplate.getRestTemplate());
+    }
 
     @Test
     @Transactional
@@ -251,5 +284,54 @@ public class LicenseTest {
         LicenseAORspList list = service.list(req, appId, null, 100);
         assertEquals(list.getResults().size(), 1);
         assertEquals(list.getResults().get(0).getId(), licenseReq.getTransaction());
+    }
+
+    @Test
+    @Transactional
+    public void Test_Fetch_Success() throws URISyntaxException {
+        mockServer.expect(requestTo(new URI(MockedBlock.licenseSrc))).andRespond(
+                withStatus(HttpStatus.OK).body(MockedBlock.license()));
+        BlockService bservice = new BlockService(blockRepository, testRestTemplate.getRestTemplate());
+        LicenseService licenseService = new LicenseService(repository, useService, titleService,
+                addressService, countService, bservice);
+
+        BlockDO block = bservice.insert(MockedBlock.licenseHash, MockedBlock.licenseSrc);
+        IndexAOReqTitle titleReq = new IndexAOReqTitle(MockedBlock.titleTxn, MockedBlock.address,
+                "dummy", List.of("dummy"));
+        TitleDO title = titleService.insert(titleReq, MockedBlock.appId, block);
+        IndexAOReqLicense licenseReq = new IndexAOReqLicense(
+                MockedBlock.licenseTxn, MockedBlock.address, title.getTransaction(),
+                List.of(new AOUse("dummy", "dummy")));
+        licenseService.insert(licenseReq, MockedBlock.appId, block);
+
+        LicenseAORsp license = licenseService.fetch(MockedBlock.licenseTxn);
+        assertEquals(license.getId(), MockedBlock.licenseTxn);
+        assertEquals(license.getAddress(), MockedBlock.address);
+        assertEquals(license.getUses().size(), 1);
+        assertEquals(license.getUses().get(0).getUsecase(), licenseReq.getUses().get(0).getUsecase());
+        assertEquals(license.getTerms(), "for use in testing only.");
+        assertEquals(license.getExpiry().toString(),"2023-03-13T04:19:41Z");
+        assertEquals(license.getTimestamp().toString(), "2023-03-12T04:19:41Z");
+        assertNull(license.getUser());
+        assertEquals(license.getDescription(), "registry testing.");
+        assertEquals(license.getUserSignature().getSignature(),
+                "QO6y-6uh8KJc4u-1AAWOS4mur2FpUb4My1mYDsG3Odt4Oi-fIZxJO_MqZ9DNC6_Y1Fc6_Fnarh04_7-5HKmr-1sT-D8aQyFnm41Lop3TBtH4tfsFZSHN_rO-bJ5ICRwrdqJwhBabW9K35f4x8rWm11oBJFDNCNVd-S1DNt4CVlE_DRI76Fna1JTRq0doG8TPt3Y4FW5X77aB-hZZwbZOcDCe2vYUxvCZT2fLYEOkjR3Qke-_iCrXUSODPJ8rkHVA1rgf2iRYVpN9H3KX6RAT4IcSdPOZlsWrF7yhXDplJqLQHqRjW6OZBSg3s_3TJ4ekbkruxhZx7KugWhu6sFAe9Q");
+        assertEquals(license.getUserSignature().getPubkey(),
+                "https://bucket.storage.l0.mytiki.com/" +
+                        MockedBlock.appId + "/"+ licenseReq.getAddress() + "/public.key");
+        assertNull(license.getAppSignature());
+    }
+
+    @Test
+    @Transactional
+    public void Test_Fetch_None_Success() throws URISyntaxException {
+        mockServer.expect(requestTo(new URI(MockedBlock.licenseSrc))).andRespond(
+                withStatus(HttpStatus.OK).body(MockedBlock.license()));
+        BlockService bservice = new BlockService(blockRepository, testRestTemplate.getRestTemplate());
+        LicenseService licenseService = new LicenseService(repository, useService, titleService,
+                addressService, countService, bservice);
+
+        LicenseAORsp license = licenseService.fetch(UUID.randomUUID().toString());
+        assertNull(license.getId());
     }
 }
