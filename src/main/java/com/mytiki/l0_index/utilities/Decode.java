@@ -73,12 +73,12 @@ public class Decode {
     }
 
     static public String utf8(byte[] bytes) {
-        if (bytes.length == 1 && bytes[0] == 0) return null;
+        if (bytes.length == 0) return null;
         else return Utf8.decode(bytes);
     }
 
     static public ZonedDateTime dateTime(byte[] bytes) {
-        if (bytes.length == 1 && bytes[0] == 0) return null;
+        if (bytes.length == 0) return null;
         else return Instant
                 .ofEpochSecond(Decode.bigInt(bytes).longValue())
                 .atZone(ZoneOffset.UTC);

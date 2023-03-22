@@ -22,7 +22,6 @@ import com.mytiki.l0_index.utilities.Decode;
 import com.mytiki.spring_rest_api.ApiExceptionBuilder;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.codec.Utf8;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -154,9 +153,8 @@ public class LicenseService {
                 List<byte[]> contents = Decode.bytes(decoded.get(6));
                 int schema = Decode.bigInt(contents.get(0)).intValue();
                 if(schema == 3){
-                    rsp.setTerms(Utf8.decode(contents.get(2)));
-                    String desc = Utf8.decode(contents.get(3));
-                    if(!desc.isBlank()) rsp.setDescription(desc);
+                    rsp.setTerms(Decode.utf8(contents.get(2)));
+                    rsp.setDescription(Decode.utf8(contents.get(3)));
                 }
             }
         }
