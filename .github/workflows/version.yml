@@ -97,4 +97,4 @@ jobs:
           git push
 
     outputs:
-      version: ${{ steps.bump-version.outputs.new-version }}
+      version: ${{ steps.semver.outputs.nextStrict }}
