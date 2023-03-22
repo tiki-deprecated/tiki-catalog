@@ -111,6 +111,10 @@
                 <configuration>
                     <wait>1000</wait>
                     <maxAttempts>360</maxAttempts>
+                    <profiles>
+                        <profile>ci</profile>
+                        <profile>dev</profile>
+                    </profiles>
                 </configuration>
                 <executions>
                     <execution>
