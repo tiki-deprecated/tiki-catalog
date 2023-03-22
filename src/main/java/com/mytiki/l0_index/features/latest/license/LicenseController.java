@@ -37,4 +37,13 @@ public class LicenseController {
         if(maxResults == null) maxResults = 100;
         return service.list(body, principal.getName(), pageToken, maxResults);
     }
+
+    @Operation(operationId = Constants.PROJECT_DASH_PATH +  "-license-get",
+            summary = "Get License",
+            description = "Returns a complete License Record",
+            security = @SecurityRequirement(name = "jwt"))
+    @RequestMapping(method = RequestMethod.POST, path = "/{id}")
+    public LicenseAORsp get(Principal principal, @RequestParam String id) {
+        return service.fetch(id, principal.getName());
+    }
 }

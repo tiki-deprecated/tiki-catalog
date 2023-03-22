@@ -7,6 +7,7 @@ package com.mytiki.l0_index.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mytiki.l0_index.features.latest.index.IndexController;
+import com.mytiki.l0_index.features.latest.license.LicenseController;
 import com.mytiki.l0_index.utilities.Constants;
 import com.mytiki.spring_rest_api.ApiConstants;
 import com.mytiki.spring_rest_api.SecurityConstants;
@@ -93,7 +94,8 @@ public class SecurityConfig {
                 .configurationSource(SecurityConstants.corsConfigurationSource()).and()
                 .csrf()
                 .ignoringRequestMatchers(
-                        new AntPathRequestMatcher(IndexController.PATH_CONTROLLER, HttpMethod.POST.name())
+                        new AntPathRequestMatcher(IndexController.PATH_CONTROLLER, HttpMethod.POST.name()),
+                        new AntPathRequestMatcher(LicenseController.PATH_CONTROLLER, HttpMethod.POST.name())
                 ).and()
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.GET, ApiConstants.HEALTH_ROUTE).permitAll()

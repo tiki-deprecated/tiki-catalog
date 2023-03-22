@@ -15,7 +15,9 @@ import com.mytiki.l0_index.features.latest.tag.TagService;
 import com.mytiki.l0_index.utilities.AOSignature;
 import com.mytiki.l0_index.utilities.B64;
 import com.mytiki.l0_index.utilities.Decode;
+import com.mytiki.spring_rest_api.ApiExceptionBuilder;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.codec.Utf8;
 
 import java.time.ZonedDateTime;
@@ -61,7 +63,7 @@ public class TitleService {
     }
 
     @Transactional
-    public TitleAORsp fetch(String transaction){
+    public TitleAORsp fetch(String transaction, String appId){
         TitleAORsp rsp = new TitleAORsp();
         Optional<TitleDO> found = repository.getByTransaction(transaction);
         if(found.isPresent()){
@@ -71,6 +73,10 @@ public class TitleService {
             AddressDO address = found.get().getAddress();
             rsp.setAddress(address.getAddress());
             rsp.setUser(address.getUserId());
+            if(!appId.equals(address.getAppId()))
+                throw new ApiExceptionBuilder(HttpStatus.UNAUTHORIZED)
+                        .help("Check your auth token and transaction id")
+                        .build();
 
             byte[] raw = blockService.fetch(found.get().getBlock().getSrc(), transaction);
             List<byte[]> decoded = Decode.bytes(raw);

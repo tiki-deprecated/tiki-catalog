@@ -122,7 +122,7 @@ public class TitleTest {
         BlockDO block = bservice.insert(MockedBlock.titleHash, MockedBlock.titleSrc);
         titleService.insert(req, MockedBlock.appId, block);
 
-        TitleAORsp title = titleService.fetch(MockedBlock.titleTxn);
+        TitleAORsp title = titleService.fetch(MockedBlock.titleTxn, MockedBlock.appId);
         assertEquals(title.getId(), MockedBlock.titleTxn);
         assertEquals(title.getAddress(), req.getAddress());
         assertEquals(title.getTags().size(), 1);
@@ -148,7 +148,7 @@ public class TitleTest {
         BlockService bservice = new BlockService(blockRepository, testRestTemplate.getRestTemplate());
         TitleService titleService = new TitleService(repository, tagService, addressService, bservice);
 
-        TitleAORsp title = titleService.fetch(UUID.randomUUID().toString());
+        TitleAORsp title = titleService.fetch(UUID.randomUUID().toString(), UUID.randomUUID().toString());
         assertNull(title.getId());
     }
 }

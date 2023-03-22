@@ -19,7 +19,9 @@ import com.mytiki.l0_index.utilities.AOSignature;
 import com.mytiki.l0_index.utilities.AOUse;
 import com.mytiki.l0_index.utilities.B64;
 import com.mytiki.l0_index.utilities.Decode;
+import com.mytiki.spring_rest_api.ApiExceptionBuilder;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.codec.Utf8;
 
 import java.time.ZonedDateTime;
@@ -107,7 +109,7 @@ public class LicenseService {
     }
 
     @Transactional
-    public LicenseAORsp fetch(String transaction){
+    public LicenseAORsp fetch(String transaction, String appId){
         LicenseAORsp rsp = new LicenseAORsp();
         Optional<LicenseDO> found = repository.getByTransaction(transaction);
         if(found.isPresent()){
@@ -123,6 +125,10 @@ public class LicenseService {
             AddressDO address = found.get().getAddress();
             rsp.setAddress(address.getAddress());
             rsp.setUser(address.getUserId());
+            if(!appId.equals(address.getAppId()))
+                throw new ApiExceptionBuilder(HttpStatus.UNAUTHORIZED)
+                        .help("Check your auth token and transaction id")
+                        .build();
 
             byte[] raw = blockService.fetch(found.get().getBlock().getSrc(), transaction);
             List<byte[]> decoded = Decode.bytes(raw);

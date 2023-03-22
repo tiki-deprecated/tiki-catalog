@@ -323,7 +323,7 @@ public class LicenseTest {
                 List.of(new AOUse("dummy", "dummy")), null);
         licenseService.insert(licenseReq, MockedBlock.appId, block);
 
-        LicenseAORsp license = licenseService.fetch(MockedBlock.licenseTxn);
+        LicenseAORsp license = licenseService.fetch(MockedBlock.licenseTxn, MockedBlock.appId);
         assertEquals(license.getId(), MockedBlock.licenseTxn);
         assertEquals(license.getAddress(), MockedBlock.address);
         assertEquals(license.getUses().size(), 1);
@@ -350,7 +350,7 @@ public class LicenseTest {
         LicenseService licenseService = new LicenseService(repository, useService, titleService,
                 addressService, countService, bservice);
 
-        LicenseAORsp license = licenseService.fetch(UUID.randomUUID().toString());
+        LicenseAORsp license = licenseService.fetch(UUID.randomUUID().toString(), UUID.randomUUID().toString());
         assertNull(license.getId());
     }
 }
