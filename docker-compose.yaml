@@ -2,8 +2,8 @@ services:
   service:
     build:
       context: .
-      dockerfile: dev.dockerfile
-      target: development
+      dockerfile: Dockerfile
+      target: run
       args:
         - JAR_FILE=target/*.jar
     environment:

@@ -3,7 +3,7 @@
  * MIT license. See LICENSE file in root directory.
  */
 
-package com.mytiki.l0_index.features.latest.address;
+package com.mytiki.l0_index.features.latest.count;
 
 import com.mytiki.l0_index.utilities.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +11,13 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@EnableJpaRepositories(AddressConfig.PACKAGE_PATH)
-@EntityScan(AddressConfig.PACKAGE_PATH)
-public class AddressConfig {
-    public static final String PACKAGE_PATH = Constants.PACKAGE_FEATURES_LATEST_DOT_PATH + ".address";
+@EnableJpaRepositories(CountConfig.PACKAGE_PATH)
+@EntityScan(CountConfig.PACKAGE_PATH)
+public class CountConfig {
+    public static final String PACKAGE_PATH = Constants.PACKAGE_FEATURES_LATEST_DOT_PATH + ".count";
 
     @Bean
-    public AddressService addressService(@Autowired AddressRepository repository){
-        return new AddressService(repository);
+    public final CountService countService(@Autowired CountRepository repository){
+        return new CountService(repository);
     }
 }

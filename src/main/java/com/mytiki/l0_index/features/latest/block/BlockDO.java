@@ -5,7 +5,6 @@
 
 package com.mytiki.l0_index.features.latest.block;
 
-import com.mytiki.l0_index.features.latest.address.AddressDO;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -16,14 +15,13 @@ import java.time.ZonedDateTime;
 @Table(name = "block")
 public class BlockDO implements Serializable {
     private Long id;
-    private byte[] hash;
-    private AddressDO address;
+    private String hash;
     private URL src;
     private ZonedDateTime created;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "block_id")
     public Long getId() {
         return id;
     }
@@ -33,22 +31,12 @@ public class BlockDO implements Serializable {
     }
 
     @Column(name = "block_hash")
-    public byte[] getHash() {
+    public String getHash() {
         return hash;
     }
 
-    public void setHash(byte[] hash) {
+    public void setHash(String hash) {
         this.hash = hash;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "address_id")
-    public AddressDO getAddress() {
-        return address;
-    }
-
-    public void setAddress(AddressDO address) {
-        this.address = address;
     }
 
     @Column(name = "src_url")
@@ -60,7 +48,7 @@ public class BlockDO implements Serializable {
         this.src = src;
     }
 
-    @Column(name = "created_utc")
+    @Column(name = "created")
     public ZonedDateTime getCreated() {
         return created;
     }
