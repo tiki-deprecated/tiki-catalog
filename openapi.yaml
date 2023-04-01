@@ -221,4 +221,4 @@ components:
           tokenUrl: https://auth.l0.mytiki.com/api/latest/oauth/token
           refreshUrl: https://auth.l0.mytiki.com/api/latest/oauth/token
           scopes:
-            L0 Index: index
+            index: this service
