@@ -61,7 +61,7 @@ public class AppConfig {
                                         .clientCredentials(new OAuthFlow()
                                                 .tokenUrl("https://auth.l0.mytiki.com/api/latest/oauth/token")
                                                 .refreshUrl("https://auth.l0.mytiki.com/api/latest/oauth/token")
-                                                .scopes(new Scopes().addString("L0 Index", "index"))))));
+                                                .scopes(new Scopes().addString("index","this service"))))));
     }
 }
 
