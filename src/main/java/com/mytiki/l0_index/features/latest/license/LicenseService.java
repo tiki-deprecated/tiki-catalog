@@ -15,15 +15,16 @@ import com.mytiki.l0_index.features.latest.tag.TagDO;
 import com.mytiki.l0_index.features.latest.title.TitleDO;
 import com.mytiki.l0_index.features.latest.title.TitleService;
 import com.mytiki.l0_index.features.latest.use.UseService;
-import com.mytiki.l0_index.utilities.AOSignature;
-import com.mytiki.l0_index.utilities.AOUse;
-import com.mytiki.l0_index.utilities.B64;
-import com.mytiki.l0_index.utilities.Decode;
+import com.mytiki.l0_index.utilities.*;
 import com.mytiki.spring_rest_api.ApiExceptionBuilder;
 import jakarta.transaction.Transactional;
+import org.bouncycastle.util.encoders.Base64;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.codec.Utf8;
 
+import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,6 +77,7 @@ public class LicenseService {
 
     public LicenseAORspList list(LicenseAOReq req, String appId, Long pageToken, Integer maxResults){
         LicenseAORspList rsp = new LicenseAORspList();
+        req.setPtrs(hashPtrs(req.getPtrs()));
         List<LicenseDO> licenses = repository.search(req, appId, pageToken, maxResults);
 
         if(pageToken == null && licenses.size() < maxResults)
@@ -158,6 +160,17 @@ public class LicenseService {
                 }
             }
         }
+        return rsp;
+    }
+
+
+    private List<String> hashPtrs(List<String> ptrs){
+        if(ptrs == null) return null;
+        List<String> rsp = new ArrayList<>(ptrs.size());
+        ptrs.forEach((ptr) -> {
+            byte[] hashBytes = Sha256.hash(ptr.getBytes(StandardCharsets.UTF_8));
+            rsp.add(Base64.toBase64String(hashBytes));
+        });
         return rsp;
     }
 }
