@@ -8,84 +8,9 @@ info:
   version: 1.0.0
 servers:
 - url: https://index.l0.mytiki.com
-paths:
-  /api/latest/index:
-    post:
-      tags:
-      - index-controller
-      summary: Index Block
-      description: Inform the service to index a block
-      operationId: l0-index-index-post
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/IndexAOReq'
-        required: true
-      responses:
-        "204":
-          description: No Content
-      security:
-      - l0Storage: []
+paths: {}
 components:
-  schemas:
-    AOUse:
-      type: object
-      properties:
-        usecase:
-          type: string
-        destination:
-          type: string
-    IndexAOReq:
-      type: object
-      properties:
-        block:
-          type: string
-        appId:
-          type: string
-        src:
-          type: string
-        titles:
-          type: array
-          items:
-            $ref: '#/components/schemas/IndexAOReqTitle'
-        licenses:
-          type: array
-          items:
-            $ref: '#/components/schemas/IndexAOReqLicense'
-    IndexAOReqLicense:
-      type: object
-      properties:
-        transaction:
-          type: string
-        address:
-          type: string
-        title:
-          type: string
-        uses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AOUse'
-        expiry:
-          type: string
-          format: date-time
-    IndexAOReqTitle:
-      type: object
-      properties:
-        transaction:
-          type: string
-        address:
-          type: string
-        ptr:
-          type: string
-        tags:
-          type: array
-          items:
-            type: string
   securitySchemes:
-    l0Storage:
-      type: http
-      scheme: basic
     jwt:
       type: http
       scheme: bearer
