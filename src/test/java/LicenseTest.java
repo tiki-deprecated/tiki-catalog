@@ -16,7 +16,9 @@ import com.mytiki.l0_index.features.latest.title.TitleService;
 import com.mytiki.l0_index.features.latest.use.UseService;
 import com.mytiki.l0_index.main.App;
 import com.mytiki.l0_index.utilities.AOUse;
+import com.mytiki.l0_index.utilities.Sha256;
 import jakarta.transaction.Transactional;
+import org.bouncycastle.util.encoders.Base64;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +29,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -252,8 +255,12 @@ public class LicenseTest {
     public void Test_List_Ptr_Success(){
         String appId = UUID.randomUUID().toString();
         BlockDO block = blockService.insert(UUID.randomUUID().toString(), "https://mytiki.com");
+
+        String ptr = UUID.randomUUID().toString();
+        String hashedPtr = Base64.toBase64String(Sha256.hash(ptr.getBytes(StandardCharsets.UTF_8)));
+
         IndexAOReqTitle titleReq = new IndexAOReqTitle(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
-                UUID.randomUUID().toString(), List.of(UUID.randomUUID().toString()));
+                hashedPtr, List.of(UUID.randomUUID().toString()));
         TitleDO title = titleService.insert(titleReq, appId, block);
         IndexAOReqLicense licenseReq = new IndexAOReqLicense(
                 UUID.randomUUID().toString(), UUID.randomUUID().toString(), title.getTransaction(),
@@ -261,7 +268,7 @@ public class LicenseTest {
         service.insert(licenseReq, appId, block);
 
         LicenseAOReq req = new LicenseAOReq();
-        req.setPtrs(List.of(titleReq.getPtr()));
+        req.setPtrs(List.of(ptr));
         LicenseAORspList list = service.list(req, appId, null, 100);
         assertEquals(list.getResults().size(), 1);
         assertEquals(list.getResults().get(0).getId(), licenseReq.getTransaction());
