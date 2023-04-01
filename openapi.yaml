@@ -44,7 +44,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/LicenseAORspList'
       security:
-      - oauth: []
+      - oauth:
+        - index
   /api/latest/title/{id}:
     get:
       tags:
@@ -66,7 +67,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/TitleAORsp'
       security:
-      - oauth: []
+      - oauth:
+        - index
   /api/latest/license/{id}:
     get:
       tags:
@@ -88,7 +90,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/LicenseAORsp'
       security:
-      - oauth: []
+      - oauth:
+        - index
 components:
   schemas:
     LicenseAOReq:
@@ -221,4 +224,4 @@ components:
           tokenUrl: https://auth.l0.mytiki.com/api/latest/oauth/token
           refreshUrl: https://auth.l0.mytiki.com/api/latest/oauth/token
           scopes:
-            L0 Index: index
+            index: this service
