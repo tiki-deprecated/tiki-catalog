@@ -1,0 +1,17 @@
+openapi: 3.0.1
+info:
+  title: L0 Index
+  description: Index Service
+  license:
+    name: MIT
+    url: https://github.com/tiki/l0-index/blob/main/LICENSE
+  version: 1.0.0
+servers:
+- url: https://index.l0.mytiki.com
+paths: {}
+components:
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

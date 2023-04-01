@@ -1,4 +1,4 @@
-FROM azul/zulu-openjdk:19 as base
+FROM azul/zulu-openjdk:20 as base
 
 FROM base as development
 

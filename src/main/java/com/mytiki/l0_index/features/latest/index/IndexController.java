@@ -23,9 +23,7 @@ public class IndexController {
         this.service = service;
     }
 
-    @Operation(operationId = Constants.PROJECT_DASH_PATH +  "-index-post",
-            summary = "Index Block", description = "Inform the service to index a block",
-            security = @SecurityRequirement(name = "l0Storage"))
+    @Operation(hidden = true)
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void post(@RequestBody IndexAOReq body) {
