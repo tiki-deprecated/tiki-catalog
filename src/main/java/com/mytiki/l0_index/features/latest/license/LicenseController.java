@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-@Tag(name = "LICENSE")
+@Tag(name = "")
 @RestController
-@RequestMapping(value = "suck-it")
+@RequestMapping(value = LicenseController.PATH_CONTROLLER)
 public class LicenseController {
     public static final String PATH_CONTROLLER = ApiConstants.API_LATEST_ROUTE + "license";
 
@@ -44,8 +44,8 @@ public class LicenseController {
             summary = "Get License",
             description = "Returns a complete License Record",
             security = @SecurityRequirement(name = "jwt"))
-    @RequestMapping(method = RequestMethod.POST, path = "/{id}")
-    public LicenseAORsp get(Principal principal, @RequestParam String id) {
+    @RequestMapping(method = RequestMethod.GET, path = "/{id}")
+    public LicenseAORsp get(Principal principal, @PathVariable String id) {
         return service.fetch(id, principal.getName());
     }
 }
