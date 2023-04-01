@@ -23,6 +23,11 @@ public class LicenseConfig {
     public static final String PACKAGE_PATH = Constants.PACKAGE_FEATURES_LATEST_DOT_PATH + ".license";
 
     @Bean
+    public LicenseController licenseController(@Autowired LicenseService service){
+        return new LicenseController(service);
+    }
+
+    @Bean
     public LicenseService licenseService(
             @Autowired LicenseRepository repository,
             @Autowired UseService useService,

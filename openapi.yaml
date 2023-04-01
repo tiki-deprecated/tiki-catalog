@@ -5,13 +5,223 @@ info:
   license:
     name: MIT
     url: https://github.com/tiki/l0-index/blob/main/LICENSE
-  version: 1.0.0
+  version: 1.0.1
 servers:
 - url: https://index.l0.mytiki.com
-paths: {}
+paths:
+  /api/latest/license:
+    post:
+      tags:
+      - ""
+      summary: List Licenses
+      description: Retrieve a list of compressed licenses matching one or more filters
+      operationId: l0-index-license-list
+      parameters:
+      - name: page-token
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: max-results
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LicenseAOReq'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseAORspList'
+      security:
+      - oauth:
+        - index
+  /api/latest/title/{id}:
+    get:
+      tags:
+      - ""
+      summary: Get Title
+      description: Returns a complete Title Record
+      operationId: l0-index-title-get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TitleAORsp'
+      security:
+      - oauth:
+        - index
+  /api/latest/license/{id}:
+    get:
+      tags:
+      - ""
+      summary: Get License
+      description: Returns a complete License Record
+      operationId: l0-index-license-get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseAORsp'
+      security:
+      - oauth:
+        - index
 components:
+  schemas:
+    LicenseAOReq:
+      type: object
+      properties:
+        tags:
+          type: array
+          items:
+            type: string
+        usecases:
+          type: array
+          items:
+            type: string
+        destinations:
+          type: array
+          items:
+            type: string
+        users:
+          type: array
+          items:
+            type: string
+        ptrs:
+          type: array
+          items:
+            type: string
+        includeAll:
+          type: boolean
+    AOUse:
+      type: object
+      properties:
+        usecase:
+          type: string
+        destination:
+          type: string
+    LicenseAORspList:
+      type: object
+      properties:
+        approxResults:
+          type: integer
+          format: int32
+        nextPageToken:
+          type: integer
+          format: int64
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LicenseAORspResult'
+    LicenseAORspResult:
+      type: object
+      properties:
+        id:
+          type: string
+        ptr:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        uses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AOUse'
+    AOSignature:
+      type: object
+      properties:
+        signature:
+          type: string
+        pubkey:
+          type: string
+    TitleAORsp:
+      type: object
+      properties:
+        id:
+          type: string
+        ptr:
+          type: string
+        user:
+          type: string
+        address:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        origin:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        userSignature:
+          $ref: '#/components/schemas/AOSignature'
+        appSignature:
+          $ref: '#/components/schemas/AOSignature'
+    LicenseAORsp:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        user:
+          type: string
+        address:
+          type: string
+        description:
+          type: string
+        uses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AOUse'
+        expiry:
+          type: string
+          format: date-time
+        terms:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        userSignature:
+          $ref: '#/components/schemas/AOSignature'
+        appSignature:
+          $ref: '#/components/schemas/AOSignature'
   securitySchemes:
-    jwt:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.l0.mytiki.com/api/latest/oauth/token
+          refreshUrl: https://auth.l0.mytiki.com/api/latest/oauth/token
+          scopes:
+            index: this service

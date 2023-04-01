@@ -9,13 +9,12 @@ import com.mytiki.l0_index.utilities.Constants;
 import com.mytiki.spring_rest_api.ApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
+@Tag(name = "")
 @RestController
 @RequestMapping(value = TitleController.PATH_CONTROLLER)
 public class TitleController {
@@ -30,9 +29,9 @@ public class TitleController {
     @Operation(operationId = Constants.PROJECT_DASH_PATH +  "-title-get",
             summary = "Get Title",
             description = "Returns a complete Title Record",
-            security = @SecurityRequirement(name = "jwt"))
-    @RequestMapping(method = RequestMethod.POST, path = "/{id}")
-    public TitleAORsp get(Principal principal, @RequestParam String id) {
+            security = @SecurityRequirement(name = "oauth", scopes = "index"))
+    @RequestMapping(method = RequestMethod.GET, path = "/{id}")
+    public TitleAORsp get(Principal principal, @PathVariable String id) {
         return service.fetch(id, principal.getName());
     }
 }

@@ -13,6 +13,9 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.OAuthFlow;
+import io.swagger.v3.oas.models.security.OAuthFlows;
+import io.swagger.v3.oas.models.security.Scopes;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import jakarta.annotation.PostConstruct;
@@ -52,10 +55,13 @@ public class AppConfig {
                 .servers(Collections.singletonList(new Server()
                                 .url("https://index.l0.mytiki.com")))
                 .components(new Components()
-                        .addSecuritySchemes("jwt", new SecurityScheme()
-                                .type(SecurityScheme.Type.HTTP)
-                                .scheme("bearer")
-                                .bearerFormat("JWT")));
+                        .addSecuritySchemes("oauth", new SecurityScheme()
+                                .type(SecurityScheme.Type.OAUTH2)
+                                .flows(new OAuthFlows()
+                                        .clientCredentials(new OAuthFlow()
+                                                .tokenUrl("https://auth.l0.mytiki.com/api/latest/oauth/token")
+                                                .refreshUrl("https://auth.l0.mytiki.com/api/latest/oauth/token")
+                                                .scopes(new Scopes().addString("index","this service"))))));
     }
 }
 

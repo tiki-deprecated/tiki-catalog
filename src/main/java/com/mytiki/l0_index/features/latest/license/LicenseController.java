@@ -9,10 +9,12 @@ import com.mytiki.l0_index.utilities.Constants;
 import com.mytiki.spring_rest_api.ApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
+@Tag(name = "")
 @RestController
 @RequestMapping(value = LicenseController.PATH_CONTROLLER)
 public class LicenseController {
@@ -27,7 +29,7 @@ public class LicenseController {
     @Operation(operationId = Constants.PROJECT_DASH_PATH +  "-license-list",
             summary = "List Licenses",
             description = "Retrieve a list of compressed licenses matching one or more filters",
-            security = @SecurityRequirement(name = "jwt"))
+            security = @SecurityRequirement(name = "oauth", scopes = "index"))
     @RequestMapping(method = RequestMethod.POST)
     public LicenseAORspList list(
             Principal principal,
@@ -41,9 +43,9 @@ public class LicenseController {
     @Operation(operationId = Constants.PROJECT_DASH_PATH +  "-license-get",
             summary = "Get License",
             description = "Returns a complete License Record",
-            security = @SecurityRequirement(name = "jwt"))
-    @RequestMapping(method = RequestMethod.POST, path = "/{id}")
-    public LicenseAORsp get(Principal principal, @RequestParam String id) {
+            security = @SecurityRequirement(name = "oauth", scopes = "index"))
+    @RequestMapping(method = RequestMethod.GET, path = "/{id}")
+    public LicenseAORsp get(Principal principal, @PathVariable String id) {
         return service.fetch(id, principal.getName());
     }
 }

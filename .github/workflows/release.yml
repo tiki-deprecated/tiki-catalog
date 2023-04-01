@@ -7,6 +7,10 @@ on:
     types:
       - closed
 
+permissions:
+  contents: write
+  id-token: write
+
 # Cancel any active builds when new commits are pushed
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
@@ -37,10 +41,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up JDK 19
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '19'
+          java-version: '20'
           distribution: 'zulu'
 
       - name: Install CLI
@@ -71,7 +75,7 @@ jobs:
 
       - name: Mvn project version
         id: version
-        run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+        run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> "GITHUB_OUTPUT"
 
       - name: Build and push
         uses: docker/build-push-action@v4
@@ -157,6 +161,6 @@ jobs:
           rdme: openapi openapi.yaml --key=${{ secrets.README_API_KEY }} --id=63eb0b3c8850f60012d4bf13
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ needs.test_and_push.outputs.version }}
+          tag: ${{ needs.test_and_push.outputs.version }}
