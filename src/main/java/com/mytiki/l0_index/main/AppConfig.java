@@ -49,19 +49,13 @@ public class AppConfig {
                         .license(new License()
                                 .name("MIT")
                                 .url("https://github.com/tiki/l0-index/blob/main/LICENSE")))
-                .servers(Collections.singletonList(
-                        new Server()
+                .servers(Collections.singletonList(new Server()
                                 .url("https://index.l0.mytiki.com")))
                 .components(new Components()
-                        .addSecuritySchemes("l0Storage",
-                                new SecurityScheme()
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("basic"))
-                        .addSecuritySchemes("jwt",
-                                new SecurityScheme()
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT")));
+                        .addSecuritySchemes("jwt", new SecurityScheme()
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")));
     }
 }
 
