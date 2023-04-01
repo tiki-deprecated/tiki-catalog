@@ -9,10 +9,10 @@ info:
 servers:
 - url: https://index.l0.mytiki.com
 paths:
-  /suck-it:
+  /api/latest/license:
     post:
       tags:
-      - LICENSE
+      - ""
       summary: List Licenses
       description: Retrieve a list of compressed licenses matching one or more filters
       operationId: l0-index-license-list
@@ -45,38 +45,16 @@ paths:
                 $ref: '#/components/schemas/LicenseAORspList'
       security:
       - jwt: []
-  /suck-it/{id}:
-    post:
-      tags:
-      - LICENSE
-      summary: Get License
-      description: Returns a complete License Record
-      operationId: l0-index-license-get
-      parameters:
-      - name: id
-        in: query
-        required: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LicenseAORsp'
-      security:
-      - jwt: []
   /api/latest/title/{id}:
-    post:
+    get:
       tags:
-      - TITLE
+      - ""
       summary: Get Title
       description: Returns a complete Title Record
       operationId: l0-index-title-get
       parameters:
       - name: id
-        in: query
+        in: path
         required: true
         schema:
           type: string
@@ -87,6 +65,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TitleAORsp'
+      security:
+      - jwt: []
+  /api/latest/license/{id}:
+    get:
+      tags:
+      - ""
+      summary: Get License
+      description: Returns a complete License Record
+      operationId: l0-index-license-get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseAORsp'
       security:
       - jwt: []
 components:
@@ -158,6 +158,32 @@ components:
           type: string
         pubkey:
           type: string
+    TitleAORsp:
+      type: object
+      properties:
+        id:
+          type: string
+        ptr:
+          type: string
+        user:
+          type: string
+        address:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        origin:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        userSignature:
+          $ref: '#/components/schemas/AOSignature'
+        appSignature:
+          $ref: '#/components/schemas/AOSignature'
     LicenseAORsp:
       type: object
       properties:
@@ -179,32 +205,6 @@ components:
           type: string
           format: date-time
         terms:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-        userSignature:
-          $ref: '#/components/schemas/AOSignature'
-        appSignature:
-          $ref: '#/components/schemas/AOSignature'
-    TitleAORsp:
-      type: object
-      properties:
-        id:
-          type: string
-        ptr:
-          type: string
-        user:
-          type: string
-        address:
-          type: string
-        description:
-          type: string
-        tags:
-          type: array
-          items:
-            type: string
-        origin:
           type: string
         timestamp:
           type: string
