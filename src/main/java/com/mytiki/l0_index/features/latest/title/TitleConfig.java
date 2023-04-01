@@ -20,6 +20,11 @@ public class TitleConfig {
     public static final String PACKAGE_PATH = Constants.PACKAGE_FEATURES_LATEST_DOT_PATH + ".title";
 
     @Bean
+    public TitleController titleController(@Autowired TitleService service){
+        return new TitleController(service);
+    }
+
+    @Bean
     public TitleService titleService(
             @Autowired TitleRepository repository,
             @Autowired TagService tagService,

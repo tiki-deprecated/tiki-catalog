@@ -9,12 +9,14 @@ import com.mytiki.l0_index.utilities.Constants;
 import com.mytiki.spring_rest_api.ApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
+@Tag(name = "LICENSE")
 @RestController
-@RequestMapping(value = LicenseController.PATH_CONTROLLER)
+@RequestMapping(value = "suck-it")
 public class LicenseController {
     public static final String PATH_CONTROLLER = ApiConstants.API_LATEST_ROUTE + "license";
 
