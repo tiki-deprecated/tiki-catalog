@@ -34,7 +34,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 19
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '20'
@@ -60,7 +60,7 @@ jobs:
         run: |
           sed -i '0,/<version>*.*.*<\/version>/s//<version>${{ steps.semver.outputs.nextStrict }}<\/version>/' pom.xml
 
-      - name: Set up JDK 19
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '20'
