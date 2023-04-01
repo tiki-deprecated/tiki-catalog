@@ -37,7 +37,7 @@ jobs:
       - name: Set up JDK 19
         uses: actions/setup-java@v3
         with:
-          java-version: '19'
+          java-version: '20'
           distribution: 'zulu'
 
       - name: Checkout PR
@@ -63,7 +63,7 @@ jobs:
       - name: Set up JDK 19
         uses: actions/setup-java@v3
         with:
-          java-version: '19'
+          java-version: '20'
           distribution: 'zulu'
 
       - name: Install CLI
