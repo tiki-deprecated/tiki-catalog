@@ -44,7 +44,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/LicenseAORspList'
       security:
-      - jwt: []
+      - oauth: []
   /api/latest/title/{id}:
     get:
       tags:
@@ -66,7 +66,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TitleAORsp'
       security:
-      - jwt: []
+      - oauth: []
   /api/latest/license/{id}:
     get:
       tags:
@@ -88,7 +88,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/LicenseAORsp'
       security:
-      - jwt: []
+      - oauth: []
 components:
   schemas:
     LicenseAOReq:
@@ -214,7 +214,11 @@ components:
         appSignature:
           $ref: '#/components/schemas/AOSignature'
   securitySchemes:
-    jwt:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.l0.mytiki.com/api/latest/oauth/token
+          refreshUrl: https://auth.l0.mytiki.com/api/latest/oauth/token
+          scopes:
+            L0 Index: index

@@ -29,7 +29,7 @@ public class TitleController {
     @Operation(operationId = Constants.PROJECT_DASH_PATH +  "-title-get",
             summary = "Get Title",
             description = "Returns a complete Title Record",
-            security = @SecurityRequirement(name = "jwt"))
+            security = @SecurityRequirement(name = "oauth"))
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
     public TitleAORsp get(Principal principal, @PathVariable String id) {
         return service.fetch(id, principal.getName());
