@@ -44,7 +44,7 @@ public class AppConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("L0 Index")
-                        .description("Index Service")
+                        .description("Searchable Index Service")
                         .version(appVersion)
                         .license(new License()
                                 .name("MIT")

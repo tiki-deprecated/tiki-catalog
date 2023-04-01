@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: L0 Index
-  description: Index Service
+  description: Searchable Index Service
   license:
     name: MIT
     url: https://github.com/tiki/l0-index/blob/main/LICENSE
