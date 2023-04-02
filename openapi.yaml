@@ -5,7 +5,7 @@ info:
   license:
     name: MIT
     url: https://github.com/tiki/l0-index/blob/main/LICENSE
-  version: 1.0.3
+  version: 1.1.0
 servers:
 - url: https://index.l0.mytiki.com
 paths:
