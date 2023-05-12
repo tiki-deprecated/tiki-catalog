@@ -47,3 +47,14 @@ Returns `200 OK`
 ### Security
 - GET request(s) require a valid JWT with the index.l0.mytiki.com audience.
 - POST /report request to require a secret key injected at runtime via Cloudflare Worker secrets —the request will be sent from the serverless l0-storage worker, and temporary credential grants would add significant overhead.
+
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
