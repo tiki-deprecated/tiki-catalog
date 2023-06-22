@@ -10,6 +10,7 @@ import com.mytiki.spring_rest_api.ApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -47,5 +48,17 @@ public class LicenseController {
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
     public LicenseAORsp get(Principal principal, @PathVariable String id) {
         return service.fetch(id, principal.getName());
+    }
+
+    @Secured("SCOPE_internal:read")
+    @Operation(hidden = true)
+    @RequestMapping(method = RequestMethod.POST, path = "/{app-id}")
+    public LicenseAORspList listAdmin(
+            @PathVariable(value = "app-id") String appId,
+            @RequestParam(value = "page-token", required = false) Long pageToken,
+            @RequestParam(value = "max-results", required = false, defaultValue = "100") Integer maxResults,
+            @RequestBody LicenseAOReq body) {
+        if(maxResults == null) maxResults = 100;
+        return service.list(body, appId, pageToken, maxResults);
     }
 }

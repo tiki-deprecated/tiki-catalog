@@ -95,7 +95,8 @@ public class SecurityConfig {
                 .csrf()
                 .ignoringRequestMatchers(
                         new AntPathRequestMatcher(IndexController.PATH_CONTROLLER, HttpMethod.POST.name()),
-                        new AntPathRequestMatcher(LicenseController.PATH_CONTROLLER, HttpMethod.POST.name())
+                        new AntPathRequestMatcher(LicenseController.PATH_CONTROLLER, HttpMethod.POST.name()),
+                        new AntPathRequestMatcher(LicenseController.PATH_CONTROLLER + "/*", HttpMethod.POST.name())
                 ).and()
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.GET, ApiConstants.HEALTH_ROUTE).permitAll()
