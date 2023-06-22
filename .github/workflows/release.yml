@@ -156,7 +156,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: OpenApi
-        uses: readmeio/rdme@8.6.0
+        uses: readmeio/rdme@8.6.2
         with:
           rdme: openapi openapi.yaml --key=${{ secrets.README_API_KEY }} --id=63eb0b3c8850f60012d4bf13
 
