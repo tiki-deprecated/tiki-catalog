@@ -12,7 +12,7 @@
 
     <groupId>com.mytiki</groupId>
     <artifactId>l0_index</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <packaging>jar</packaging>
 
     <name>L0 Index</name>
